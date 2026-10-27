@@ -38,6 +38,85 @@ use LinguatorPro\Install\Linguator_Usable;
 
 
 
+// Free to Pro handoff. The free plugin shares options, hooks and routes with Pro, so only one may stay active.
+if ( ! defined( 'LINGUATOR_FREE_PLUGIN_BASE' ) ) {
+	define( 'LINGUATOR_FREE_PLUGIN_BASE', 'translate-words/translate-wp-words.php' );
+}
+if ( ! defined( 'LINGUATOR_FREE_NOTICE_KEY' ) ) {
+	define( 'LINGUATOR_FREE_NOTICE_KEY', 'linguator_pro_free_deactivated' );
+}
+
+if ( ! function_exists( 'linguator_pro_deactivate_free' ) ) {
+	/**
+	 * Deactivate the free Linguator plugin while Pro is active.
+	 *
+	 * Runs on Pro activation and on every admin request, so activating the free
+	 * plugin while Pro is active is undone as well. Settings are shared between
+	 * the two builds and are kept.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	function linguator_pro_deactivate_free() {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$network_active = is_multisite() && is_plugin_active_for_network( LINGUATOR_FREE_PLUGIN_BASE );
+		if ( ! $network_active && ! is_plugin_active( LINGUATOR_FREE_PLUGIN_BASE ) ) {
+			return;
+		}
+
+		$capability = $network_active ? 'manage_network_plugins' : 'activate_plugins';
+		if ( ! current_user_can( $capability ) ) {
+			return;
+		}
+
+		deactivate_plugins( LINGUATOR_FREE_PLUGIN_BASE, true, $network_active );
+		set_transient( LINGUATOR_FREE_NOTICE_KEY, 1, MINUTE_IN_SECONDS );
+	}
+}
+
+if ( ! function_exists( 'linguator_pro_free_deactivated_notice' ) ) {
+	/**
+	 * Tell the admin that the free plugin was deactivated in favour of Pro.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	function linguator_pro_free_deactivated_notice() {
+		if ( ! get_transient( LINGUATOR_FREE_NOTICE_KEY ) ) {
+			return;
+		}
+		delete_transient( LINGUATOR_FREE_NOTICE_KEY );
+
+		echo '<div class="notice notice-warning is-dismissible"><p>';
+		echo wp_kses(
+			sprintf(
+				/* translators: 1: Pro plugin name, 2: Free plugin name. */
+				esc_html__( 'The %1$s plugin is active and the %2$s plugin has been deactivated. Your settings and translations are kept.', 'linguator-pro' ),
+				'<strong>Linguator Pro</strong>',
+				'<strong>Linguator (Free)</strong>'
+			),
+			[ 'strong' => [] ]
+		);
+		echo '</p></div>';
+	}
+}
+
+register_activation_hook( __FILE__, 'linguator_pro_deactivate_free' );
+add_action( 'admin_init', 'linguator_pro_deactivate_free', 1, 0 );
+add_action( 'admin_notices', 'linguator_pro_free_deactivated_notice', 10, 0 );
+add_action( 'network_admin_notices', 'linguator_pro_free_deactivated_notice', 10, 0 );
+
+// The free plugin already booted in this request (Pro is being activated on top of it). Both builds share
+// hook names, so Pro must not boot beside it. Free is deactivated above and Pro takes over from the next request.
+if ( class_exists( 'Linguator\Includes\Core\Linguator', false ) ) {
+	return;
+}
+
 // Linguator constants - wrapped in checks to prevent redeclaration
 if ( ! defined( 'LINGUATOR_PRO_VERSION' ) ) {
 	define( 'LINGUATOR_PRO_VERSION', '2.2.1' );
