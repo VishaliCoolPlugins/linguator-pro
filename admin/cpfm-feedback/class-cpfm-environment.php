@@ -2,7 +2,7 @@
 /**
  * CPFM Environment — shared non-sensitive site snapshot for feedback payloads.
  *
- * Used by deactivation surveys, usage-data opt-in, and the 30-day usage cron
+ * Used by the usage-data opt-in, and the 30-day usage cron
  * so every surface sends the same server_info / extra_details shape.
  *
  * Hosts may extend the payload via the `cpfm_environment` filter.

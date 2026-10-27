@@ -6,15 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CPFM_Deactivation_Feedback' => $baseDir . '/admin/cpfm-feedback/cpfm-deactivation-feedback.php',
     'CPFM_Environment' => $baseDir . '/admin/cpfm-feedback/class-cpfm-environment.php',
     'CPFM_Feedback_Notice' => $baseDir . '/admin/cpfm-feedback/cpfm-feedback-notice.php',
     'CPFM_Loader' => $baseDir . '/admin/cpfm-feedback/class-cpfm-loader.php',
-    'CPFM_Review' => $baseDir . '/admin/cpfm-feedback/class-cpfm-review.php',
-    'CPFM_Review_Assets' => $baseDir . '/admin/cpfm-feedback/review/class-cpfm-review-assets.php',
-    'CPFM_Review_Inline' => $baseDir . '/admin/cpfm-feedback/review/class-cpfm-review-inline.php',
-    'CPFM_Review_Notice' => $baseDir . '/admin/cpfm-feedback/review/class-cpfm-review-notice.php',
-    'CPFM_Review_Row' => $baseDir . '/admin/cpfm-feedback/review/class-cpfm-review-row.php',
     'CPFM_Usage_Cron' => $baseDir . '/admin/cpfm-feedback/cron/class-cron.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Linguator\\Admin\\Controllers\\Linguator_Admin' => $baseDir . '/admin/controllers/admin.php',
@@ -37,7 +31,6 @@ return array(
     'Linguator\\Admin\\Controllers\\Linguator_Admin_Static_Pages' => $baseDir . '/admin/controllers/admin-static-pages.php',
     'Linguator\\Admin\\Controllers\\Linguator_Admin_Strings' => $baseDir . '/admin/controllers/admin-strings.php',
     'Linguator\\Admin\\Controllers\\Linguator_Admin_View_Language_Links' => $baseDir . '/admin/controllers/admin-view-language-links.php',
-    'Linguator\\Admin\\Feedback\\Linguator_Admin_Feedback' => $baseDir . '/admin/feedback/admin-feedback.php',
     'Linguator\\Custom_Fields\\Custom_Fields' => $baseDir . '/admin/custom-fields/custom-fields.php',
     'Linguator\\Frontend\\Controllers\\Linguator_Choose_Lang' => $baseDir . '/frontend/controllers/choose-lang.php',
     'Linguator\\Frontend\\Controllers\\Linguator_Choose_Lang_Content' => $baseDir . '/frontend/controllers/choose-lang-content.php',

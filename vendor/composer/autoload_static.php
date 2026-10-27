@@ -62,15 +62,9 @@ class ComposerStaticInitccc319e267efc807f0f35d0c7ed56335
     );
 
     public static $classMap = array (
-        'CPFM_Deactivation_Feedback' => __DIR__ . '/../..' . '/admin/cpfm-feedback/cpfm-deactivation-feedback.php',
         'CPFM_Environment' => __DIR__ . '/../..' . '/admin/cpfm-feedback/class-cpfm-environment.php',
         'CPFM_Feedback_Notice' => __DIR__ . '/../..' . '/admin/cpfm-feedback/cpfm-feedback-notice.php',
         'CPFM_Loader' => __DIR__ . '/../..' . '/admin/cpfm-feedback/class-cpfm-loader.php',
-        'CPFM_Review' => __DIR__ . '/../..' . '/admin/cpfm-feedback/class-cpfm-review.php',
-        'CPFM_Review_Assets' => __DIR__ . '/../..' . '/admin/cpfm-feedback/review/class-cpfm-review-assets.php',
-        'CPFM_Review_Inline' => __DIR__ . '/../..' . '/admin/cpfm-feedback/review/class-cpfm-review-inline.php',
-        'CPFM_Review_Notice' => __DIR__ . '/../..' . '/admin/cpfm-feedback/review/class-cpfm-review-notice.php',
-        'CPFM_Review_Row' => __DIR__ . '/../..' . '/admin/cpfm-feedback/review/class-cpfm-review-row.php',
         'CPFM_Usage_Cron' => __DIR__ . '/../..' . '/admin/cpfm-feedback/cron/class-cron.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Linguator\\Admin\\Controllers\\Linguator_Admin' => __DIR__ . '/../..' . '/admin/controllers/admin.php',
@@ -93,7 +87,6 @@ class ComposerStaticInitccc319e267efc807f0f35d0c7ed56335
         'Linguator\\Admin\\Controllers\\Linguator_Admin_Static_Pages' => __DIR__ . '/../..' . '/admin/controllers/admin-static-pages.php',
         'Linguator\\Admin\\Controllers\\Linguator_Admin_Strings' => __DIR__ . '/../..' . '/admin/controllers/admin-strings.php',
         'Linguator\\Admin\\Controllers\\Linguator_Admin_View_Language_Links' => __DIR__ . '/../..' . '/admin/controllers/admin-view-language-links.php',
-        'Linguator\\Admin\\Feedback\\Linguator_Admin_Feedback' => __DIR__ . '/../..' . '/admin/feedback/admin-feedback.php',
         'Linguator\\Custom_Fields\\Custom_Fields' => __DIR__ . '/../..' . '/admin/custom-fields/custom-fields.php',
         'Linguator\\Frontend\\Controllers\\Linguator_Choose_Lang' => __DIR__ . '/../..' . '/frontend/controllers/choose-lang.php',
         'Linguator\\Frontend\\Controllers\\Linguator_Choose_Lang_Content' => __DIR__ . '/../..' . '/frontend/controllers/choose-lang-content.php',

@@ -75,9 +75,7 @@ if ( ! class_exists( 'CPFM_Loader' ) ) {
 
 			$files = array(
 				'class-cpfm-environment.php',
-				'class-cpfm-review.php',
 				'cpfm-feedback-notice.php',
-				'cpfm-deactivation-feedback.php',
 				'cron/class-cron.php',
 			);
 

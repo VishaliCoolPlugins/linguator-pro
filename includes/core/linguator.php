@@ -86,10 +86,6 @@ $GLOBALS['lmat_local_config'] = apply_filters( 'lmat_local_config', $lmat_config
 class Linguator {
 
 	/**
-	 * @var Linguator_Admin_Feedback|null
-	 */
-	public $feedback;
-	/**
 	 * @var CPFM_Feedback_Notice|null
 	 */
 	public $cpfm_feedback_notice;
@@ -137,8 +133,6 @@ class Linguator {
 			Linguator_Translation_Dashboard::get_instance();
 		}
 
-		// Initialize feedback functionality
-		$this->feedback = new \Linguator\Admin\Feedback\Linguator_Admin_Feedback( $this );
 		$this->register_cpfm_feedback();
 
 		/*
@@ -447,125 +441,11 @@ class Linguator {
 	}
 
 	/**
-	 * Register CPFM feedback notices, reviews, and deactivation feedback.
+	 * Register the CPFM opt-in notice.
 	 */
 	public function register_feedback_notices() {
 		// 1. Opt-in Notice Panel
 		add_action( 'cpfm_register_notice', array( $this, 'register_cpfm_optin_notice' ) );
-
-		// 2. Review Notice
-		if ( class_exists( 'CPFM_Review' ) ) {
-			$name = 'Linguator AI – Auto Translate & Create Multilingual Sites';
-
-			\CPFM_Review::cpfm_register(
-				array(
-					'id'          => 'lmat',
-					'plugin_file' => LINGUATOR_FILE,
-					'plugin_name' => $name,
-					'review_url'  => 'https://wordpress.org/support/plugin/translate-words/reviews/#new-post',
-					'capability'  => 'activate_plugins',
-					'quiet_days'  => 0,
-					'own_screens' => array(
-						'languages_page_lmat',
-						'languages_page_lmat_settings',
-						'toplevel_page_lmat',
-					),
-					'trigger'     => array(
-						'type'  => 'install_age',
-						'hours' => 24,
-					),
-					'notice'      => array(
-						'enabled'        => true,
-						'template'       => 'two_step',
-						'screens'        => array(
-							'plugins',
-							'languages_page_lmat',
-							'languages_page_lmat_settings',
-							'toplevel_page_lmat',
-						),
-						'inline_screens' => array(),
-					),
-					'row'         => array( 'enabled' => true ),
-					'legacy'      => array(
-						'done_options'   => array(
-							'lmat_review_prompt' => array( 'yes', 'done', 'dismissed' ),
-							'lmat_review_shown'  => array( 'yes', 'done', 'dismissed' ),
-						),
-						'done_user_meta' => array(
-							'lmat_review_dismissed' => array( '1', 'yes', 'true' ),
-						),
-					),
-					'i18n'        => array(
-						'dismiss_link'  => __( 'No thanks', 'linguator-pro' ),
-						'later_link'    => __( 'Ask me later', 'linguator-pro' ),
-						'submit_button' => __( 'Submit review', 'linguator-pro' ),
-						'like_question' => __( 'Do you like the %s plugin?', 'linguator-pro' ),
-						'yes_button'    => __( 'Yes, I like it', 'linguator-pro' ),
-						'close_label'   => __( 'Close', 'linguator-pro' ),
-						'direct_line'   => __( 'Enjoying %s? A short review really helps.', 'linguator-pro' ),
-						'thanks_line'   => __( 'Great to hear! A quick review on WordPress.org would really help us.', 'linguator-pro' ),
-						'no_link'       => __( 'I do not like it, dismiss', 'linguator-pro' ),
-						'row_question'  => __( 'Do you like this plugin?', 'linguator-pro' ),
-						'inline_title'  => __( 'Enjoying %s?', 'linguator-pro' ),
-						'inline_text'   => __( 'A short review on WordPress.org helps other people find it.', 'linguator-pro' ),
-					),
-				)
-			);
-		}
-
-		// 3. Deactivation Feedback
-		if ( class_exists( 'CPFM_Deactivation_Feedback' ) ) {
-			$name = 'Linguator AI – Auto Translate & Create Multilingual Sites';
-
-			\CPFM_Deactivation_Feedback::cpfm_register(
-				array(
-					'id'                     => 'lmat',
-					'slug'                   => 'linguator-pro',
-					'plugin_name'            => $name,
-					'version'                => LINGUATOR_VERSION,
-					'api'                    => LINGUATOR_FEEDBACK_API,
-					'site_key'               => '153',
-					'install_date_option'    => 'lmat_install_date',
-					'initial_version_option' => 'lmat_initial_version',
-					'onboarding_data'        => 'linguator',
-					'reasons'                => array(
-						'not_working'  => array(
-							'title'       => __( "The plugin isn't working", 'linguator-pro' ),
-							'placeholder' => __( 'Which problem did you run into? We read every reply.', 'linguator-pro' ),
-						),
-						'not_expected' => array(
-							'title'       => __( "It didn't do what I expected", 'linguator-pro' ),
-							'placeholder' => __( 'What were you hoping it would do?', 'linguator-pro' ),
-						),
-						'found_better' => array(
-							'title'       => __( 'I found a better plugin', 'linguator-pro' ),
-							'placeholder' => __( 'Mind sharing which one?', 'linguator-pro' ),
-						),
-						'temporary'    => array(
-							'title'       => __( "It's a temporary deactivation", 'linguator-pro' ),
-							'placeholder' => '',
-						),
-						'other'        => array(
-							'title'       => __( 'Another reason', 'linguator-pro' ),
-							'placeholder' => __( 'Please tell us more', 'linguator-pro' ),
-						),
-					),
-					'i18n'                   => array(
-						'title'        => __( 'Before you go…', 'linguator-pro' ),
-						/* translators: %s: plugin name (bold). */
-						'intro'        => __( 'What made you deactivate %s? Your answer helps us fix it.', 'linguator-pro' ),
-						'submit'       => __( 'Submit & Deactivate', 'linguator-pro' ),
-						'skip'         => __( 'Skip & Deactivate', 'linguator-pro' ),
-						'deactivating' => __( 'Deactivating…', 'linguator-pro' ),
-						'pick_reason'  => __( 'Please choose a reason.', 'linguator-pro' ),
-						'close_label'  => __( 'Close', 'linguator-pro' ),
-						/* translators: %s: company name. */
-						'byline'       => __( 'A plugin by %s', 'linguator-pro' ),
-						'consent'      => __( 'Submitting shares your reason plus your site URL, admin email and basic environment details (PHP, WordPress, active plugins). Skip & Deactivate sends nothing.', 'linguator-pro' ),
-					),
-				)
-			);
-		}
 	}
 
 	/**
