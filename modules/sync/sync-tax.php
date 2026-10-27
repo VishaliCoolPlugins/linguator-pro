@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sync_Tax {
+class Linguator_Pro_Sync_Tax {
 
 	/**
 	 * Stores the plugin options.

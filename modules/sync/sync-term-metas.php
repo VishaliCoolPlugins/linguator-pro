@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sync_Term_Metas extends Linguator_Sync_Metas {
+class Linguator_Pro_Sync_Term_Metas extends Linguator_Pro_Sync_Metas {
 
 	/**
 	 * Constructor.

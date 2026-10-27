@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Includes\Options;
+namespace LinguatorPro\Includes\Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -12,7 +12,7 @@ use WP_Error;
  */
 
 
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 
 
 

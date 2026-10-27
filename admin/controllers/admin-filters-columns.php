@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
 use WP_Post;
 use WP_Query;
 use WP_Screen;

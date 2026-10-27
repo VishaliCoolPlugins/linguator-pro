@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Includes\Other;
+namespace LinguatorPro\Includes\Other;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -94,7 +94,7 @@ class Linguator_Language_Factory {
 		}
 
 		// The description fields can contain any property.
-		$description = linguator_maybe_unserialize( $terms['lmat_language']->description );
+		$description = linguator_pro_maybe_unserialize( $terms['lmat_language']->description );
 
 		if ( is_array( $description ) ) {
 			$description = array_intersect_key(
@@ -201,7 +201,7 @@ class Linguator_Language_Factory {
 	 */
 	private function get_languages() {
 		if ( empty( self::$languages ) ) {
-			self::$languages = include LINGUATOR_DIR . '/admin/settings/controllers/languages.php';
+			self::$languages = include LINGUATOR_PRO_DIR . '/admin/settings/controllers/languages.php';
 		}
 
 		return self::$languages;
@@ -239,14 +239,14 @@ class Linguator_Language_Factory {
 
 		// Custom flags?
 		$directories = array(
-			LMAT_LOCAL_DIR,
+			LMATP_LOCAL_DIR,
 			get_stylesheet_directory() . '/linguator',
 			get_template_directory() . '/linguator',
 		);
 
 		foreach ( $directories as $dir ) {
 			if ( is_readable( $file = "{$dir}/{$locale}.png" ) || is_readable( $file = "{$dir}/{$locale}.jpg" ) || is_readable( $file = "{$dir}/{$locale}.jpeg" ) || is_readable( $file = "{$dir}/{$locale}.svg" ) ) {
-				$custom_flag_url = linguator_content_path_to_url( $file );
+				$custom_flag_url = linguator_pro_content_path_to_url( $file );
 				if ( '' !== $custom_flag_url ) {
 					$flags['custom_flag'] = array(
 						'url' => $custom_flag_url,

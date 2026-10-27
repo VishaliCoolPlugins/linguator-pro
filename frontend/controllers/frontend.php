@@ -2,34 +2,34 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Controllers;
+namespace LinguatorPro\Frontend\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Frontend\Controllers\Linguator_Choose_Lang_Content;
-use Linguator\Frontend\Controllers\Linguator_Choose_Lang_Url;
-use Linguator\Frontend\Controllers\Linguator_Choose_Lang_Domain;
-use Linguator\Frontend\Controllers\Linguator_Frontend_Auto_Translate;
-use Linguator\Frontend\Controllers\Linguator_Frontend_Nav_Menu;
-use Linguator\Frontend\Controllers\Linguator_Frontend_Static_Pages;
-use Linguator\Frontend\Filters\Linguator_Frontend_Filters;
-use Linguator\Frontend\Filters\Linguator_Frontend_Filters_Links;
-use Linguator\Frontend\Filters\Linguator_Frontend_Filters_Search;
-use Linguator\Frontend\Filters\Linguator_Frontend_Filters_Widgets;
-use Linguator\Frontend\Services\Linguator_Frontend_Links;
-use Linguator\Includes\Helpers\Linguator_Default_Term;
-use Linguator\Includes\Other\Linguator_Query;
-use Linguator\Frontend\Services\Linguator_Canonical;
-use Linguator\Includes\Other\Linguator_Switch_Language;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Frontend\Controllers\Linguator_Choose_Lang_Content;
+use LinguatorPro\Frontend\Controllers\Linguator_Choose_Lang_Url;
+use LinguatorPro\Frontend\Controllers\Linguator_Choose_Lang_Domain;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend_Auto_Translate;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend_Nav_Menu;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend_Static_Pages;
+use LinguatorPro\Frontend\Filters\Linguator_Frontend_Filters;
+use LinguatorPro\Frontend\Filters\Linguator_Frontend_Filters_Links;
+use LinguatorPro\Frontend\Filters\Linguator_Frontend_Filters_Search;
+use LinguatorPro\Frontend\Filters\Linguator_Frontend_Filters_Widgets;
+use LinguatorPro\Frontend\Services\Linguator_Frontend_Links;
+use LinguatorPro\Includes\Helpers\Linguator_Default_Term;
+use LinguatorPro\Includes\Other\Linguator_Query;
+use LinguatorPro\Frontend\Services\Linguator_Canonical;
+use LinguatorPro\Includes\Other\Linguator_Switch_Language;
 
 
 
 /**
- * Main Linguator class when on frontend, accessible from @see LMAT().
+ * Main Linguator class when on frontend, accessible from @see LMATP().
  *
  *  
  */

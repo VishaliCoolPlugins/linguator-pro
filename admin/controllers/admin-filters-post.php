@@ -2,17 +2,17 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Filters_Post_Base;
-use Linguator\Admin\Controllers\Linguator_Language;
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
-use Linguator\Includes\Other\Linguator_Query;
-use Linguator\Includes\Capabilities\User;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Filters_Post_Base;
+use LinguatorPro\Admin\Controllers\Linguator_Language;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Other\Linguator_Query;
+use LinguatorPro\Includes\Capabilities\User;
 
 /**
  * Manages filters and actions related to posts on admin side

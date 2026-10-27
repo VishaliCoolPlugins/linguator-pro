@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Abstract_Option;
 
 /**
  * Class defining menu sync visibility option.
@@ -65,7 +65,7 @@ class Menu_Sync_Visibility extends Abstract_Option {
 	 * @param Options $options All options.
 	 * @return bool|WP_Error The sanitized value. An instance of `WP_Error` in case of blocking error.
 	 */
-	protected function sanitize( $value, \Linguator\Includes\Options\Options $options ) {
+	protected function sanitize( $value, \LinguatorPro\Includes\Options\Options $options ) {
 		return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
 	}
 

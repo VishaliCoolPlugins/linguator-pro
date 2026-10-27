@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\jetpack;
+namespace LinguatorPro\Integrations\jetpack;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -43,8 +43,8 @@ class Linguator_Jetpack {
 		}
 
 		// Infinite scroll ajax url must be on the right domain.
-		if ( did_action( 'lmat_init' ) && LMAT()->options['force_lang'] > 1 ) {
-			add_filter( 'infinite_scroll_ajax_url', array( LMAT()->links_model, 'site_url' ) );
+		if ( did_action( 'lmat_init' ) && LMATP()->options['force_lang'] > 1 ) {
+			add_filter( 'infinite_scroll_ajax_url', array( LMATP()->links_model, 'site_url' ) );
 			add_filter( 'infinite_scroll_js_settings', array( $this, 'jetpack_infinite_scroll_js_settings' ) );
 		}
 	}
@@ -60,7 +60,7 @@ class Linguator_Jetpack {
 	 */
 	public function jetpack_widget_get_top_posts( $posts ) {
 		foreach ( $posts as $k => $post ) {
-			if ( linguator_current_language() !== linguator_get_post_language( $post['post_id'] ) ) {
+			if ( linguator_pro_current_language() !== linguator_pro_get_post_language( $post['post_id'] ) ) {
 				unset( $posts[ $k ] );
 			}
 		}
@@ -81,7 +81,7 @@ class Linguator_Jetpack {
 	 */
 	public function grunion_contact_form_field_html_filter( $r, $field_label ) {
 		if ( function_exists( 'icl_translate' ) ) {
-			if ( linguator_current_language() !== linguator_default_language() ) {
+			if ( linguator_pro_current_language() !== linguator_pro_default_language() ) {
 				$label_translation = icl_translate( 'jetpack ', $field_label . '_label', $field_label );
 				$r = str_replace( $field_label, $label_translation, $r );
 			}
@@ -100,11 +100,11 @@ class Linguator_Jetpack {
 	 */
 	public function jetpack_ogp( $tags ) {
 		if ( did_action( 'lmat_init' ) ) {
-			foreach ( LMAT()->model->get_languages_list() as $language ) {
-				if ( LMAT()->curlang->slug !== $language->slug && LMAT()->links->get_translation_url( $language ) && isset( $language->facebook ) ) {
+			foreach ( LMATP()->model->get_languages_list() as $language ) {
+				if ( LMATP()->curlang->slug !== $language->slug && LMATP()->links->get_translation_url( $language ) && isset( $language->facebook ) ) {
 					$tags['og:locale:alternate'][] = $language->facebook;
 				}
-				if ( LMAT()->curlang->slug === $language->slug && isset( $language->facebook ) ) {
+				if ( LMATP()->curlang->slug === $language->slug && isset( $language->facebook ) ) {
 					$tags['og:locale'] = $language->facebook;
 				}
 			}
@@ -122,7 +122,7 @@ class Linguator_Jetpack {
 	 * @return array
 	 */
 	public function jetpack_relatedposts_filter_filters( $filters, $post_id ) {
-		$slug = sanitize_title( linguator_get_post_language( $post_id, 'slug' ) );
+		$slug = sanitize_title( linguator_pro_get_post_language( $post_id, 'slug' ) );
 		$filters[] = array( 'term' => array( 'taxonomy.language.slug' => $slug ) );
 		return $filters;
 	}
@@ -136,7 +136,7 @@ class Linguator_Jetpack {
 	 * @return array
 	 */
 	public function jetpack_infinite_scroll_js_settings( $settings ) {
-		$settings['history']['host'] = wp_parse_url( linguator_home_url(), PHP_URL_HOST ); // Jetpack uses get_option( 'home' ).
+		$settings['history']['host'] = wp_parse_url( linguator_pro_home_url(), PHP_URL_HOST ); // Jetpack uses get_option( 'home' ).
 		return $settings;
 	}
 }

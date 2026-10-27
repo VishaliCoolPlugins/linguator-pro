@@ -1,6 +1,6 @@
 /**
  * Turn literal \n, \r, \t (backslash + letter) into real control characters after DOM / API reads.
- * Matches server-side `Linguator\Modules\REST\V1\Bulk_Translation::ai_normalize_translation_string()`.
+ * Matches server-side `LinguatorPro\Modules\REST\V1\Bulk_Translation::ai_normalize_translation_string()`.
  * Repeats until stable (max 5 passes) so doubled escapes from the model (e.g. "\\n") collapse correctly.
  * Also removes up to three layers of stray leading/trailing ASCII `"` some models add per value.
  *

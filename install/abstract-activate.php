@@ -2,10 +2,10 @@
 /**
  * @package Linguator
  *
- * IMPORTANT: You must define the constants `LINGUATOR_BASENAME` and `LINGUATOR_VERSION` for this to work.
+ * IMPORTANT: You must define the constants `LINGUATOR_PRO_BASENAME` and `LINGUATOR_PRO_VERSION` for this to work.
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

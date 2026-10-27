@@ -1,7 +1,7 @@
 <?php
-namespace Linguator\Custom_Fields;
+namespace LinguatorPro\Custom_Fields;
 
-use Linguator\Settings\Header\Header;
+use LinguatorPro\Settings\Header\Header;
 
 if(!defined('ABSPATH')) exit;
 
@@ -34,12 +34,12 @@ if(!class_exists('Custom_Fields')) {
 		@return bool
 		*/
         public function linguator_custom_fields_assets($status, $tab, $is_settings_tab){
-			if($is_settings_tab && $tab === 'custom-fields' && function_exists('LMAT')){
+			if($is_settings_tab && $tab === 'custom-fields' && function_exists('LMATP')){
 
-				$header = Header::get_instance('custom-fields', LMAT()->model);
+				$header = Header::get_instance('custom-fields', LMATP()->model);
 				$header->header_assets();
 
-				$datatable_handle = linguator_enqueue_datatable_assets();
+				$datatable_handle = linguator_pro_enqueue_datatable_assets();
 
 				wp_localize_script( $datatable_handle, 'lmatCustomTableDataObject', array(
 					'admin_url' => esc_url(admin_url('admin-ajax.php')),
@@ -74,7 +74,7 @@ if(!class_exists('Custom_Fields')) {
 		public function linguator_render_custom_fields_page($status, $selected_tab, $active_tab) {
 			if($selected_tab === 'custom-fields' && $active_tab === 'settings'){
 
-				$header = Header::get_instance('custom-fields', LMAT()->model);
+				$header = Header::get_instance('custom-fields', LMATP()->model);
 
 				$header->header();
 
@@ -256,7 +256,7 @@ if(!class_exists('Custom_Fields')) {
 						continue;
 					}
 
-					$serialized_value=linguator_maybe_unserialize($result['meta_value']);
+					$serialized_value=linguator_pro_maybe_unserialize($result['meta_value']);
 					$value_type=json_decode($result['meta_value'], true) ? 'array' : (is_array($serialized_value) ? 'array' : 'string');
 					
 					$type=isset($allowed_fields[$result['meta_key']]) && true === $allowed_fields[$result['meta_key']]['status'] ? $allowed_fields[$result['meta_key']]['type'] : $value_type;
@@ -379,7 +379,7 @@ if(!class_exists('Custom_Fields')) {
 
 			WP_Filesystem();
 
-			$local_path = trailingslashit( LINGUATOR_DIR ) . 'modules/page-translation/block-translation-rules/default-allow-metafields.json';
+			$local_path = trailingslashit( LINGUATOR_PRO_DIR ) . 'modules/page-translation/block-translation-rules/default-allow-metafields.json';
 			if ( $wp_filesystem && $wp_filesystem->exists( $local_path ) && $wp_filesystem->is_readable( $local_path ) ) {
 				$default_allowed_fields = $wp_filesystem->get_contents( $local_path );
 			} else {

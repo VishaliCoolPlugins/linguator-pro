@@ -2,12 +2,12 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations;
+namespace LinguatorPro\Integrations;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-use Linguator\Includes\Core\Linguator;
+use LinguatorPro\Includes\Core\Linguator;
 
 
 

@@ -6,7 +6,7 @@
  * @wordpress-plugin
  */
 
-namespace Linguator\Integrations\elementor;
+namespace LinguatorPro\Integrations\elementor;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -41,7 +41,7 @@ class Linguator_Template_Translation {
         add_action('elementor/frontend/widget/before_render', [$this, 'linguator_translate_widget_template_id']);
         add_action('elementor/documents/register_controls', [$this, 'linguator_add_language_panel_controls']);
 
-        if (linguator_is_plugin_active('elementor-pro/elementor-pro.php')) {
+        if (linguator_pro_is_plugin_active('elementor-pro/elementor-pro.php')) {
             add_action('set_object_terms', [$this, 'linguator_update_conditions_on_translation_change'], 10, 4);
         }
 
@@ -81,19 +81,19 @@ class Linguator_Template_Translation {
         }
 
         // Ensure Linguator is properly initialized
-        if (!function_exists('LMAT') || empty(LMAT()->model)) {
+        if (!function_exists('LMATP') || empty(LMATP()->model)) {
             return;
         }
 
         // Get the default language
-        $default_lang = LMAT()->model->get_default_language();
+        $default_lang = LMATP()->model->get_default_language();
         if (!$default_lang) {
             return;
         }
 
         // Use Linguator's efficient mass assignment for post type
         // This will find all elementor_library posts without language and assign the default language
-        LMAT()->model->set_language_in_mass($default_lang, ['post']);
+        LMATP()->model->set_language_in_mass($default_lang, ['post']);
 
         // Mark the process as completed
         update_option('lmat_elementor_templates_assigned', true);
@@ -109,18 +109,18 @@ class Linguator_Template_Translation {
      */
     public function linguator_translate_template_id($post_id) {
         // Get the language of the current page
-        $page_lang = linguator_get_post_language(get_the_ID());
+        $page_lang = linguator_pro_get_post_language(get_the_ID());
         
         // Get the translated template in current page's language (if exists)
-        $translated_post_id = linguator_get_post($post_id, $page_lang);
+        $translated_post_id = linguator_pro_get_post($post_id, $page_lang);
     
         // If translated template exists, use it. Otherwise, fallback to default language template
         if ($translated_post_id) {
             $post_id = $translated_post_id;
         } else {
             // Fallback: get the template in the default language
-            $default_lang = linguator_default_language();
-            $default_template_id = linguator_get_post($post_id, $default_lang);
+            $default_lang = linguator_pro_default_language();
+            $default_template_id = linguator_pro_get_post($post_id, $default_lang);
             
             if ($default_template_id) {
                 $post_id = $default_template_id;
@@ -147,16 +147,16 @@ class Linguator_Template_Translation {
             return $sub_id;
         }
 
-        $default_lang = linguator_default_language();
+        $default_lang = linguator_pro_default_language();
         // Get current page/template ID from context
         $current_template_id = get_the_ID() ?: (is_singular() ? get_queried_object_id() : 0);
-        $current_lang = $current_template_id ? linguator_get_post_language($current_template_id) : null;
+        $current_lang = $current_template_id ? linguator_pro_get_post_language($current_template_id) : null;
 
-        if ($current_lang && $current_lang !== $default_lang && $current_template_id && linguator_get_post($current_template_id, $default_lang)) {
+        if ($current_lang && $current_lang !== $default_lang && $current_template_id && linguator_pro_get_post($current_template_id, $default_lang)) {
             if (in_array($condition['sub_name'], get_post_types(), true)) {
-                $sub_id = linguator_get_post($sub_id) ?: $sub_id;
+                $sub_id = linguator_pro_get_post($sub_id) ?: $sub_id;
             } else {
-                $sub_id = linguator_get_term($sub_id) ?: $sub_id;
+                $sub_id = linguator_pro_get_term($sub_id) ?: $sub_id;
             }
         }
 
@@ -178,7 +178,7 @@ class Linguator_Template_Translation {
             return $false;
         }
 
-        $attrs['id'] = linguator_get_post(absint($attrs['id'])) ?: $attrs['id'];
+        $attrs['id'] = linguator_pro_get_post(absint($attrs['id'])) ?: $attrs['id'];
         $attrs['skip'] = 1;
 
         $output = '';
@@ -219,7 +219,7 @@ class Linguator_Template_Translation {
         $widget_name = $element->get_name();
 
         if ('template' === $widget_name) {
-            $template_id = linguator_get_post($element->get_settings('template_id')) ?: $element->get_settings('template_id');
+            $template_id = linguator_pro_get_post($element->get_settings('template_id')) ?: $element->get_settings('template_id');
             $element->set_settings('template_id', $template_id);
             return;
         }
@@ -228,7 +228,7 @@ class Linguator_Template_Translation {
             $component_instance = $element->get_settings('component_instance');
             if (is_array($component_instance) && isset($component_instance['value']['component_id']['value'])) {
                 $component_id = absint($component_instance['value']['component_id']['value']);
-                $translated_component_id = linguator_get_post($component_id);
+                $translated_component_id = linguator_pro_get_post($component_id);
                 if ($translated_component_id && $translated_component_id !== $component_id) {
                     $component_instance['value']['component_id']['value'] = $translated_component_id;
                     $element->set_settings('component_instance', $component_instance);
@@ -250,13 +250,13 @@ class Linguator_Template_Translation {
             return;
         }
 
-        // require_once LINGUATOR_DIR . 'helpers/lmat-helpers.php';
+        // require_once LINGUATOR_PRO_DIR . 'helpers/lmat-helpers.php';
 
         $post_id = $document->get_main_id();
-        $languages = linguator_languages_list(['fields' => '']);
-        $translations = linguator_get_post_translations($post_id);
-        $current_lang_slug = linguator_get_post_language($post_id);
-        $current_lang_name = linguator_get_post_language($post_id, 'name');
+        $languages = linguator_pro_languages_list(['fields' => '']);
+        $translations = linguator_pro_get_post_translations($post_id);
+        $current_lang_slug = linguator_pro_get_post_language($post_id);
+        $current_lang_name = linguator_pro_get_post_language($post_id, 'name');
 
         $document->start_controls_section(
             'lmat_language_panel_controls',

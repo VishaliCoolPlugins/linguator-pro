@@ -4,13 +4,13 @@
  * Run: php tests/admin-bar-category-regressions.php
  */
 
-namespace Linguator\Includes\Base {
+namespace LinguatorPro\Includes\Base {
 	class Linguator_Base {
 		public $model;
 	}
 }
 
-namespace Linguator\Includes\Other {
+namespace LinguatorPro\Includes\Other {
 	class Linguator_Language {
 		public $slug = 'fr';
 	}
@@ -42,7 +42,7 @@ namespace {
 
 	require_once dirname( __DIR__ ) . '/admin/controllers/admin-base.php';
 
-	class Test_Admin_Base extends \Linguator\Admin\Controllers\Linguator_Admin_Base {
+	class Test_Admin_Base extends \LinguatorPro\Admin\Controllers\Linguator_Admin_Base {
 		public function get_language_url( $language ) {
 			return $this->get_admin_bar_menu_url( $language );
 		}
@@ -67,7 +67,7 @@ namespace {
 
 	$GLOBALS['pagenow']   = 'edit.php';
 	$GLOBALS['post_type'] = 'post';
-	$url = $admin->get_language_url( new \Linguator\Includes\Other\Linguator_Language() );
+	$url = $admin->get_language_url( new \LinguatorPro\Includes\Other\Linguator_Language() );
 
 	if ( false === strpos( $url, 'category_name=translated' ) ) {
 		throw new \RuntimeException( 'Admin-bar link did not translate the category without a current post.' );

@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Settings\Controllers;
+namespace LinguatorPro\Settings\Controllers;
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 use WP_Error;
 use WP_Ajax_Response;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 
 
 /**
@@ -289,13 +289,13 @@ class Linguator_Settings_Module {
 
 			if ( ! $errors->has_errors() ) {
 				// Send update message
-				linguator_add_notice( new WP_Error( 'settings_updated', __( 'Settings saved.', 'linguator-pro' ), 'success' ) );
+				linguator_pro_add_notice( new WP_Error( 'settings_updated', __( 'Settings saved.', 'linguator-pro' ), 'success' ) );
 				$notice_html = $this->linguator_render_settings_errors_html( 'linguator' );
 				$x = new WP_Ajax_Response( array( 'what' => 'success', 'data' => $notice_html ) );
 				$x->send();
 			} else {
 				// Send error messages
-				linguator_add_notice( $errors );
+				linguator_pro_add_notice( $errors );
 				$notice_html = $this->linguator_render_settings_errors_html( 'linguator' );
 				$x = new WP_Ajax_Response( array( 'what' => 'error', 'data' => $notice_html ) );
 				$x->send();

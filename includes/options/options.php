@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Includes\Options;
+namespace LinguatorPro\Includes\Options;
 
 /**
  * @package Linguator
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
-use Linguator\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Abstract_Option;
 use WP_Error;
 
 
@@ -166,7 +166,7 @@ class Options implements ArrayAccess, IteratorAggregate {
 			return;
 		}
 
-		if ( ! linguator_is_plugin_active( LINGUATOR_BASENAME ) && ! doing_action( 'activate_' . LINGUATOR_BASENAME ) ) {
+		if ( ! linguator_pro_is_plugin_active( LINGUATOR_PRO_BASENAME ) && ! doing_action( 'activate_' . LINGUATOR_PRO_BASENAME ) ) {
 			return;
 		}
 
@@ -626,7 +626,7 @@ class Options implements ArrayAccess, IteratorAggregate {
 			return $this->is_plugin_active[ $this->current_blog_id ];
 		}
 
-		$this->is_plugin_active[ $this->current_blog_id ] = linguator_is_plugin_active( LINGUATOR_BASENAME ) || doing_action( 'activate_' . LINGUATOR_BASENAME );
+		$this->is_plugin_active[ $this->current_blog_id ] = linguator_pro_is_plugin_active( LINGUATOR_PRO_BASENAME ) || doing_action( 'activate_' . LINGUATOR_PRO_BASENAME );
 
 		return $this->is_plugin_active[ $this->current_blog_id ];
 	}

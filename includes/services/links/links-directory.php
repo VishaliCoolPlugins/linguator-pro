@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Links;
+namespace LinguatorPro\Includes\Services\Links;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 
 
@@ -116,7 +116,7 @@ class Linguator_Links_Directory extends Linguator_Links_Permalinks {
 	 */
 	public function get_language_from_url( $url = '' ) {
 		if ( empty( $url ) ) {
-			$url = linguator_get_requested_url();
+			$url = linguator_pro_get_requested_url();
 		}
 
 		$path = (string) wp_parse_url( $url, PHP_URL_PATH );

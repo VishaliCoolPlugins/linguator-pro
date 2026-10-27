@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/duplicate-post.php';
 
-use Linguator\Integrations\duplicate_post\Linguator_Duplicate_Post;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\duplicate_post\Linguator_Duplicate_Post;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

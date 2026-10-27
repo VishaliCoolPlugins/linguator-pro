@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/yarpp.php';
 
-use Linguator\Integrations\yarpp\Linguator_Yarpp;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\yarpp\Linguator_Yarpp;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

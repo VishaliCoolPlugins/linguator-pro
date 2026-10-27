@@ -5,15 +5,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Freshness;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Freshness;
+use LinguatorPro\Modules\Scan\Result;
 
 /**
  * Finds content with no language and default-language content with no translation.

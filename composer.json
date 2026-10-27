@@ -27,14 +27,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Linguator\\Admin\\": "admin/",
-            "Linguator\\Frontend\\": "frontend/",
-            "Linguator\\Includes\\": "includes/",
-            "Linguator\\includes\\": "includes/",
-            "Linguator\\Settings\\": "admin/settings/",
-            "Linguator\\Modules\\": "modules/",
-            "Linguator\\Integrations\\": "integrations/",
-            "Linguator\\Install\\": "install/"
+            "LinguatorPro\\Admin\\": "admin/",
+            "LinguatorPro\\Frontend\\": "frontend/",
+            "LinguatorPro\\Includes\\": "includes/",
+            "LinguatorPro\\includes\\": "includes/",
+            "LinguatorPro\\Settings\\": "admin/settings/",
+            "LinguatorPro\\Modules\\": "modules/",
+            "LinguatorPro\\Integrations\\": "integrations/",
+            "LinguatorPro\\Install\\": "install/"
         },
         "classmap": [
             "includes/",

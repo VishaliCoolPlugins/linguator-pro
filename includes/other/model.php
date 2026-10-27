@@ -2,30 +2,30 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Includes\Other;
+namespace LinguatorPro\Includes\Other;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Models\Post_Types;
-use Linguator\Includes\Models\Taxonomies;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Models\Post_Types;
+use LinguatorPro\Includes\Models\Taxonomies;
+use LinguatorPro\Includes\Options\Options;
 
 // Link model classes
-use Linguator\Includes\Services\Links\Linguator_Links_Model;
-use Linguator\Includes\Services\Links\Linguator_Links_Default;
-use Linguator\Includes\Services\Links\Linguator_Links_Directory;
-use Linguator\Includes\Services\Links\Linguator_Links_Subdomain;
-use Linguator\Includes\Services\Links\Linguator_Links_Domain;
-use Linguator\Includes\Helpers\Linguator_Cache;
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Objects;
-use Linguator\Includes\Models\Translated\Linguator_Translated_Post;
-use Linguator\Includes\Models\Translated\Linguator_Translated_Term;
-use Linguator\Includes\Models\Hide_Empty;
-use Linguator\Includes\Models\Hide_Default;
+use LinguatorPro\Includes\Services\Links\Linguator_Links_Model;
+use LinguatorPro\Includes\Services\Links\Linguator_Links_Default;
+use LinguatorPro\Includes\Services\Links\Linguator_Links_Directory;
+use LinguatorPro\Includes\Services\Links\Linguator_Links_Subdomain;
+use LinguatorPro\Includes\Services\Links\Linguator_Links_Domain;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Objects;
+use LinguatorPro\Includes\Models\Translated\Linguator_Translated_Post;
+use LinguatorPro\Includes\Models\Translated\Linguator_Translated_Term;
+use LinguatorPro\Includes\Models\Hide_Empty;
+use LinguatorPro\Includes\Models\Hide_Default;
 
 /**
  * Setups the language and translations model based on WordPress taxonomies.
@@ -92,21 +92,21 @@ class Linguator_Model {
 	/**
 	 * Model for the languages.
 	 *
-	 * @var \Linguator\Includes\Models\Languages
+	 * @var \LinguatorPro\Includes\Models\Languages
 	 */
 	public $languages;
 
 	/**
 	 * Model for taxonomies translated by Linguator.
 	 *
-	 * @var \Linguator\Includes\Models\Post_Types
+	 * @var \LinguatorPro\Includes\Models\Post_Types
 	 */
 	public $post_types;
 
 	/**
 	 * Model for taxonomies filtered/translated by Linguator.
 	 *
-	 * @var \Linguator\Includes\Models\Taxonomies
+	 * @var \LinguatorPro\Includes\Models\Taxonomies
 	 */
 	public $taxonomies;
 

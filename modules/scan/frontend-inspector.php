@@ -5,7 +5,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -87,7 +87,7 @@ class Frontend_Inspector {
 		}
 
 		// A source-language template is edited in Elementor, not from a translation panel.
-		$model    = function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
+		$model    = function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
 		$language = $model ? $model->post->get_language( $post_id ) : false;
 		$default  = $model ? $model->get_default_language() : null;
 		if ( $language && $default && $language->slug === $default->slug && 'elementor_library' === get_post_type( $post_id ) ) {
@@ -207,7 +207,7 @@ class Frontend_Inspector {
 
 		wp_enqueue_script(
 			self::BLOCK_FOCUS_HANDLE,
-			plugins_url( 'admin/assets/js/lmat-block-editor-focus.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/lmat-block-editor-focus.js', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'wp-data', 'wp-dom-ready', 'wp-block-editor' ),
 			self::version( 'admin/assets/js/lmat-block-editor-focus.js' ),
 			true
@@ -229,7 +229,7 @@ class Frontend_Inspector {
 
 		wp_enqueue_script(
 			self::FOCUS_HANDLE,
-			plugins_url( 'admin/assets/js/lmat-elementor-focus.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/lmat-elementor-focus.js', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'elementor-editor' ),
 			self::version( 'admin/assets/js/lmat-elementor-focus.js' ),
 			true
@@ -244,7 +244,7 @@ class Frontend_Inspector {
 	 * @return bool
 	 */
 	private static function can_inspect(): bool {
-		return ! is_admin() && is_singular() && current_user_can( 'manage_options' ) && function_exists( 'LMAT' );
+		return ! is_admin() && is_singular() && current_user_can( 'manage_options' ) && function_exists( 'LMATP' );
 	}
 
 	/**
@@ -380,13 +380,13 @@ class Frontend_Inspector {
 
 		wp_enqueue_style(
 			self::HANDLE,
-			plugins_url( 'admin/assets/css/lmat-frontend-inspector.css', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/css/lmat-frontend-inspector.css', LINGUATOR_PRO_ROOT_FILE ),
 			array(),
 			self::version( 'admin/assets/css/lmat-frontend-inspector.css' )
 		);
 		wp_enqueue_script(
 			self::HANDLE,
-			plugins_url( 'admin/assets/js/lmat-frontend-inspector.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/lmat-frontend-inspector.js', LINGUATOR_PRO_ROOT_FILE ),
 			array(),
 			self::version( 'admin/assets/js/lmat-frontend-inspector.js' ),
 			true
@@ -402,9 +402,9 @@ class Frontend_Inspector {
 	 * @return string
 	 */
 	private static function version( string $relative ): string {
-		$file = LINGUATOR_DIR . '/' . $relative;
+		$file = LINGUATOR_PRO_DIR . '/' . $relative;
 
-		return file_exists( $file ) ? (string) filemtime( $file ) : (string) LINGUATOR_VERSION;
+		return file_exists( $file ) ? (string) filemtime( $file ) : (string) LINGUATOR_PRO_VERSION;
 	}
 
 	/**

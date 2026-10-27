@@ -4,7 +4,7 @@
  * Run: php tests/translated-object-regressions.php
  */
 
-namespace Linguator\Includes\Models\Translatable {
+namespace LinguatorPro\Includes\Models\Translatable {
 	class Linguator_Translatable_Object {
 		protected function get_object_term( $id, $taxonomy ) {
 			return $GLOBALS['test_term'];
@@ -15,11 +15,11 @@ namespace Linguator\Includes\Models\Translatable {
 namespace {
 	define( 'ABSPATH', __DIR__ );
 
-	function linguator_sanitize_id( $id ) {
+	function linguator_pro_sanitize_id( $id ) {
 		return (int) $id;
 	}
 
-	function linguator_maybe_unserialize( $value ) {
+	function linguator_pro_maybe_unserialize( $value ) {
 		return unserialize( $value );
 	}
 
@@ -37,7 +37,7 @@ namespace {
 
 	require_once dirname( __DIR__ ) . '/includes/models/translated/translated-object.php';
 
-	class Test_Translated_Object extends \Linguator\Includes\Models\Translated\Linguator_Translated_Object {
+	class Test_Translated_Object extends \LinguatorPro\Includes\Models\Translated\Linguator_Translated_Object {
 		protected $tax_translations = 'test_translations';
 		public $translation_ids = array( 'en' => 7, 'de' => 7 );
 

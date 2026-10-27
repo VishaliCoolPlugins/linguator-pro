@@ -1,9 +1,9 @@
 <?php
 
-namespace Linguator\Settings\Header;
+namespace LinguatorPro\Settings\Header;
 
-use Linguator\Includes\Migration\Polylang_Migration;
-use Linguator\Includes\Migration\WPML_Migration;
+use LinguatorPro\Includes\Migration\Polylang_Migration;
+use LinguatorPro\Includes\Migration\WPML_Migration;
 /**
  * Header file for settings page
  *
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Linguator\Settings\Header\Header' ) ) {
+if ( ! class_exists( 'LinguatorPro\Settings\Header\Header' ) ) {
     /**
      * Header class
      * @param mixed $tab
@@ -153,7 +153,7 @@ if ( ! class_exists( 'Linguator\Settings\Header\Header' ) ) {
 			echo '<div id="lmat-settings-header-tabs">';
 			echo '<div class="lmat-settings-header-tab-container">';
 			echo '<div class="lmat-settings-header-logo">';
-			echo '<a href="' . esc_url( admin_url( 'admin.php?page=lmat_settings&tab=general' ) ) . '"><img src="' . esc_url( plugin_dir_url( LINGUATOR_ROOT_FILE ) . 'assets/logo/linguator_icon.svg' ) . '" alt="Linguator" /></a>';
+			echo '<a href="' . esc_url( admin_url( 'admin.php?page=lmat_settings&tab=general' ) ) . '"><img src="' . esc_url( plugin_dir_url( LINGUATOR_PRO_ROOT_FILE ) . 'assets/logo/linguator_icon.svg' ) . '" alt="Linguator" /></a>';
 			echo '</div>';
 			echo '<div class="lmat-settings-header-tab-list">';
 			foreach ( $this->tabs() as $key => $value ) {
@@ -173,9 +173,9 @@ if ( ! class_exists( 'Linguator\Settings\Header\Header' ) ) {
 			$video_label   = esc_html__( 'Video Tutorial', 'linguator-pro' );
 			$support_label = esc_html__( 'Support', 'linguator-pro' );
 
-			$docs_icon_url    = plugin_dir_url( LINGUATOR_ROOT_FILE ) . 'assets/logo/docs.svg';
-			$video_icon_url   = plugin_dir_url( LINGUATOR_ROOT_FILE ) . 'assets/logo/video.svg';
-			$support_icon_url = plugin_dir_url( LINGUATOR_ROOT_FILE ) . 'assets/logo/support.svg';
+			$docs_icon_url    = plugin_dir_url( LINGUATOR_PRO_ROOT_FILE ) . 'assets/logo/docs.svg';
+			$video_icon_url   = plugin_dir_url( LINGUATOR_PRO_ROOT_FILE ) . 'assets/logo/video.svg';
+			$support_icon_url = plugin_dir_url( LINGUATOR_PRO_ROOT_FILE ) . 'assets/logo/support.svg';
 
 			echo '<a href="https://linguator.com/documentation/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=docs&utm_content=dashboard" target="_blank" rel="noopener noreferrer" class="lmat-header-action-link" title="' . esc_attr( $docs_label ) . '"><span class="lmat-header-action-icon" style="--lmat-icon-url: url(\'' . esc_url( $docs_icon_url ) . '\');" aria-hidden="true"></span><span class="screen-reader-text">' . esc_html( $docs_label ) . '</span></a>';
 			echo '<a href="https://linguator.com/docs/video-tutorials/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=video&utm_content=dashboard" target="_blank" rel="noopener noreferrer" class="lmat-header-action-link" title="' . esc_attr( $video_label ) . '"><span class="lmat-header-action-icon" style="--lmat-icon-url: url(\'' . esc_url( $video_icon_url ) . '\');" aria-hidden="true"></span><span class="screen-reader-text">' . esc_html( $video_label ) . '</span></a>';
@@ -199,7 +199,7 @@ if ( ! class_exists( 'Linguator\Settings\Header\Header' ) ) {
 		 * @return void
 		 */
 		public function header_assets() {
-			wp_enqueue_style( 'lmat-settings-header', plugins_url( 'admin/assets/css/settings-header.css', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
+			wp_enqueue_style( 'lmat-settings-header', plugins_url( 'admin/assets/css/settings-header.css', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
 		}
 	}
 

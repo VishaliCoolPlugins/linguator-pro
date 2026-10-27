@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options;
+namespace LinguatorPro\Includes\Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

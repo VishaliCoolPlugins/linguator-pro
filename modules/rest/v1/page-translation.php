@@ -1,6 +1,6 @@
 <?php
 
-namespace Linguator\Modules\REST\V1;
+namespace LinguatorPro\Modules\REST\V1;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

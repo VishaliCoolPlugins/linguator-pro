@@ -5,13 +5,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Model;
 
 /**
  * Loads checks, runs them, applies the ignore list and persists the report.

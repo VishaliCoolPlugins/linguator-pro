@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/wp-sweep.php';
 
-use Linguator\Integrations\wp_sweep\Linguator_WP_Sweep;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\wp_sweep\Linguator_WP_Sweep;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\jetpack;
+namespace LinguatorPro\Integrations\jetpack;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Frontend\Controllers\Linguator_Frontend;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend;
 use Featured_Content;
 
 
@@ -60,7 +60,7 @@ class Linguator_Featured_Content {
 		}
 
 		// Get featured tag translations
-		$tags = LMAT()->model->term->get_translations( $term->term_id );
+		$tags = LMATP()->model->term->get_translations( $term->term_id );
 		$ids = array();
 
 		// Query for featured posts in all languages
@@ -105,7 +105,7 @@ class Linguator_Featured_Content {
 	 * @return array modified $settings
 	 */
 	public function linguator_option_featured_content( $settings ) {
-		if ( $this->is_active() && LMAT() instanceof Linguator_Frontend && $settings['tag-id'] && $tr = linguator_get_term( $settings['tag-id'] ) ) {
+		if ( $this->is_active() && LMATP() instanceof Linguator_Frontend && $settings['tag-id'] && $tr = linguator_pro_get_term( $settings['tag-id'] ) ) {
 			$settings['tag-id'] = $tr;
 		}
 

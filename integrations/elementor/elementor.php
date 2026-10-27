@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\elementor;
+namespace LinguatorPro\Integrations\elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Capabilities\Capabilities;
+use LinguatorPro\Includes\Capabilities\Capabilities;
 use WP_Error;
 use WP_REST_Request;
 
@@ -134,14 +134,14 @@ class Linguator_Elementor {
 		}
 
 		// Get the post language
-		$language = linguator_get_post_language( $post_id );
+		$language = linguator_pro_get_post_language( $post_id );
 		
 		if ( ! $language ) {
 			return new WP_Error( 'language_not_found', 'Language not found for this post', [ 'status' => 404 ] );
 		}
 
 		// Get language object with flag information
-		$language_object = LMAT()->model->get_language( $language );
+		$language_object = LMATP()->model->get_language( $language );
 		
 		if ( ! $language_object ) {
 			return new WP_Error( 'language_object_not_found', 'Language object not found', [ 'status' => 404 ] );

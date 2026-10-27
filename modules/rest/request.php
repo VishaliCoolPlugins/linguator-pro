@@ -3,7 +3,7 @@
  * @package Linguator 
  */
 
-namespace Linguator\Modules\REST;
+namespace LinguatorPro\Modules\REST;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 use Closure;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_REST_Request;
 use WP_REST_Posts_Controller;
 use WP_REST_Terms_Controller;

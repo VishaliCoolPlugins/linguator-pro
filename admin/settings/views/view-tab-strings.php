@@ -4,7 +4,7 @@
  *
  * @package Linguator
  *
- * @var \Linguator\Settings\Header\Header $header An object representing the header.
+ * @var \LinguatorPro\Settings\Header\Header $header An object representing the header.
  * @var Linguator_Table_String $string_table An object representing the translations list table.
  */
 
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
 ?>
 <div class="form-wrap">
 	<form id="string-translation" method="post" action="<?php echo esc_url( add_query_arg( 'noheader', 'true' ) ); ?>">

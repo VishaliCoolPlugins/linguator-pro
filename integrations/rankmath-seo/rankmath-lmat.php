@@ -4,16 +4,16 @@
  *
  * @package Linguator
  */
-namespace Linguator\Integrations\RankMath;
+namespace LinguatorPro\Integrations\RankMath;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 use RankMath\Sitemap\Sitemap;
-use Linguator\Includes\Options\Linguator_Translate_Option;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Frontend\Controllers\Linguator_Frontend;
+use LinguatorPro\Includes\Options\Linguator_Translate_Option;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend;
 
 /**
  * Manages the compatibility with the Rank Math plugin
@@ -38,7 +38,7 @@ class Linguator_RankMath {
 		add_action( 'wp_loaded', array( $this, 'rm_translate_options_keys' ) );
 		add_action( 'plugins_loaded', array( $this, 'rm_reset_rank_math_options' ) );
 
-		if ( LMAT() instanceof Linguator_Frontend ) {
+		if ( LMATP() instanceof Linguator_Frontend ) {
 			// Filters sitemap queries to remove inactive language or to get
 			// one sitemap per language when using multiple domains or subdomains
 			// because Rank Math does not accept several domains or subdomains in one sitemap
@@ -47,7 +47,7 @@ class Linguator_RankMath {
 			add_filter( 'rank_math/sitemap/get_posts/join', array( $this, 'rank_math_sitemap_join_clause' ), 10, 2 );
 			add_filter( 'rank_math/sitemap/get_posts/where', array( $this, 'rank_math_sitemap_where_clause' ), 10, 2 );
 
-			if ( LMAT()->options['force_lang'] > 1 ) {
+			if ( LMATP()->options['force_lang'] > 1 ) {
 				add_filter( 'rank_math/sitemap/enable_caching', '__return_false' ); // Disable cache! otherwise Rank Math keeps only one domain
 				add_filter( 'home_url', array( $this, 'rank_math_home_url' ), 10, 2 );
 			} else {
@@ -140,9 +140,9 @@ class Linguator_RankMath {
 	 * @return string
 	 */
 	public function rank_math_home_url( $url, $path ) {
-		$uri = empty( $path ) ? ltrim( (string) wp_parse_url( linguator_get_requested_url(), PHP_URL_PATH ), '/' ) : $path;
+		$uri = empty( $path ) ? ltrim( (string) wp_parse_url( linguator_pro_get_requested_url(), PHP_URL_PATH ), '/' ) : $path;
 		if ( 'sitemap_index.xml' === $uri || preg_match( '#([^/]+?)-sitemap([0-9]+)?\.xml|([a-z]+)?-?sitemap\.xsl#', $uri ) ) {
-			$url = LMAT()->links_model->switch_language_in_link( $url, LMAT()->curlang );
+			$url = LMATP()->links_model->switch_language_in_link( $url, LMATP()->curlang );
 		}
 
 		return $url;
@@ -154,7 +154,7 @@ class Linguator_RankMath {
 	 * @return array list of active language slugs, empty if all languages are active
 	 */
 	protected function rank_math_get_active_languages() {
-		$languages = LMAT()->model->get_languages_list();
+		$languages = LMATP()->model->get_languages_list();
 		if ( wp_list_filter( $languages, array( 'active' => false ) ) ) {
 			return wp_list_pluck( wp_list_filter( $languages, array( 'active' => false ), 'NOT' ), 'slug' );
 		}
@@ -170,7 +170,7 @@ class Linguator_RankMath {
 	 * @return string
 	 */
 	public function rank_math_sitemap_join_clause( $sql, $post_type ) {
-		return linguator_is_translated_post_type( $post_type ) ? $sql . LMAT()->model->post->join_clause( 'p' ) : $sql;
+		return linguator_pro_is_translated_post_type( $post_type ) ? $sql . LMATP()->model->post->join_clause( 'p' ) : $sql;
 	}
 
 	/**
@@ -182,20 +182,20 @@ class Linguator_RankMath {
 	 * @return string
 	 */
 	public function rank_math_sitemap_where_clause( $sql, $post_type ) {
-		if ( ! linguator_is_translated_post_type( $post_type ) ) {
+		if ( ! linguator_pro_is_translated_post_type( $post_type ) ) {
 			return $sql;
 		}
 
-		if ( LMAT()->options['force_lang'] > 1 && LMAT()->curlang instanceof Linguator_Language ) {
-			return $sql . LMAT()->model->post->where_clause( LMAT()->curlang );
+		if ( LMATP()->options['force_lang'] > 1 && LMATP()->curlang instanceof Linguator_Language ) {
+			return $sql . LMATP()->model->post->where_clause( LMATP()->curlang );
 		}
 
 		$languages = $this->rank_math_get_active_languages();
 		if ( empty( $languages ) ) { // Empty when all languages are active.
-			$languages = linguator_languages_list();
+			$languages = linguator_pro_languages_list();
 		}
 
-		return $sql . LMAT()->model->post->where_clause( $languages );
+		return $sql . LMATP()->model->post->where_clause( $languages );
 	}
 
 	/**
@@ -214,7 +214,7 @@ class Linguator_RankMath {
 
 		// Get active languages directly from the languages model
 		try {
-			$languages = LMAT()->model->languages->get_list();
+			$languages = LMATP()->model->languages->get_list();
 			$active_languages = array();
 			
 			foreach ( $languages as $lang ) {
@@ -277,27 +277,27 @@ class Linguator_RankMath {
 	 * @return bool
 	 */
 	public function update_sitemap_contents( $exclude, $type ) {
-		if ( linguator_is_translated_post_type( $type ) && ( 'post' !== $type || ! get_option( 'page_on_front' ) ) ) {
+		if ( linguator_pro_is_translated_post_type( $type ) && ( 'post' !== $type || ! get_option( 'page_on_front' ) ) ) {
 			// Include post, post type archives, and the homepages in all languages to the sitemap when the front page displays posts!
 			add_action(
 				"rank_math/sitemap/{$type}_content",
 				function() use ( $type ) {
 					$generator     = new \RankMath\Sitemap\Generator();
 					$post_type_obj = get_post_type_object( $type );
-					$languages     = wp_list_filter( LMAT()->model->get_languages_list(), array( 'active' => false ), 'NOT' );
+					$languages     = wp_list_filter( LMATP()->model->get_languages_list(), array( 'active' => false ), 'NOT' );
 					$mod           = Sitemap::get_last_modified_gmt( $type );
 					$output        = '';
 
 					if ( 'post' === $type ) {
-						if ( ! empty( LMAT()->options['hide_default'] ) ) {
+						if ( ! empty( LMATP()->options['hide_default'] ) ) {
 							// The home url is of course already added by Rank Math.
-							$languages = wp_list_filter( $languages, array( 'slug' => linguator_default_language() ), 'NOT' );
+							$languages = wp_list_filter( $languages, array( 'slug' => linguator_pro_default_language() ), 'NOT' );
 						}
 
 						foreach ( $languages as $lang ) {
 							$output .= $generator->sitemap_url(
 								array(
-									'loc' => linguator_home_url( $lang->slug ),
+									'loc' => linguator_pro_home_url( $lang->slug ),
 									'mod' => $mod,
 								)
 							);
@@ -308,10 +308,10 @@ class Linguator_RankMath {
 
 						if ( ! wpcom_vip_get_page_by_path( $slug ) ) {
 							// The post type archive in the current language is already added by Rank Math.
-							$languages = wp_list_filter( $languages, array( 'slug' => linguator_current_language() ), 'NOT' );
+							$languages = wp_list_filter( $languages, array( 'slug' => linguator_pro_current_language() ), 'NOT' );
 
 							foreach ( $languages as $lang ) {
-								LMAT()->curlang = $lang; // Switch the language to get the correct archive link.
+								LMATP()->curlang = $lang; // Switch the language to get the correct archive link.
 								$output        .= $generator->sitemap_url(
 									array(
 										'loc' => get_post_type_archive_link( $type ),
@@ -341,11 +341,11 @@ class Linguator_RankMath {
 
 		$post_id = (int) get_option( 'page_on_front' );
 
-		if ( ! is_home() && isset( $post->ID ) && $post->ID !== linguator_get_post( $post_id ) ) {
+		if ( ! is_home() && isset( $post->ID ) && $post->ID !== linguator_pro_get_post( $post_id ) ) {
 			return $canonical;
 		}
 
-		$path = ltrim( (string) wp_parse_url( linguator_get_requested_url(), PHP_URL_PATH ), '/' );
+		$path = ltrim( (string) wp_parse_url( linguator_pro_get_requested_url(), PHP_URL_PATH ), '/' );
 
 		return $canonical . $path;
 	}
@@ -386,8 +386,8 @@ class Linguator_RankMath {
 	protected function update_ogp_alternate_languages() {
 		$alternates = array();
 
-		foreach ( LMAT()->model->get_languages_list() as $language ) {
-			if ( isset( LMAT()->curlang ) && LMAT()->curlang->slug !== $language->slug && LMAT()->links->get_translation_url( $language ) && isset( $language->facebook ) ) {
+		foreach ( LMATP()->model->get_languages_list() as $language ) {
+			if ( isset( LMATP()->curlang ) && LMATP()->curlang->slug !== $language->slug && LMATP()->links->get_translation_url( $language ) && isset( $language->facebook ) ) {
 				$alternates[] = $language->facebook;
 			}
 		}
@@ -425,7 +425,7 @@ class Linguator_RankMath {
 			)
 		);
 
-		$sync_taxonomies = LMAT()->sync->taxonomies->get_taxonomies_to_copy( $sync, $from, $to );
+		$sync_taxonomies = LMATP()->sync->taxonomies->get_taxonomies_to_copy( $sync, $from, $to );
 
 		$taxonomies = array_intersect( $taxonomies, $sync_taxonomies );
 
@@ -452,11 +452,11 @@ class Linguator_RankMath {
 
 		$taxonomy = str_replace( 'rank_math_primary_', '', $key );
 
-		if ( ! LMAT()->model->is_translated_taxonomy( $taxonomy ) ) {
+		if ( ! LMATP()->model->is_translated_taxonomy( $taxonomy ) ) {
 			return $value;
 		}
 
-		return linguator_get_term( $value, $lang );
+		return linguator_pro_get_term( $value, $lang );
 	}
 
 	/**

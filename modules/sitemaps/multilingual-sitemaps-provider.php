@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Multilingual_Sitemaps_Provider extends WP_Sitemaps_Provider {
+class Linguator_Pro_Multilingual_Sitemaps_Provider extends WP_Sitemaps_Provider {
 	/**
 	 * Separator between name and language slug.
 	 */

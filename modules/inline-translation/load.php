@@ -4,7 +4,7 @@
  *
  * @package Linguator
  */
-namespace Linguator\Modules\Inline_Translation;
+namespace LinguatorPro\Modules\Inline_Translation;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly

@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Editors\Screens;
+namespace LinguatorPro\Modules\Editors\Screens;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Base\Linguator_Base;
 use WP_Screen;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Admin\Controllers\Linguator_Admin_Block_Editor;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Block_Editor;
 
 /**
  * Template class to manage editors scripts.
@@ -86,7 +86,7 @@ abstract class Abstract_Screen {
 
 		wp_enqueue_script(
 			static::get_handle(),
-			plugins_url( $this->get_script_path(), LINGUATOR_ROOT_FILE ),
+			plugins_url( $this->get_script_path(), LINGUATOR_PRO_ROOT_FILE ),
 			array(
 				'wp-api-fetch',
 				'wp-data',
@@ -94,7 +94,7 @@ abstract class Abstract_Screen {
 				'wp-sanitize',
 				'lodash',
 			),
-			LINGUATOR_VERSION,
+			LINGUATOR_PRO_VERSION,
 			true
 		);
 
@@ -198,9 +198,9 @@ abstract class Abstract_Screen {
 	protected function enqueue_style(): void {
 		wp_enqueue_style(
 			'linguator-block-widget-editor-css',
-			plugins_url( '/admin/assets/css/build/style' . $this->suffix . '.css', LINGUATOR_ROOT_FILE ),
+			plugins_url( '/admin/assets/css/build/style' . $this->suffix . '.css', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'wp-components' ),
-			LINGUATOR_VERSION
+			LINGUATOR_PRO_VERSION
 		);
 	}
 

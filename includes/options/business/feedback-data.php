@@ -3,14 +3,14 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Options\Primitive\Abstract_Boolean;
+use LinguatorPro\Includes\Options\Primitive\Abstract_Boolean;
 
 
 

@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
-use Linguator\Includes\Capabilities\User;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Capabilities\User;
 
 /**
  * Manages filters and actions related to media on admin side

@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Controllers;
+namespace LinguatorPro\Frontend\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Controllers\Linguator_Static_Pages;
+use LinguatorPro\Includes\Controllers\Linguator_Static_Pages;
 
 
 
@@ -302,7 +302,7 @@ class Linguator_Frontend_Static_Pages extends Linguator_Static_Pages {
 	 * @return int|false
 	 */
 	public function linguator_customize_page( $pre ) {
-		return is_numeric( $pre ) ? linguator_get_post( (int) $pre ) : $pre;
+		return is_numeric( $pre ) ? linguator_pro_get_post( (int) $pre ) : $pre;
 	}
 
 	/**

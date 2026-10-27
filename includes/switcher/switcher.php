@@ -3,10 +3,10 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher;
+namespace LinguatorPro\Includes\Switcher;
 
-use Linguator\Includes\Services\Links\Linguator_Links;
-use Linguator\Includes\Switcher\Settings\Settings;
+use LinguatorPro\Includes\Services\Links\Linguator_Links;
+use LinguatorPro\Includes\Switcher\Settings\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

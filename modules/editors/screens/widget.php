@@ -3,14 +3,14 @@
  * @package Linguator 
  */
 
-namespace Linguator\Modules\Editors\Screens;
+namespace LinguatorPro\Modules\Editors\Screens;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 use WP_Screen;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 /**
  * Class to manage Widget editor scripts.

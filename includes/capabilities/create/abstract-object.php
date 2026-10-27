@@ -3,12 +3,12 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Capabilities\Create;
+namespace LinguatorPro\Includes\Capabilities\Create;
 
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Modules\REST\Request;
-use Linguator\Includes\Capabilities\User;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Modules\REST\Request;
+use LinguatorPro\Includes\Capabilities\User;
 
 /**
  * Abstract class for helping choose the right language when creating or updating an object

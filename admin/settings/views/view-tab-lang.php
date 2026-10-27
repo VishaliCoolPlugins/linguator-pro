@@ -14,9 +14,9 @@ if (! defined('ABSPATH')) {
 }
 
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Settings\Controllers\Linguator_Settings;
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Settings\Controllers\Linguator_Settings;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
 
 ?>
 <div id="col-container">

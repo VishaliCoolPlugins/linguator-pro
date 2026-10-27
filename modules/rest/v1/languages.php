@@ -3,23 +3,23 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\REST\V1;
+namespace LinguatorPro\Modules\REST\V1;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Modules\REST\Abstract_Controller;
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Objects;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Modules\REST\Abstract_Controller;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Objects;
 use ReflectionClass;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use Linguator\Includes\Models\Languages as Languages_Model;
-use Linguator\Includes\Capabilities\Capabilities;
+use LinguatorPro\Includes\Models\Languages as Languages_Model;
+use LinguatorPro\Includes\Capabilities\Capabilities;
 
 
 /**
@@ -859,7 +859,7 @@ class Languages extends Abstract_Controller {
 		}
 
 		// Assign language and link translations.
-		linguator_set_post_language( $new_post_id, $target_lang_slug );
+		linguator_pro_set_post_language( $new_post_id, $target_lang_slug );
 
 		$translations = $this->model->post->get_translations( $source_id );
 		$source_lang  = $this->model->post->get_language( $source_id );

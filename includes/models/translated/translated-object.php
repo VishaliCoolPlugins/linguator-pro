@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models\Translated;
+namespace LinguatorPro\Includes\Models\Translated;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Object;
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Object;
+use LinguatorPro\Includes\Other\Linguator_Model;
 use WP_Term;
 
 /**
@@ -101,7 +101,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 			return false;
 		}
 
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		$translations = $this->get_translations( $id );
 
@@ -126,7 +126,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_translations_from_term_id( $term_id ) {
-		$term_id = linguator_sanitize_id( $term_id );
+		$term_id = linguator_pro_sanitize_id( $term_id );
 
 		if ( empty( $term_id ) ) {
 			return array();
@@ -139,7 +139,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 		}
 
 		// Lang slugs as array keys, translation IDs as array values.
-		$translations = linguator_maybe_unserialize( $translations_term->description );
+		$translations = linguator_pro_maybe_unserialize( $translations_term->description );
 		$translations = is_array( $translations ) ? $translations : array();
 
 		return $this->validate_translations( $translations, 0, 'display' );
@@ -157,7 +157,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function save_translations( $id, array $translations = array() ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -196,7 +196,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 		} else {
 			// Take care not to overwrite extra data stored in the description field, if any.
 			$group = (int) $term->term_id;
-			$descr = linguator_maybe_unserialize( $term->description );
+			$descr = linguator_pro_maybe_unserialize( $term->description );
 			$descr = is_array( $descr ) ? array_diff_key( $descr, $old_translations ) : array(); // Remove old translations.
 			$descr = array_merge( $descr, $translations ); // Add new one.
 			wp_update_term( $group, $this->tax_translations, array( 'description' => (string) maybe_serialize( $descr ) ) );
@@ -234,7 +234,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @return void
 	 */
 	public function delete_translation( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -246,7 +246,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 			return;
 		}
 
-		$descr = linguator_maybe_unserialize( $term->description );
+		$descr = linguator_pro_maybe_unserialize( $term->description );
 
 		if ( ! empty( $descr ) && is_array( $descr ) ) {
 			/*
@@ -278,7 +278,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_translations( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -299,7 +299,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_raw_translations( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -344,7 +344,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @phpstan-return int<0, max>
 	 */
 	public function get( $id, $lang ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return 0;
@@ -374,7 +374,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 	 * @return bool
 	 */
 	public function current_user_can_synchronize( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return false;
@@ -467,7 +467,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 				continue;
 			}
 
-			$trans = linguator_maybe_unserialize( $terms[ $id ]->description );
+			$trans = linguator_pro_maybe_unserialize( $terms[ $id ]->description );
 			$translations[ $id ] = is_array( $trans ) ? $trans : array();
 		}
 
@@ -514,7 +514,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 
 		// Make sure values are clean before working with them.
 		/** @phpstan-var array<non-empty-string, positive-int> $translations */
-		$translations = linguator_sanitize_ids( $translations );
+		$translations = linguator_pro_sanitize_ids( $translations );
 
 		if ( 'save' === $context ) {
 			/**
@@ -535,7 +535,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 			$translations = $valid_translations;
 		}
 
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return $translations;
@@ -689,7 +689,7 @@ abstract class Linguator_Translated_Object extends Linguator_Translatable_Object
 		// Prepare objects relationships.
 		if ( is_array( $terms ) ) {
 			foreach ( $terms as $term ) {
-				$t = linguator_maybe_unserialize( $term->description );
+				$t = linguator_pro_maybe_unserialize( $term->description );
 				if ( is_array( $t ) && in_array( $t, $translations ) ) {
 					foreach ( $t as $object_id ) {
 						if ( ! empty( $object_id ) ) {

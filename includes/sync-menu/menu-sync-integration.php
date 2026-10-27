@@ -33,7 +33,7 @@ add_action( 'admin_init', function() {
 	
 	
 	// Get Linguator instance
-	$linguator = LMAT();
+	$linguator = LMATP();
 	
 	if ( ! $linguator || ! isset( $linguator->model ) || ! isset( $linguator->options ) ) {
 		return;
@@ -52,7 +52,7 @@ add_action( 'admin_init', function() {
 	}
 
 	// Initialize menu sync with AJAX-only mode (registers handler but no UI)
-	new \Linguator\Admin\Controllers\Linguator_Admin_Menu_Sync( $linguator, true );
+	new \LinguatorPro\Admin\Controllers\Linguator_Admin_Menu_Sync( $linguator, true );
 }, 5 );
 
 /**
@@ -60,7 +60,7 @@ add_action( 'admin_init', function() {
  */
 add_action( 'load-nav-menus.php', function() {
 	// Get Linguator instance
-	$linguator = LMAT();
+	$linguator = LMATP();
 	
 	if ( ! $linguator || ! isset( $linguator->model ) || ! isset( $linguator->options ) ) {
 		return;
@@ -79,5 +79,5 @@ add_action( 'load-nav-menus.php', function() {
 	}
 
 	// Initialize menu sync with full UI (enqueues scripts and styles)
-	new \Linguator\Admin\Controllers\Linguator_Admin_Menu_Sync( $linguator, false );
+	new \LinguatorPro\Admin\Controllers\Linguator_Admin_Menu_Sync( $linguator, false );
 } );

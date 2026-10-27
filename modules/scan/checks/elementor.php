@@ -4,18 +4,18 @@
  *
  * @package Linguator
  */
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Elementor_Fields;
-use Linguator\Modules\Scan\Freshness;
-use Linguator\Modules\Scan\Frontend_Inspector;
-use Linguator\Modules\Scan\Link_Tools;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Elementor_Fields;
+use LinguatorPro\Modules\Scan\Freshness;
+use LinguatorPro\Modules\Scan\Frontend_Inspector;
+use LinguatorPro\Modules\Scan\Link_Tools;
+use LinguatorPro\Modules\Scan\Result;
 
 class Elementor extends Abstract_Check {
 	use Link_Tools;

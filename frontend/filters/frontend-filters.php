@@ -1,14 +1,14 @@
 <?php
-namespace Linguator\Frontend\Filters;
+namespace LinguatorPro\Frontend\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Core\Linguator;
-use Linguator\Includes\Filters\Linguator_Filters;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Core\Linguator;
+use LinguatorPro\Includes\Filters\Linguator_Filters;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 
 
@@ -51,7 +51,7 @@ class Linguator_Frontend_Filters extends Linguator_Filters {
 
 		// Strings translation ( must be applied before WordPress applies its default formatting filters )
 		foreach ( array( 'widget_text', 'widget_title' ) as $filter ) {
-			add_filter( $filter, 'linguator__', 1 );
+			add_filter( $filter, 'linguator_pro__', 1 );
 		}
 
 		// Translates biography
@@ -203,7 +203,7 @@ class Linguator_Frontend_Filters extends Linguator_Filters {
 	 * @return array
 	 */
 	public function linguator_widget_media_instance( $instance ) {
-		if ( empty( $instance['lmat_lang'] ) && $instance['attachment_id'] && $tr_id = linguator_get_post( $instance['attachment_id'] ) ) {
+		if ( empty( $instance['lmat_lang'] ) && $instance['attachment_id'] && $tr_id = linguator_pro_get_post( $instance['attachment_id'] ) ) {
 			$instance['attachment_id'] = $tr_id;
 			$attachment = get_post( $tr_id );
 

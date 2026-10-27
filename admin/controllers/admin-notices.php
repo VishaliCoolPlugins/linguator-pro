@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Translation_Dashboard;
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Includes\Other\Linguator_Translation_Dashboard;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
 
 /**
  * A class to manage admin notices
@@ -173,7 +173,7 @@ class Linguator_Admin_Notices {
 				update_option( 'lmat_setup_complete', true );
 				self::dismiss( $notice );
 
-				$cpfm_opt_in_choice = linguator_get_cpfm_opt_in_choice();
+				$cpfm_opt_in_choice = linguator_pro_get_cpfm_opt_in_choice();
 				$options = get_option( 'linguator' );
 				$lmat_feedback_data = is_array( $options ) && isset( $options['lmat_feedback_data'] ) ? (bool) $options['lmat_feedback_data'] : true;
 				if ( 'yes' === $cpfm_opt_in_choice || $lmat_feedback_data ) {

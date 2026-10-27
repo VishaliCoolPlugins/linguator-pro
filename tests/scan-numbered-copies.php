@@ -1,6 +1,6 @@
 <?php
 /** Run with php tests/scan-numbered-copies.php. */
-namespace Linguator\Includes\Other {
+namespace LinguatorPro\Includes\Other {
 	class Linguator_Model {
 		public $post;
 		public function get_translated_post_types() { return array( 'page' ); }
@@ -24,7 +24,7 @@ namespace {
 	require __DIR__ . '/../modules/scan/result.php';
 	require __DIR__ . '/../modules/scan/abstract-check.php';
 	require __DIR__ . '/../modules/scan/checks/url-numbered-copies.php';
-	$model = new \Linguator\Includes\Other\Linguator_Model();
+	$model = new \LinguatorPro\Includes\Other\Linguator_Model();
 	$model->post = new class {
 		public function get_language( $id ) { return (object) array( 'slug' => 4 === $id ? 'fr' : 'en', 'name' => 'Language' ); }
 	};
@@ -37,7 +37,7 @@ namespace {
 		item( 5, 'test-5', 'Test page', 8 ), item( 6, 'test-6', 'Test page', 0, 'draft' ),
 		item( 7, 'year-2026', 'Year' ),
 	);
-	$check = new \Linguator\Modules\Scan\Checks\Url_Numbered_Copies( $model );
+	$check = new \LinguatorPro\Modules\Scan\Checks\Url_Numbered_Copies( $model );
 	$result = $check->run()[0];
 	if ( 'warning' !== $result->status || 1 !== count( $result->details ) || 'url:numbered_copy:1:2' !== $result->details[0]['ignore_key'] ) {
 		throw new \RuntimeException( 'Expected only the matching same-language sibling pair.' );

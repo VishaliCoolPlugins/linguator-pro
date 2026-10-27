@@ -3,9 +3,9 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher\Settings;
+namespace LinguatorPro\Includes\Switcher\Settings;
 
-use Linguator\Includes\Switcher\Layout;
+use LinguatorPro\Includes\Switcher\Layout;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

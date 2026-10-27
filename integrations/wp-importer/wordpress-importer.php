@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\wp_importer;
+namespace LinguatorPro\Integrations\wp_importer;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -38,7 +38,7 @@ class Linguator_WordPress_Importer {
 	}
 
 	/**
-	 * Loads our child class Linguator_WP_Import instead of WP_Import.
+	 * Loads our child class Linguator_Pro_WP_Import instead of WP_Import.
 	 *
 	 *  
 	 */
@@ -46,7 +46,7 @@ class Linguator_WordPress_Importer {
 		$class = new \ReflectionClass( 'WP_Import' );
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-		$GLOBALS['wp_import'] = new \Linguator_WP_Import(); // WordPress core global variable for WP Importer
+		$GLOBALS['wp_import'] = new \Linguator_Pro_WP_Import(); // WordPress core global variable for WP Importer
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		register_importer( 'wordpress', 'WordPress', __( 'Import <strong>posts, pages, comments, custom fields, categories, and tags</strong> from a WordPress export file.', 'linguator-pro' ), array( $GLOBALS['wp_import'], 'dispatch' ) ); // phpcs:ignore WordPress.WP.CapitalPDangit.MisspelledInText
 	}

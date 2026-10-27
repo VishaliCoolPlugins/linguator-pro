@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\aqua_resizer;
+namespace LinguatorPro\Integrations\aqua_resizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

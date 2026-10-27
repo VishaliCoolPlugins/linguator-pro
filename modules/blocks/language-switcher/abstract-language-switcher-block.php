@@ -1,6 +1,6 @@
 <?php
 
-namespace Linguator\Modules\Blocks;
+namespace LinguatorPro\Modules\Blocks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -309,7 +309,7 @@ abstract class Linguator_Abstract_Language_Switcher_Block {
 		}
 
 		$script_handle = 'lmat_blocks';
-		linguator_register_script(
+		linguator_pro_register_script(
 			'blocks',
 			array(
 				'wp-block-editor',
@@ -369,7 +369,7 @@ abstract class Linguator_Abstract_Language_Switcher_Block {
 	 * @phpstan-param T $request
 	 */
 	public function linguator_get_rest_query_params( $result, $server, $request ) {
-		if ( linguator_is_edit_rest_request( $request ) ) {
+		if ( linguator_pro_is_edit_rest_request( $request ) ) {
 			$this->is_edit_context = true;
 
 			$lang = $request->get_param( 'lang' );

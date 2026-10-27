@@ -4,7 +4,7 @@
  * Run: php tests/serialized-term-description-regressions.php
  */
 
-namespace Linguator\Includes\Models\Translatable {
+namespace LinguatorPro\Includes\Models\Translatable {
 	interface Linguator_Translatable_Object_With_Types_Interface {}
 }
 
@@ -30,7 +30,7 @@ namespace {
 	require_once dirname( __DIR__ ) . '/includes/models/translated/translated-object.php';
 	require_once dirname( __DIR__ ) . '/includes/models/translated/translated-post.php';
 
-	class Test_Post_Descriptions extends \Linguator\Includes\Models\Translated\Linguator_Translated_Post {
+	class Test_Post_Descriptions extends \LinguatorPro\Includes\Models\Translated\Linguator_Translated_Post {
 		public function get_translated_object_types( $filter = true ) {
 			return array( 'post' );
 		}
@@ -41,7 +41,7 @@ namespace {
 		}
 	}
 
-	class Test_Term_Descriptions extends \Linguator\Includes\Models\Translated\Linguator_Translated_Object {
+	class Test_Term_Descriptions extends \LinguatorPro\Includes\Models\Translated\Linguator_Translated_Object {
 		protected $tax_language     = 'lmat_term_language';
 		protected $tax_translations = 'lmat_term_translations';
 		protected $object_type      = 'term';

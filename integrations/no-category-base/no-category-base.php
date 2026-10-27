@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\no_category_base;
+namespace LinguatorPro\Integrations\no_category_base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

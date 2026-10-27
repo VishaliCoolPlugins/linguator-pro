@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Options\Abstract_Option;
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Models\Languages;
+use LinguatorPro\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Models\Languages;
 
 /**
  * Class defining single associative array of domain as value and language slug as key option.

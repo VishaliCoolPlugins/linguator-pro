@@ -5,13 +5,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Model;
 
 /**
  * Provides safe access to Linguator internals so individual checks stay short.
@@ -199,7 +199,7 @@ abstract class Abstract_Check {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return \Linguator\Includes\Other\Linguator_Language[]
+	 * @return \LinguatorPro\Includes\Other\Linguator_Language[]
 	 */
 	protected function active_languages(): array {
 		$list = $this->model->get_languages_list();

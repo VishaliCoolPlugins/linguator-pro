@@ -2,16 +2,16 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Services\Links\Linguator_Links;
-use Linguator\Includes\Capabilities\User;
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Services\Links\Linguator_Links;
+use LinguatorPro\Includes\Capabilities\User;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 /**
  * Manages links related functions.

@@ -2,18 +2,18 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
-use Linguator\Includes\Capabilities\Capabilities;
+use LinguatorPro\Includes\Capabilities\Capabilities;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Includes\Filters\Linguator_Filters_Links;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Admin\Controllers\Linguator_Admin_Links;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Links;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Links;
 use WP_Post;
 use WP_Term;
 
@@ -247,14 +247,14 @@ abstract class Linguator_Admin_Base extends Linguator_Base {
 	 */
 	public function admin_enqueue_scripts() {
 		// Don't load admin scripts on wizard page as it has its own scripts
-		if ( \Linguator\Includes\Core\Linguator::is_wizard() ) {
+		if ( \LinguatorPro\Includes\Core\Linguator::is_wizard() ) {
 			
 			return;
 		}
 
 		$suffix = '.min';
 
-		wp_enqueue_script( 'lmat_admin', plugins_url( "admin/assets/js/build/admin{$suffix}.js", LINGUATOR_ROOT_FILE ), array( 'jquery' ), LINGUATOR_VERSION, true );
+		wp_enqueue_script( 'lmat_admin', plugins_url( "admin/assets/js/build/admin{$suffix}.js", LINGUATOR_PRO_ROOT_FILE ), array( 'jquery' ), LINGUATOR_PRO_VERSION, true );
 		$inline_script = sprintf( 'let lmat_admin = %s;', wp_json_encode( array( 'ajax_filter' => $this->linguator_get_ajax_filter_data() ) ) );
 		wp_add_inline_script( 'lmat_admin', $inline_script, 'before' );
 
@@ -302,14 +302,14 @@ abstract class Linguator_Admin_Base extends Linguator_Base {
 
 		foreach ( $scripts as $script => $v ) {
 			if ( in_array( $screen->base, $v[0] ) && ( $v[2] || $this->model->has_languages() ) ) {
-				wp_enqueue_script( "lmat_{$script}", plugins_url( "admin/assets/js/build/{$script}{$suffix}.js", LINGUATOR_ROOT_FILE ), $v[1], LINGUATOR_VERSION, $v[3] );
+				wp_enqueue_script( "lmat_{$script}", plugins_url( "admin/assets/js/build/{$script}{$suffix}.js", LINGUATOR_PRO_ROOT_FILE ), $v[1], LINGUATOR_PRO_VERSION, $v[3] );
 				if ( 'classic-editor' === $script || 'block-editor' === $script ) {
 					wp_set_script_translations( "lmat_{$script}", 'linguator-pro' );
 				}
 			}
 		}
 
-		linguator_enqueue_style( 'admin', array( 'wp-jquery-ui-dialog' ), 'linguator_' );
+		linguator_pro_enqueue_style( 'admin', array( 'wp-jquery-ui-dialog' ), 'linguator_' );
 		
 		// Enqueue custom font for icons
 		$this->enqueue_linguator_font();
@@ -327,7 +327,7 @@ abstract class Linguator_Admin_Base extends Linguator_Base {
 	public function enqueue_linguator_font() {
 		// Only enqueue if not already enqueued
 		if ( ! wp_style_is( 'linguator-font', 'enqueued' ) ) {
-			wp_enqueue_style( 'linguator-font', plugins_url( 'assets/fonts/lmaticons.css', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
+			wp_enqueue_style( 'linguator-font', plugins_url( 'assets/fonts/lmaticons.css', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
 			
 			// Add custom CSS for the Linguator icon
 			$icon_css = "
@@ -387,7 +387,7 @@ abstract class Linguator_Admin_Base extends Linguator_Base {
 	 * @return bool True if the screen is a block editor, false otherwise.
 	 */
 	protected function is_block_editor( $screen ) {
-		return method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() && !linguator_use_block_editor_plugin();
+		return method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() && !linguator_pro_use_block_editor_plugin();
 	}
 
 	/**
@@ -400,7 +400,7 @@ abstract class Linguator_Admin_Base extends Linguator_Base {
 	public function linguator_customize_controls_enqueue_scripts() {
 		if ( $this->model->has_languages() ) {
 			$suffix = '.min';
-			wp_enqueue_script( 'lmat_widgets', plugins_url( 'admin/assets/js/build/widgets' . $suffix . '.js', LINGUATOR_ROOT_FILE ), array( 'jquery' ), LINGUATOR_VERSION, true );
+			wp_enqueue_script( 'lmat_widgets', plugins_url( 'admin/assets/js/build/widgets' . $suffix . '.js', LINGUATOR_PRO_ROOT_FILE ), array( 'jquery' ), LINGUATOR_PRO_VERSION, true );
 			$this->add_inline_scripts();
 		}
 	}

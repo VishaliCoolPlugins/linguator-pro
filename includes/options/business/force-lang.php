@@ -3,15 +3,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Options\Abstract_Option;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Class defining the "Determine how the current language is defined" option.

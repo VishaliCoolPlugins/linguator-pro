@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/domain-mapping.php';
 
-use Linguator\Integrations\domain_mapping\Linguator_Domain_Mapping;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\domain_mapping\Linguator_Domain_Mapping;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 Linguator_Integrations::instance()->dm = new Linguator_Domain_Mapping();

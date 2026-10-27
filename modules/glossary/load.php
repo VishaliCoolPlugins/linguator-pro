@@ -4,7 +4,7 @@
  *
  * @package Linguator
  */
-namespace Linguator\Modules\Glossary;
+namespace LinguatorPro\Modules\Glossary;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly

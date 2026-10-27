@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Filters;
+namespace LinguatorPro\Includes\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -352,7 +352,7 @@ class Linguator_Filters {
 	 * @return string[] Translated email contents.
 	 */
 	public function linguator_translate_user_email( $email ) {
-		$blog_name = wp_specialchars_decode( linguator__( get_option( 'blogname' ) ), ENT_QUOTES );
+		$blog_name = wp_specialchars_decode( linguator_pro__( get_option( 'blogname' ) ), ENT_QUOTES );
 		$email['subject'] = sprintf( $email['subject'], $blog_name );
 		$email['message'] = str_replace( '###SITENAME###', $blog_name, $email['message'] );
 		return $email;

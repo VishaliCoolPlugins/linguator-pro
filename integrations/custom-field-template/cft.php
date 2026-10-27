@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\custom_field_template;
+namespace LinguatorPro\Integrations\custom_field_template;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

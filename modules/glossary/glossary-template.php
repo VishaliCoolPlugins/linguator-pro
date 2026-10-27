@@ -35,7 +35,7 @@ foreach ($glossary_data as $entry) {
     }
 
     if (!isset($grouped_entries[$key])) {
-        $kind = \Linguator\Modules\Glossary\Glossary::sanitize_glossary_kind( $entry['kind'] ?? 'general' );
+        $kind = \LinguatorPro\Modules\Glossary\Glossary::sanitize_glossary_kind( $entry['kind'] ?? 'general' );
         $grouped_entries[$key] = [
             'term' => $term,
             'original_language_code' => $lang,
@@ -202,7 +202,7 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                         <div id="add-glossary-success" class="lmat-import-success lmat-hidden">
                             <div class="import-success-icon">
                                 <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                <img src="<?php echo esc_url(plugins_url('assets/images/success.svg', LINGUATOR_ROOT_FILE)); ?>" alt="Success Icon" />
+                                <img src="<?php echo esc_url(plugins_url('assets/images/success.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" alt="Success Icon" />
                             </div>
                             <div class="lmat-import-success-message">
                                 <?php esc_html_e('Glossary term added successfully!', 'linguator-pro'); ?>
@@ -226,12 +226,12 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                                 <div class="lmat-upload-area">
                                     <?php 
                                     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                    <img src="<?php echo esc_url(plugins_url('assets/images/csv.svg', LINGUATOR_ROOT_FILE)); ?>" alt="CSV Icon" />
+                                    <img src="<?php echo esc_url(plugins_url('assets/images/csv.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" alt="CSV Icon" />
                                     <span id="file-name-display"><?php esc_html_e( 'Select a CSV file to upload', 'linguator-pro' ); ?></span>
                                 </div>
                             </label>
                             <a
-                                href="<?php echo esc_url( plugins_url('assets/sample-glossary.csv', LINGUATOR_ROOT_FILE) ); ?>"
+                                href="<?php echo esc_url( plugins_url('assets/sample-glossary.csv', LINGUATOR_PRO_ROOT_FILE) ); ?>"
                                 class="lmat-download-link"
                                 download="sample-glossary.csv">
                                 <?php esc_html_e( 'Download sample glossary CSV file', 'linguator-pro' ); ?>
@@ -242,7 +242,7 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                             <div id="lmat-import-success" class="lmat-import-success">
                                 <div class="import-success-icon">
                                     <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                    <img src="<?php echo esc_url(plugins_url('assets/images/success.svg', LINGUATOR_ROOT_FILE)); ?>" alt="Success Icon" />
+                                    <img src="<?php echo esc_url(plugins_url('assets/images/success.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" alt="Success Icon" />
                                 </div>
                                 <div class="import-success-file">
                                     <span id="importing-file-label"><?php esc_html_e('Importing:', 'linguator-pro'); ?></span>
@@ -346,11 +346,11 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                                 <div class="lmat-action-buttons-header">
                                     <button class="lmat-actions-header-btn" id="lmat-actions-header-btn-left" title="<?php esc_attr_e( 'Scroll left', 'linguator-pro' ); ?>">
                                         <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                        <img src="<?php echo esc_url(plugins_url('assets/images/arrow-left.svg', LINGUATOR_ROOT_FILE)); ?>" />
+                                        <img src="<?php echo esc_url(plugins_url('assets/images/arrow-left.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" />
                                     </button>
                                     <button class="lmat-actions-header-btn" id="lmat-actions-header-btn-right" title="<?php esc_attr_e( 'Scroll right', 'linguator-pro' ); ?>">
                                         <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                        <img src="<?php echo esc_url(plugins_url('assets/images/arrow-right.svg', LINGUATOR_ROOT_FILE)); ?>" />
+                                        <img src="<?php echo esc_url(plugins_url('assets/images/arrow-right.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" />
                                     </button>
                                 </div>
                             </th>
@@ -370,8 +370,8 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                     <tbody>
                         <?php
                         // UTF-8 safe truncate helper
-                        if ( ! function_exists('linguator_glossary_truncate')) {
-                            function linguator_glossary_truncate( $str, $limit = 10 ) {
+                        if ( ! function_exists('linguator_pro_glossary_truncate')) {
+                            function linguator_pro_glossary_truncate( $str, $limit = 10 ) {
                                 $str = (string) $str;
                                 if (mb_strlen($str, 'UTF-8') > $limit) {
                                     return mb_substr($str, 0, $limit, 'UTF-8') . '…';
@@ -427,7 +427,7 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                                             $translation = isset($data['translations'][$lang['code']]) ? $data['translations'][$lang['code']] : '';
                                             ?>
                                             <?php if (!empty($translation) && trim($translation) !== ''): ?>
-                                                <?php $truncated = linguator_glossary_truncate($translation, 7); ?>
+                                                <?php $truncated = linguator_pro_glossary_truncate($translation, 7); ?>
                                                 <span class="lmat-translated-term"
                                                     title="<?php echo esc_attr($translation); ?>"
                                                     data-full-text="<?php echo esc_attr($translation); ?>">
@@ -439,7 +439,7 @@ $single_language_code = $single_language_mode ? $language_codes_with_entries[0] 
                                                             data-term="<?php echo esc_attr(sanitize_text_field($term)); ?>"
                                                             data-source-lang="<?php echo esc_attr(sanitize_key($original_language_code)); ?>">
                                                         <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugins_url() returns a safe URL. ?>
-                                                        <img src="<?php echo esc_url(plugins_url('assets/images/file.svg', LINGUATOR_ROOT_FILE)); ?>" 
+                                                        <img src="<?php echo esc_url(plugins_url('assets/images/file.svg', LINGUATOR_PRO_ROOT_FILE)); ?>" 
                                                             alt="<?php esc_attr_e('No translation', 'linguator-pro'); ?>" />
                                                     </button>
                                                 </span>

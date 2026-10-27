@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\duplicate_post;
+namespace LinguatorPro\Integrations\duplicate_post;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

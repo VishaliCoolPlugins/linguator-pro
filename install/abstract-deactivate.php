@@ -2,10 +2,10 @@
 /**
  * @package Linguator
  *
- * IMPORTANT: You must define the constants `LINGUATOR_BASENAME` and `LINGUATOR_VERSION` for this class to work.
+ * IMPORTANT: You must define the constants `LINGUATOR_PRO_BASENAME` and `LINGUATOR_PRO_VERSION` for this class to work.
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 /**
  * This abstract class helps you handle plugin deactivation.

@@ -3,11 +3,11 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Capabilities;
+namespace LinguatorPro\Includes\Capabilities;
 
 use WP_User;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Models\Languages;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Models\Languages;
 
 defined( 'ABSPATH' ) || exit;
 

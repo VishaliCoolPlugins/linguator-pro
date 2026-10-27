@@ -7,8 +7,8 @@
  *   CPFM_Usage_Cron::cpfm_register( array(
  *       'id'                       => 'lmat',
  *       'plugin_name'              => 'Linguator AI – Auto Translate & Create Multilingual Sites',
- *       'version'                  => LINGUATOR_VERSION,
- *       'api'                      => LINGUATOR_FEEDBACK_API,        // https://feedback.coolplugins.net/
+ *       'version'                  => LINGUATOR_PRO_VERSION,
+ *       'api'                      => LINGUATOR_PRO_FEEDBACK_API,        // https://feedback.coolplugins.net/
  *       'cron_hook'                => 'lmat_extra_data_update', // THIS plugin's own hook name
  *       'consent_override_option'  => 'lmat-cpfm-data-sharing',       // THIS plugin's own checkbox
  *       'consent_master_option'    => 'cpfm_opt_in_choice_cool_translations', // THIS plugin's product family's shared flag

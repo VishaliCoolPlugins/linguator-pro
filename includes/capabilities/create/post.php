@@ -3,10 +3,10 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Capabilities\Create;
+namespace LinguatorPro\Includes\Capabilities\Create;
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Capabilities\User;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Capabilities\User;
 
 /**
  * Helps choose the right language for creating or updating posts.

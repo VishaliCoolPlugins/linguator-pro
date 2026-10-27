@@ -6,7 +6,7 @@
  *  
  */
 
-namespace Linguator\Integrations\elementor;
+namespace LinguatorPro\Integrations\elementor;
 
 use Elementor\Controls_Manager;
 use Elementor\Widget_Base;
@@ -36,9 +36,9 @@ class Linguator_Widget extends Widget_Base
         parent::__construct($data, $args);
         wp_register_style(
             'lmat-style',
-            plugins_url( 'admin/assets/css/build/language-switcher-style.css', LINGUATOR_FILE ),
+            plugins_url( 'admin/assets/css/build/language-switcher-style.css', LINGUATOR_PRO_FILE ),
             [],
-            LINGUATOR_VERSION
+            LINGUATOR_PRO_VERSION
         );
 
         add_action('elementor/editor/after_enqueue_scripts', [$this, 'linguator_language_switcher_icon_css']);
@@ -53,7 +53,7 @@ class Linguator_Widget extends Widget_Base
             display: inline-block;
             width: 25px;
             height: 25px;
-            background-image: url('" . esc_url(LINGUATOR_URL . 'assets/logo/lang_switcher.svg') . "');
+            background-image: url('" . esc_url(LINGUATOR_PRO_URL . 'assets/logo/lang_switcher.svg') . "');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -648,13 +648,13 @@ class Linguator_Widget extends Widget_Base
     {
         try {
                 // Try different approach - get languages without show_flags first
-                $languages_raw = linguator_the_languages(['raw' => 1, 'show_flags' => 0]);
+                $languages_raw = linguator_pro_the_languages(['raw' => 1, 'show_flags' => 0]);
                 if (empty($languages_raw)) {
                     return $data; // If no languages, exit early
                 }
-                $lang_curr = strtolower(linguator_current_language());
+                $lang_curr = strtolower(linguator_pro_current_language());
                 if (empty($lang_curr)) {
-                    $lang_curr = strtolower(linguator_default_language());
+                    $lang_curr = strtolower(linguator_pro_default_language());
                 }
 
                 
@@ -667,8 +667,8 @@ class Linguator_Widget extends Widget_Base
 
                         // Get flag HTML directly from language object if available
                         $flag_html = '';
-                        if (function_exists('LMAT') && !empty(LMAT()->model)) {
-                            $lang_objects = LMAT()->model->get_languages_list();
+                        if (function_exists('LMATP') && !empty(LMATP()->model)) {
+                            $lang_objects = LMATP()->model->get_languages_list();
                             foreach ($lang_objects as $lang_obj) {
                                 if ($lang_obj->slug === $language['slug']) {
                                     $flag_html = $lang_obj->get_display_flag();
@@ -702,7 +702,7 @@ class Linguator_Widget extends Widget_Base
                 $custom_data = [
                     'lmatLanguageData' => $languages,
                     'lmatCurrentLang'  => esc_html($lang_curr),
-                    'lmatPluginUrl'    => esc_url(LINGUATOR_URL),
+                    'lmatPluginUrl'    => esc_url(LINGUATOR_PRO_URL),
                 ];
                 $custom_data_json = $custom_data;
                 $data['lmatGlobalObj'] = $custom_data_json;

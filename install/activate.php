@@ -2,19 +2,19 @@
 /**
  * @package Linguator
  *
- * NOTE: You must define the constants `LINGUATOR_BASENAME` and `LINGUATOR_VERSION` for this code to work.
+ * NOTE: You must define the constants `LINGUATOR_PRO_BASENAME` and `LINGUATOR_PRO_VERSION` for this code to work.
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Options\Registry as Options_Registry;
-use Linguator\Modules\Wizard\Linguator_Wizard;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Registry as Options_Registry;
+use LinguatorPro\Modules\Wizard\Linguator_Wizard;
 
 
 /**
@@ -80,7 +80,7 @@ class Linguator_Activate extends Linguator_Abstract_Activate {
 		}
 
 		if (!get_option('lmat_initial_version')) {
-			update_option('lmat_initial_version', LINGUATOR_VERSION);
+			update_option('lmat_initial_version', LINGUATOR_PRO_VERSION);
 		}
 
 		if ( empty( $options['version'] ) ) {
@@ -101,8 +101,8 @@ class Linguator_Activate extends Linguator_Abstract_Activate {
 		add_option( 'lmat_language_taxonomies', array() );
 
 		// Also clear any cached language data in the cache object
-		if ( class_exists( 'Linguator\Includes\Helpers\Linguator_Cache' ) ) {
-			$cache = new \Linguator\Includes\Helpers\Linguator_Cache();
+		if ( class_exists( 'LinguatorPro\Includes\Helpers\Linguator_Cache' ) ) {
+			$cache = new \LinguatorPro\Includes\Helpers\Linguator_Cache();
 			$cache->clean();
 		}
 

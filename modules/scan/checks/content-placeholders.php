@@ -5,15 +5,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Elementor_Fields;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Elementor_Fields;
+use LinguatorPro\Modules\Scan\Result;
 
 /**
  * Flags translations whose shortcodes or placeholders differ from the source.

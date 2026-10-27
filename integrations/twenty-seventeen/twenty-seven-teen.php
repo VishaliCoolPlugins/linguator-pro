@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\twenty_seventeen;
+namespace LinguatorPro\Integrations\twenty_seventeen;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Linguator_Translate_Option;
-use Linguator\Frontend\Controllers\Linguator_Frontend;
+use LinguatorPro\Includes\Options\Linguator_Translate_Option;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend;
 
 
 
@@ -26,7 +26,7 @@ class Linguator_Twenty_Seventeen {
 	 */
 	public function init() {
 		if ( 'twentyseventeen' === get_template() && did_action( 'lmat_init' ) ) {
-			if ( function_exists( 'twentyseventeen_panel_count' ) && LMAT() instanceof Linguator_Frontend ) {
+			if ( function_exists( 'twentyseventeen_panel_count' ) && LMATP() instanceof Linguator_Frontend ) {
 				$num_sections = twentyseventeen_panel_count();
 				for ( $i = 1; $i < ( 1 + $num_sections ); $i++ ) {
 					add_filter( 'theme_mod_panel_' . $i, 'lmat_get_post' );

@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/wpseo.php';
 
-use Linguator\Integrations\wpseo\Linguator_WPSEO;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\wpseo\Linguator_WPSEO;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/rankmath-lmat.php';
 
-use Linguator\Integrations\RankMath\Linguator_RankMath;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\RankMath\Linguator_RankMath;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

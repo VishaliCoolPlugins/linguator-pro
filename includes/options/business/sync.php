@@ -3,23 +3,23 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 use NOOP_Translations;
-use Linguator\Modules\sync\Linguator_Settings_Sync;
-use Linguator\Includes\Options\Primitive\Abstract_List;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Modules\sync\Linguator_Settings_Sync;
+use LinguatorPro\Includes\Options\Primitive\Abstract_List;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Class defining synchronization settings list option.
  *
  *  
  *
- * @phpstan-import-type SchemaType from Linguator\Includes\Options\Abstract_Option
+ * @phpstan-import-type SchemaType from LinguatorPro\Includes\Options\Abstract_Option
  */
 class Sync extends Abstract_List {
 	/**

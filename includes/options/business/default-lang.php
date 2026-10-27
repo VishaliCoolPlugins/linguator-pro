@@ -3,16 +3,16 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Options\Primitive\Abstract_String;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Primitive\Abstract_String;
 use WP_Error;
 
 /**

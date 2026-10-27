@@ -3,13 +3,13 @@
  * Standalone regression checks with an in-memory WordPress model.
  * Run: php tests/media-translation-regressions.php
  */
-namespace Linguator\Includes\Base {
+namespace LinguatorPro\Includes\Base {
 	class Linguator_Base {
 		public $model;
 		public $options = array( 'media_support' => true );
 	}
 }
-namespace Linguator\Includes\Other {
+namespace LinguatorPro\Includes\Other {
 	class Linguator_Language {
 		public $slug = 'fr';
 	}
@@ -67,15 +67,15 @@ namespace {
 	}
 	require dirname( __DIR__ ) . '/includes/services/media/media-translation-service.php';
 	require dirname( __DIR__ ) . '/modules/sync/sync-content.php';
-	use Linguator\Includes\Services\Media\Media_Translation_Service;
+	use LinguatorPro\Includes\Services\Media\Media_Translation_Service;
 	class Media_Model {
 		public $created = 0;
 		public function get_translation( $id, $language ) { return 10 === $id ? 20 : 0; }
 		public function get( $id, $language ) { return 10 === (int) $id ? 20 : 0; }
-		public function get_language( $id ) { return new \Linguator\Includes\Other\Linguator_Language(); }
+		public function get_language( $id ) { return new \LinguatorPro\Includes\Other\Linguator_Language(); }
 		public function create_media_translation( $id, $language ) { ++$this->created; return 0; }
 	}
-	class Test_Sync extends \Linguator_Sync_Post {
+	class Test_Sync extends \Linguator_Pro_Sync_Post {
 		protected function translate_media( $id ) { return 10 === (int) $id ? 20 : $id; }
 		public function block( $block ) { return $this->translate_media_block( $block ); }
 	}
@@ -91,11 +91,11 @@ namespace {
 	$posts[20]->post_excerpt = 'Manual caption';
 	$meta[20]['_wp_attachment_image_alt'] = 'Manual alt';
 	$urls[10] = $urls[20] = 'https://example.org/uploads/photo.jpg';
-	$linguator = new \Linguator\Includes\Base\Linguator_Base();
+	$linguator = new \LinguatorPro\Includes\Base\Linguator_Base();
 	$linguator->model = (object) array( 'post' => new Media_Model() );
 	$service = new Media_Translation_Service( $linguator );
 	$sync = new Test_Sync( $linguator );
-	$language = new \Linguator\Includes\Other\Linguator_Language();
+	$language = new \LinguatorPro\Includes\Other\Linguator_Language();
 	$shortcode_tags = array();
 	$html = '<figure><img class="wp-image-10" src="https://example.org/uploads/photo-300x200.jpg?x=1" alt="AI alt"><figcaption>AI caption</figcaption></figure>';
 	$manual = $sync->translate_content( $html, $posts[2], $language, $language );

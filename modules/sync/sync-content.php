@@ -3,15 +3,15 @@
  * @package Linguator
  */
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Services\Media\Media_Translation_Service;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Services\Media\Media_Translation_Service;
 
 /**
  * Smart copy of post content
  *
  *  
  */
-class Linguator_Sync_Post {
+class Linguator_Pro_Sync_Post {
 	/** @var bool Preserve inline text supplied by an AI translation. */
 	protected $preserve_media_text = false;
 	/**

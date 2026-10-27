@@ -1,6 +1,6 @@
 <?php
 
-namespace Linguator\Modules\Inline_Translation;
+namespace LinguatorPro\Modules\Inline_Translation;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -42,7 +42,7 @@ class Linguator_Inline_Translation {
 	 */
 	public function linguator_block_inline_translation_assets() {
 
-		if ( defined( 'LINGUATOR_VERSION' ) ) {
+		if ( defined( 'LINGUATOR_PRO_VERSION' ) ) {
 			$this->linguator_enqueue_inline_translation_assets( 'gutenberg' );
 		}
 	}
@@ -51,7 +51,7 @@ class Linguator_Inline_Translation {
 	 * Enqueue the classic inline translation assets.
 	 */
 	public function linguator_classic_inline_translation_assets() {
-		if ( defined( 'LINGUATOR_VERSION' ) ) {
+		if ( defined( 'LINGUATOR_PRO_VERSION' ) ) {
 
 			if(!function_exists('get_current_screen')){
 				return;
@@ -73,7 +73,7 @@ class Linguator_Inline_Translation {
 	 * Enqueue the elementor widget translator script.
 	 */
 	public function linguator_elementor_inline_translation_assets() {
-		if ( defined( 'LINGUATOR_VERSION' ) ) {
+		if ( defined( 'LINGUATOR_PRO_VERSION' ) ) {
 			$this->linguator_enqueue_inline_translation_assets(
 				'elementor',
 				array(
@@ -99,42 +99,42 @@ class Linguator_Inline_Translation {
 			return;
 		}
 
-		if ( function_exists( 'linguator_current_language' ) ) {
-			$current_language      = linguator_current_language();
-			$current_language_name = linguator_current_language( 'name' );
-			$current_language_code = linguator_current_language( 'code' );
+		if ( function_exists( 'linguator_pro_current_language' ) ) {
+			$current_language      = linguator_pro_current_language();
+			$current_language_name = linguator_pro_current_language( 'name' );
+			$current_language_code = linguator_pro_current_language( 'code' );
 		} else {
 			$current_language      = '';
 			$current_language_name = '';
 			$current_language_code = '';
 		}
 
-		$editor_script_asset = include LINGUATOR_DIR . '/admin/assets/' . sanitize_file_name( $type ) . '-inline-translate/index.asset.php';
+		$editor_script_asset = include LINGUATOR_PRO_DIR . '/admin/assets/' . sanitize_file_name( $type ) . '-inline-translate/index.asset.php';
 
-		$core_modal_script_asset = include LINGUATOR_DIR . '/admin/assets/inline-translate-modal/index.asset.php';
+		$core_modal_script_asset = include LINGUATOR_PRO_DIR . '/admin/assets/inline-translate-modal/index.asset.php';
 
 		if(!is_array($editor_script_asset)) {
 			$editor_script_asset = array(
 				'dependencies' => array(),
-				'version' => LINGUATOR_VERSION,
+				'version' => LINGUATOR_PRO_VERSION,
 			);
 		}
 
 		if(!is_array($core_modal_script_asset)) {
 			$core_modal_script_asset = array(
 				'dependencies' => array(),
-				'version' => LINGUATOR_VERSION,
+				'version' => LINGUATOR_PRO_VERSION,
 			);
 		}
 
-		wp_register_script( 'lmat-inline-translate-modal', plugins_url( '/admin/assets/inline-translate-modal/index.js', LINGUATOR_ROOT_FILE ), array_merge( $core_modal_script_asset['dependencies'] ), $core_modal_script_asset['version'], true );
+		wp_register_script( 'lmat-inline-translate-modal', plugins_url( '/admin/assets/inline-translate-modal/index.js', LINGUATOR_PRO_ROOT_FILE ), array_merge( $core_modal_script_asset['dependencies'] ), $core_modal_script_asset['version'], true );
 
-		wp_register_script( 'lmat-inline-google-api', 'https://translate.google.com/translate_a/element.js', '', LINGUATOR_VERSION, true );
+		wp_register_script( 'lmat-inline-google-api', 'https://translate.google.com/translate_a/element.js', '', LINGUATOR_PRO_VERSION, true );
 		
 		$extra_dependencies[] = 'lmat-inline-google-api';
 		$extra_dependencies[] = 'lmat-inline-translate-modal';
 		
-		wp_register_script( 'lmat-' . sanitize_file_name( $type ) . '-inline-translation', plugins_url( '/admin/assets/' . sanitize_file_name( $type ) . '-inline-translate/index.js', LINGUATOR_ROOT_FILE ), array_merge( $editor_script_asset['dependencies'], $extra_dependencies ), $editor_script_asset['version'], true );
+		wp_register_script( 'lmat-' . sanitize_file_name( $type ) . '-inline-translation', plugins_url( '/admin/assets/' . sanitize_file_name( $type ) . '-inline-translate/index.js', LINGUATOR_PRO_ROOT_FILE ), array_merge( $editor_script_asset['dependencies'], $extra_dependencies ), $editor_script_asset['version'], true );
 
 		wp_enqueue_script( 'lmat-inline-google-api' );
 		wp_enqueue_script( 'lmat-inline-translate-modal' );

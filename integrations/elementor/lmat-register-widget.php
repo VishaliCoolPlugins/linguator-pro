@@ -6,7 +6,7 @@
  * @wordpress-plugin
  */
 
-namespace Linguator\Integrations\elementor;
+namespace LinguatorPro\Integrations\elementor;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,7 +35,7 @@ class Linguator_Register_Widget {
 	 * @return void
 	 */
 	public function linguator_register_widgets() {
-		require_once LINGUATOR_DIR . '/integrations/elementor/lmat-widget.php';
+		require_once LINGUATOR_PRO_DIR . '/integrations/elementor/lmat-widget.php';
 		\Elementor\Plugin::instance()->widgets_manager->register( new Linguator_Widget() );
 	}
 }

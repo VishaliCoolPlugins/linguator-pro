@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Filters\Linguator_Filters;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Filters\Linguator_Filters;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 
 
@@ -86,7 +86,7 @@ class Linguator_Admin_Filters extends Linguator_Filters {
 
 		$data = array();
 
-		wp_enqueue_script( 'lmat_user', plugins_url( 'admin/assets/js/build/user.min.js', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION, array( 'in_footer' => true ) );
+		wp_enqueue_script( 'lmat_user', plugins_url( 'admin/assets/js/build/user.min.js', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION, array( 'in_footer' => true ) );
 
 		foreach ( $this->model->get_languages_list() as $lang ) {
 			$meta        = $lang->is_default ? 'description' : "description_{$lang->slug}";

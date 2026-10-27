@@ -3,17 +3,17 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models\Translated;
+namespace LinguatorPro\Includes\Models\Translated;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Interface;
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Trait;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Interface;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Trait;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_Term;
 use WP_Error;
 
@@ -117,7 +117,7 @@ class Linguator_Translated_Term extends Linguator_Translated_Object implements L
 			return false;
 		}
 
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		// Add translation group for correct WXR export.
 		$translations = $this->get_translations( $id );
@@ -142,7 +142,7 @@ class Linguator_Translated_Term extends Linguator_Translated_Object implements L
 	public function delete_translation( $id ) {
 		global $wpdb;
 
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -253,7 +253,7 @@ class Linguator_Translated_Term extends Linguator_Translated_Object implements L
 	 * @phpstan-param array<positive-int> $ids
 	 */
 	public function clean_term_cache( $ids ) {
-		clean_object_term_cache( linguator_sanitize_ids( $ids ), 'term' );
+		clean_object_term_cache( linguator_pro_sanitize_ids( $ids ), 'term' );
 	}
 
 	/**
@@ -307,7 +307,7 @@ class Linguator_Translated_Term extends Linguator_Translated_Object implements L
 	 * Returns the description to use for the "language properties" in the REST API.
 	 *
 	 *  
-	 * @see Linguator\modules\REST\V2\Languages::get_item_schema()
+	 * @see LinguatorPro\modules\REST\V2\Languages::get_item_schema()
 	 *
 	 * @return string
 	 */

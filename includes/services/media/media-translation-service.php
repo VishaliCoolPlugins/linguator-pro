@@ -5,13 +5,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Media;
+namespace LinguatorPro\Includes\Services\Media;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Base\Linguator_Base;
 use WP_Post;
 
 /**
@@ -25,7 +25,7 @@ class Media_Translation_Service {
 	/**
 	 * Main Linguator model.
 	 *
-	 * @var \Linguator\Includes\Other\Linguator_Model
+	 * @var \LinguatorPro\Includes\Other\Linguator_Model
 	 */
 	private $model;
 
@@ -370,7 +370,7 @@ class Media_Translation_Service {
 	 * metadata to a shared attachment would overwrite the source language.
 	 *
 	 * @param int                                            $source_attachment_id Source attachment ID.
-	 * @param \Linguator\Includes\Other\Linguator_Language|string $language             Target language.
+	 * @param \LinguatorPro\Includes\Other\Linguator_Language|string $language             Target language.
 	 * @return int Translated attachment ID, or 0 on failure.
 	 */
 	public function resolve_translated_attachment( $source_attachment_id, $language ) {
@@ -607,7 +607,7 @@ class Media_Translation_Service {
 	 * Remaps Elementor media controls to translated attachments.
 	 *
 	 * @param array                                          $elements     Elementor elements tree.
-	 * @param \Linguator\Includes\Other\Linguator_Language|string $language     Target language.
+	 * @param \LinguatorPro\Includes\Other\Linguator_Language|string $language     Target language.
 	 * @param mixed                                          $translations Optional translated strings.
 	 * @return array Remapped Elementor elements.
 	 */
@@ -826,7 +826,7 @@ class Media_Translation_Service {
 	 * Recursively remaps Elementor media-control attachment IDs and URLs.
 	 *
 	 * @param array                                          $data         Elementor tree node.
-	 * @param \Linguator\Includes\Other\Linguator_Language|string $language     Target language.
+	 * @param \LinguatorPro\Includes\Other\Linguator_Language|string $language     Target language.
 	 * @param array                                          $translations Translations keyed by source attachment ID.
 	 * @return void
 	 */

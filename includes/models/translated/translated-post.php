@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models\Translated;
+namespace LinguatorPro\Includes\Models\Translated;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Interface;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Other\Linguator_Switch_Language;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Object_With_Types_Interface;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Switch_Language;
 use WP_Error;
 use WP_Post;
 
@@ -144,7 +144,7 @@ class Linguator_Translated_Post extends Linguator_Translated_Object implements L
 	 * @return void
 	 */
 	public function delete_translation( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -266,7 +266,7 @@ class Linguator_Translated_Post extends Linguator_Translated_Object implements L
 	 * @phpstan-param non-empty-string $context
 	 */
 	public function current_user_can_read( $id, $context = 'view' ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return false;
@@ -359,15 +359,15 @@ class Linguator_Translated_Post extends Linguator_Translated_Object implements L
 		$post['tax_input'] = array( 'lmat_language' => array( $lang->slug ) ); // Assigns the language.
 
 		// Loads the strings translations with the attachment's target language.
-		LMAT()->load_strings_translations( $lang->slug );
+		LMATP()->load_strings_translations( $lang->slug );
 
 		$tr_id = wp_insert_attachment( wp_slash( $post ), false, 0, true );
 		remove_filter( 'lmat_enable_duplicate_media', '__return_false', 99 ); // Restore automatic duplicate at upload.
 
 		if ( is_wp_error( $tr_id ) || ! $tr_id ) {
 			// Restore strings for the current language before returning from a failed insertion.
-			if ( LMAT()->curlang instanceof Linguator_Language ) {
-				LMAT()->load_strings_translations( LMAT()->curlang->slug );
+			if ( LMATP()->curlang instanceof Linguator_Language ) {
+				LMATP()->load_strings_translations( LMATP()->curlang->slug );
 			}
 
 			return 0;
@@ -410,8 +410,8 @@ class Linguator_Translated_Post extends Linguator_Translated_Object implements L
 		do_action( 'lmat_translate_media', $post_id, $tr_id, $lang->slug );
 
 		// Restores the strings translations with the current language.
-		if ( LMAT()->curlang instanceof Linguator_Language ) {
-			LMAT()->load_strings_translations( LMAT()->curlang->slug );
+		if ( LMATP()->curlang instanceof Linguator_Language ) {
+			LMATP()->load_strings_translations( LMATP()->curlang->slug );
 		}
 
 		return $tr_id;
@@ -510,7 +510,7 @@ class Linguator_Translated_Post extends Linguator_Translated_Object implements L
 	 * Returns the description to use for the "language properties" in the REST API.
 	 *
 	 *  
-	 * @see Linguator\modules\REST\V2\Languages::get_item_schema()
+	 * @see LinguatorPro\modules\REST\V2\Languages::get_item_schema()
 	 *
 	 * @return string
 	 */

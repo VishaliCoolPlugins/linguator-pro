@@ -3,10 +3,10 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher\Layout;
+namespace LinguatorPro\Includes\Switcher\Layout;
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Switcher\Element\Nav as Element;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Switcher\Element\Nav as Element;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

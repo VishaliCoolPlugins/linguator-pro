@@ -4,7 +4,7 @@
  * Run: php tests/bulk-translation-post-slug-regressions.php
  */
 
-namespace Linguator\Includes\Other {
+namespace LinguatorPro\Includes\Other {
 	class Linguator_Language {
 		public $slug;
 
@@ -39,7 +39,7 @@ namespace {
 	require_once dirname( __DIR__ ) . '/modules/rest/v1/bulk-translation.php';
 	require_once dirname( __DIR__ ) . '/modules/sync/sync-content.php';
 
-	$rest = new \Linguator\Modules\REST\V1\Bulk_Translation( null );
+	$rest = new \LinguatorPro\Modules\REST\V1\Bulk_Translation( null );
 	$method = new \ReflectionMethod( $rest, 'select_translated_post_slug' );
 	$method->setAccessible( true );
 	$cases = array(
@@ -56,13 +56,13 @@ namespace {
 		}
 	}
 
-	class Slug_Test_Sync_Post extends \Linguator_Sync_Post {
-		public function translate_content( $content, $target_post, \Linguator\Includes\Other\Linguator_Language $from_language, \Linguator\Includes\Other\Linguator_Language $target_language, $preserve_media_text = false ) {
+	class Slug_Test_Sync_Post extends \Linguator_Pro_Sync_Post {
+		public function translate_content( $content, $target_post, \LinguatorPro\Includes\Other\Linguator_Language $from_language, \LinguatorPro\Includes\Other\Linguator_Language $target_language, $preserve_media_text = false ) {
 			return $content;
 		}
 	}
 
-	$language = new \Linguator\Includes\Other\Linguator_Language( 'fr' );
+	$language = new \LinguatorPro\Includes\Other\Linguator_Language( 'fr' );
 	$linguator = new \stdClass();
 	$linguator->options = array();
 	$linguator->model = new class( $language ) {

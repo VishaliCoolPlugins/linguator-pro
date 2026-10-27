@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher;
+namespace LinguatorPro\Includes\Switcher;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +45,7 @@ class Assets {
 			return;
 		}
 
-		wp_register_style( self::FRONTEND_ASSET_HANDLE, self::get_build_url( 'css', 'language-switcher' ), array(), LINGUATOR_VERSION );
+		wp_register_style( self::FRONTEND_ASSET_HANDLE, self::get_build_url( 'css', 'language-switcher' ), array(), LINGUATOR_PRO_VERSION );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Assets {
 			return;
 		}
 
-		wp_register_script( self::FRONTEND_ASSET_HANDLE, self::get_build_url( 'js', 'language-switcher' ), array(), LINGUATOR_VERSION, array( 'in_footer' => true ) );
+		wp_register_script( self::FRONTEND_ASSET_HANDLE, self::get_build_url( 'js', 'language-switcher' ), array(), LINGUATOR_PRO_VERSION, array( 'in_footer' => true ) );
 	}
 
 	/**
@@ -71,6 +71,6 @@ class Assets {
 	private static function get_build_url( string $type, string $name ): string {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		return plugins_url( "admin/assets/{$type}/build/{$name}{$suffix}.{$type}", LINGUATOR_ROOT_FILE );
+		return plugins_url( "admin/assets/{$type}/build/{$name}{$suffix}.{$type}", LINGUATOR_PRO_ROOT_FILE );
 	}
 }

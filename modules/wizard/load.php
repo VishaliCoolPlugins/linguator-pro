@@ -4,7 +4,7 @@
  *
  * @package Linguator
  */
-namespace Linguator\Modules\Wizard;
+namespace LinguatorPro\Modules\Wizard;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/wizard.php';
 
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
-use Linguator\Modules\Wizard\Linguator_Wizard;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Modules\Wizard\Linguator_Wizard;
 
 if ( $linguator instanceof Linguator_Admin_Base ) {
 	$linguator->wizard = new Linguator_Wizard( $linguator );

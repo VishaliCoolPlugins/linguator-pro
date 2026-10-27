@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Includes\Other;
+namespace LinguatorPro\Includes\Other;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Core\Linguator;
+use LinguatorPro\Includes\Core\Linguator;
 use WP_Locale;
 
 
@@ -119,9 +119,9 @@ class Linguator_OLT_Manager {
 	 * @return string[] List of active plugins.
 	 */
 	public function make_linguator_first( $plugins ) {
-		if ( $key = array_search( LINGUATOR_BASENAME, $plugins ) ) {
+		if ( $key = array_search( LINGUATOR_PRO_BASENAME, $plugins ) ) {
 			unset( $plugins[ $key ] );
-			array_unshift( $plugins, LINGUATOR_BASENAME );
+			array_unshift( $plugins, LINGUATOR_PRO_BASENAME );
 		}
 		return $plugins;
 	}

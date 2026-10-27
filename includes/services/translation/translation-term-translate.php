@@ -3,9 +3,9 @@
  * @package Linguator Multilingual AI Translation
  */
 
-namespace Linguator\Includes\Services\Translation;
+namespace LinguatorPro\Includes\Services\Translation;
 
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_Error;
 use WP_Term;
 use Translation_Entry;

@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Admin\Views;
+namespace LinguatorPro\Admin\Views;
 /**
  * Displays the translations fields for media
  * Needs WP 3.5+

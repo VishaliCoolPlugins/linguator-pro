@@ -8,15 +8,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package Linguator
  */
 
-use Linguator\Custom_Fields\Custom_Fields;
-use Linguator\Includes\Services\Media\Media_Translation_Service;
+use LinguatorPro\Custom_Fields\Custom_Fields;
+use LinguatorPro\Includes\Services\Media\Media_Translation_Service;
 
 /**
  * Model for synchronizing posts
  *
  *  
  */
-class Linguator_Sync_Post_Model {
+class Linguator_Pro_Sync_Post_Model {
 	/**
 	 * Stores the plugin options.
 	 *
@@ -30,7 +30,7 @@ class Linguator_Sync_Post_Model {
 	public $model;
 
 	/**
-	 * @var Linguator_Sync
+	 * @var Linguator_Pro_Sync
 	 */
 	public $sync;
 
@@ -72,7 +72,7 @@ class Linguator_Sync_Post_Model {
 		$this->options      = &$linguator->options;
 		$this->model        = &$linguator->model;
 		$this->sync         = &$linguator->sync;
-		$this->sync_content = new Linguator_Sync_Post( $linguator );
+		$this->sync_content = new Linguator_Pro_Sync_Post( $linguator );
 		$this->media_translation = new Media_Translation_Service( $linguator );
 
 		add_filter( 'lmat_copy_taxonomies', array( $this, 'copy_taxonomies' ), 5, 4 );
@@ -136,8 +136,8 @@ class Linguator_Sync_Post_Model {
 		$elementor_post_data = null;
 		if ( isset( $post_data['meta_fields']['_elementor_data'] ) ) {
 			$elementor_post_data = $post_data['meta_fields']['_elementor_data'];
-			if ( is_string( $elementor_post_data ) && '' !== $elementor_post_data && function_exists( 'linguator_replace_links_with_translations' ) ) {
-				$elementor_post_data = linguator_replace_links_with_translations( $elementor_post_data, $target_language, $source_language );
+			if ( is_string( $elementor_post_data ) && '' !== $elementor_post_data && function_exists( 'linguator_pro_replace_links_with_translations' ) ) {
+				$elementor_post_data = linguator_pro_replace_links_with_translations( $elementor_post_data, $target_language, $source_language );
 			}
 			unset( $post_data['meta_fields']['_elementor_data'] );
 			$this->pending_elementor_media = ( isset( $post_data['elementor_media'] ) && is_array( $post_data['elementor_media'] ) )
@@ -167,7 +167,7 @@ class Linguator_Sync_Post_Model {
 		
 		if(isset($post_data['post_content'])){
 			
-			$filtered_post_content=linguator_replace_links_with_translations($tr_post->post_content, $target_language, $source_language);
+			$filtered_post_content=linguator_pro_replace_links_with_translations($tr_post->post_content, $target_language, $source_language);
 			
 			$default_allowed_tags=wp_kses_allowed_html('post');
 			
@@ -473,7 +473,7 @@ class Linguator_Sync_Post_Model {
 			return;
 		}
 
-		$d    = linguator_maybe_unserialize( $term->description );
+		$d    = linguator_pro_maybe_unserialize( $term->description );
 		$lang = $this->model->post->get_language( $post_id );
 
 		if ( ! is_array( $d ) || empty( $lang ) ) {
@@ -507,7 +507,7 @@ class Linguator_Sync_Post_Model {
 
 		if ( ! empty( $term ) ) {
 			$lang = $this->model->post->get_language( $post_id );
-			$d    = linguator_maybe_unserialize( $term->description );
+			$d    = linguator_pro_maybe_unserialize( $term->description );
 
 			if ( ! is_array( $d ) || empty( $lang ) ) {
 				return array();

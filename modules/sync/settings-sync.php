@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\sync;
+namespace LinguatorPro\Modules\sync;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Settings\Controllers\Linguator_Settings_Module;
+use LinguatorPro\Settings\Controllers\Linguator_Settings_Module;
 
 
 

@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return bool True if the cache compatibility must be loaded
  */
-function linguator_is_cache_active() {
+function linguator_pro_is_cache_active() {
 	/**
 	 * Filters whether we should load the cache compatibility
 	 *
@@ -37,7 +37,7 @@ function linguator_is_cache_active() {
  *
  * @return string Requested url
  */
-function linguator_get_requested_url() {
+function linguator_pro_get_requested_url() {
 	if ( isset( $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'] ) ) {
 		return set_url_scheme( sanitize_url( wp_unslash( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) ) );
 	}
@@ -73,7 +73,7 @@ function linguator_get_requested_url() {
  * @param string $plugin_name Plugin basename.
  * @return bool True if activated, false otherwise.
  */
-function linguator_is_plugin_active( string $plugin_name ) {
+function linguator_pro_is_plugin_active( string $plugin_name ) {
 	$sitewide_plugins     = get_site_option( 'active_sitewide_plugins' );
 	$sitewide_plugins     = ! empty( $sitewide_plugins ) && is_array( $sitewide_plugins ) ? array_keys( $sitewide_plugins ) : array();
 	$current_site_plugins = (array) get_option( 'active_plugins', array() );
@@ -92,7 +92,7 @@ function linguator_is_plugin_active( string $plugin_name ) {
  * @param WP_Error $error Error object.
  * @return void
  */
-function linguator_add_notice( WP_Error $error ) {
+function linguator_pro_add_notice( WP_Error $error ) {
 	if ( ! $error->has_errors() ) {
 		return;
 	}
@@ -128,7 +128,7 @@ function linguator_add_notice( WP_Error $error ) {
  *
  * @phpstan-return int<0,max>
  */
-function linguator_sanitize_id( $id ) {
+function linguator_pro_sanitize_id( $id ) {
 		$options = array(
 		'options' => array(
 			'min_range' => 1,
@@ -151,12 +151,12 @@ function linguator_sanitize_id( $id ) {
  * @phpstan-return array<positive-int>
  */
 
-function linguator_sanitize_ids( $ids ) {
+function linguator_pro_sanitize_ids( $ids ) {
 	if ( empty( $ids ) || ! is_array( $ids ) ) {
 		return array();
 	}
 
-	return array_filter( array_map( 'linguator_sanitize_id', $ids ) );
+	return array_filter( array_map( 'linguator_pro_sanitize_id', $ids ) );
 	
 }
 
@@ -168,7 +168,7 @@ function linguator_sanitize_ids( $ids ) {
  * @param mixed $data Data that might be unserialized.
  * @return mixed Unserialized data, or the original value if not serialized.
  */
-function linguator_maybe_unserialize( $data ) {
+function linguator_pro_maybe_unserialize( $data ) {
 	if ( is_serialized( $data ) ) {
 		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
 	}
@@ -177,17 +177,17 @@ function linguator_maybe_unserialize( $data ) {
 }
 
 
-if ( ! function_exists( 'linguator_extract_taxonomy_name' ) ) {
+if ( ! function_exists( 'linguator_pro_extract_taxonomy_name' ) ) {
 	/**
-	 * Extracts taxonomy name from a URL path (helper for linguator_replace_links_with_translations).
+	 * Extracts taxonomy name from a URL path (helper for linguator_pro_replace_links_with_translations).
 	 *
 	 * @param string               $path       URL path relative to home (may include language prefix).
 	 * @param array<string,string> $terms_data Map of rewrite slug / taxonomy keys.
 	 * @return string|false|null Taxonomy name, false if not resolved, null if path is empty after language strip.
 	 */
-	function linguator_extract_taxonomy_name( $path, $terms_data ) {
+	function linguator_pro_extract_taxonomy_name( $path, $terms_data ) {
 		// Remove the language prefix if using Linguator.
-		$languages = linguator_languages_list();
+		$languages = linguator_pro_languages_list();
 		$segments  = explode( '/', $path );
 		if ( in_array( $segments[0], $languages, true ) ) {
 			array_shift( $segments );
@@ -214,7 +214,7 @@ if ( ! function_exists( 'linguator_extract_taxonomy_name' ) ) {
  * @param string $locale The locale to replace links for.
  * @return string The content with links replaced.
  */
-function linguator_replace_links_with_translations($content, $locale, $current_locale){
+function linguator_pro_replace_links_with_translations($content, $locale, $current_locale){
 	// Get all URLs in the content that start with the current home page URL (current domain), regardless of attribute or tag.
 	$home_url = preg_quote(get_home_url(), '/');
 	$pattern = '/(' . $home_url . '[^\s"\'<>]*)/i';
@@ -236,7 +236,7 @@ function linguator_replace_links_with_translations($content, $locale, $current_l
 			$postID = url_to_postid($href);
  
 			if ($postID > 0) {
-				$translatedPost = linguator_get_post($postID, $locale);
+				$translatedPost = linguator_pro_get_post($postID, $locale);
 				if ($translatedPost) {
 					$link = get_permalink($translatedPost);
 					
@@ -246,17 +246,17 @@ function linguator_replace_links_with_translations($content, $locale, $current_l
 					}
 				}
 			} else {
-				 $path = trim(str_replace(linguator_home_url($current_locale), '', $href), '/');
+				 $path = trim(str_replace(linguator_pro_home_url($current_locale), '', $href), '/');
 				 $path_parts = array_filter(explode('/', $path));
 				 $category_slug = end($path_parts);
-				 $taxonomy_name=linguator_extract_taxonomy_name($path, $terms_data);
+				 $taxonomy_name=linguator_pro_extract_taxonomy_name($path, $terms_data);
 				 $taxonomy_name=$taxonomy_name ? $taxonomy_name : 'category';
  
 				$category = get_term_by('slug', $category_slug, $taxonomy_name);
  
 				if(!$category){
 						// Remove the language prefix if using Linguator
-					$languages = linguator_languages_list(); // e.g., ['en', 'fr']
+					$languages = linguator_pro_languages_list(); // e.g., ['en', 'fr']
 					$segments = explode('/', $path);
 					if (in_array($segments[0], $languages)) {
 						$lang_code=$segments[0];
@@ -270,7 +270,7 @@ function linguator_replace_links_with_translations($content, $locale, $current_l
  
 				
 				if ($category) {
-					$term_id = linguator_get_term($category->term_id, $locale);
+					$term_id = linguator_pro_get_term($category->term_id, $locale);
 					if ($term_id > 0) {
 						$link = get_category_link($term_id);
 						$content = str_replace($href, esc_url($link), $content);
@@ -282,7 +282,7 @@ function linguator_replace_links_with_translations($content, $locale, $current_l
 	
 	return $content;
  }
-function linguator_is_edit_rest_request(WP_REST_Request $request): bool {
+function linguator_pro_is_edit_rest_request(WP_REST_Request $request): bool {
 	if (in_array($request->get_method(), array('PATCH', 'POST', 'PUT'), true)) {
 		return true;
 	}
@@ -296,13 +296,13 @@ function linguator_is_edit_rest_request(WP_REST_Request $request): bool {
  *
  * @return bool True to use the block editor plugin.
  */
-function linguator_use_block_editor_plugin() {
+function linguator_pro_use_block_editor_plugin() {
 	/**
 	 * Filters whether we should load the block editor plugin or the legacy languages metabox.
 	 *
 	 * @param bool $use_plugin True when loading the block editor plugin.
 	 */
-	return class_exists( 'Linguator\Modules\Editors\Screens\Abstract_Screen' ) && apply_filters( 'lmat_use_block_editor_plugin', ! defined( 'LMAT_USE_BLOCK_EDITOR_PLUGIN' ) || LMAT_USE_BLOCK_EDITOR_PLUGIN );
+	return class_exists( 'LinguatorPro\Modules\Editors\Screens\Abstract_Screen' ) && apply_filters( 'lmat_use_block_editor_plugin', ! defined( 'LMAT_USE_BLOCK_EDITOR_PLUGIN' ) || LMAT_USE_BLOCK_EDITOR_PLUGIN );
 }
 
 /**
@@ -313,7 +313,7 @@ function linguator_use_block_editor_plugin() {
  * @param string $switcher_type The switcher type to check ('default', 'block', 'elementor')
  * @return bool True if the switcher type is enabled
  */
-function linguator_is_switcher_type_enabled( $switcher_type ) {
+function linguator_pro_is_switcher_type_enabled( $switcher_type ) {
 	// Get the options instance
 	global $linguator;
 	
@@ -337,7 +337,7 @@ function linguator_is_switcher_type_enabled( $switcher_type ) {
  * @param string $file Absolute path to a file.
  * @return string URL, or empty string if the path is not under wp_content_dir().
  */
-function linguator_content_path_to_url( $file ) {
+function linguator_pro_content_path_to_url( $file ) {
 	if ( '' === $file || ! is_string( $file ) ) {
 		return '';
 	}
@@ -363,7 +363,7 @@ function linguator_content_path_to_url( $file ) {
  *
  * @return string[]
  */
-function linguator_get_allowed_ai_providers() {
+function linguator_pro_get_allowed_ai_providers() {
 	$allowed = array( 'chrome_local_ai', 'edge_local_ai', 'google' );
 
 	global $wp_version;
@@ -385,8 +385,8 @@ function linguator_get_allowed_ai_providers() {
  * @param string $provider Provider key (google|chrome_local_ai|gemini).
  * @return bool
  */
-function linguator_is_ai_provider_allowed( $provider ) {
-	return in_array( (string) $provider, linguator_get_allowed_ai_providers(), true );
+function linguator_pro_is_ai_provider_allowed( $provider ) {
+	return in_array( (string) $provider, linguator_pro_get_allowed_ai_providers(), true );
 }
 
 /**
@@ -398,7 +398,7 @@ function linguator_is_ai_provider_allowed( $provider ) {
  * @param string[] $active_providers Service keys of the enabled providers (google, localAiTranslator, edgeLocalAiTranslator, gemini).
  * @return string Service key, or an empty string when nothing can be pre-selected.
  */
-function linguator_get_default_ai_provider_service( array $active_providers ) {
+function linguator_pro_get_default_ai_provider_service( array $active_providers ) {
 	$services = array(
 		'google'          => 'google',
 		'chrome_local_ai' => 'localAiTranslator',
@@ -407,8 +407,8 @@ function linguator_get_default_ai_provider_service( array $active_providers ) {
 	);
 	$setting  = 'google';
 
-	if ( function_exists( 'LMAT' ) && property_exists( LMAT(), 'options' ) && isset( LMAT()->options['ai_translation_configuration']['default_provider'] ) ) {
-		$setting = (string) LMAT()->options['ai_translation_configuration']['default_provider'];
+	if ( function_exists( 'LMATP' ) && property_exists( LMATP(), 'options' ) && isset( LMATP()->options['ai_translation_configuration']['default_provider'] ) ) {
+		$setting = (string) LMATP()->options['ai_translation_configuration']['default_provider'];
 	}
 
 	if ( isset( $services[ $setting ] ) && in_array( $services[ $setting ], $active_providers, true ) ) {
@@ -425,7 +425,7 @@ function linguator_get_default_ai_provider_service( array $active_providers ) {
  *
  * @return string|false `yes`, `no`, or false if the user has not chosen yet.
  */
-function linguator_get_cpfm_opt_in_choice() {
+function linguator_pro_get_cpfm_opt_in_choice() {
 	$choice = get_option( 'cpfm_opt_in_choice_cool_translations' );
 
 	if ( false !== $choice ) {
@@ -446,27 +446,27 @@ function linguator_get_cpfm_opt_in_choice() {
  *
  * @return string Script handle used for wp_localize_script (lmat-custom-data-table).
  */
-function linguator_enqueue_datatable_assets() {
+function linguator_pro_enqueue_datatable_assets() {
 	wp_enqueue_script(
 		'lmat-datatable-script',
-		plugins_url( 'admin/assets/js/dataTables.min.js', LINGUATOR_ROOT_FILE ),
+		plugins_url( 'admin/assets/js/dataTables.min.js', LINGUATOR_PRO_ROOT_FILE ),
 		array(),
-		LINGUATOR_VERSION,
+		LINGUATOR_PRO_VERSION,
 		true
 	);
 
 	wp_enqueue_style(
 		'lmat-custom-data-table',
-		plugins_url( 'admin/assets/css/lmat-custom-data-table.min.css', LINGUATOR_ROOT_FILE ),
+		plugins_url( 'admin/assets/css/lmat-custom-data-table.min.css', LINGUATOR_PRO_ROOT_FILE ),
 		array(),
-		LINGUATOR_VERSION
+		LINGUATOR_PRO_VERSION
 	);
 
 	wp_enqueue_script(
 		'lmat-custom-data-table',
-		plugins_url( 'admin/assets/js/lmat-custom-data-table.js', LINGUATOR_ROOT_FILE ),
+		plugins_url( 'admin/assets/js/lmat-custom-data-table.js', LINGUATOR_PRO_ROOT_FILE ),
 		array( 'lmat-datatable-script' ),
-		LINGUATOR_VERSION,
+		LINGUATOR_PRO_VERSION,
 		true
 	);
 
@@ -484,8 +484,8 @@ function linguator_enqueue_datatable_assets() {
  *
  * @phpstan-param non-empty-string $name
  */
-function linguator_enqueue_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'lmat-' ): void {
-	linguator_register_script( $name, $dependencies, $args, $prefix );
+function linguator_pro_enqueue_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'lmat-' ): void {
+	linguator_pro_register_script( $name, $dependencies, $args, $prefix );
 	wp_scripts()->enqueue( $prefix . $name );
 }
 
@@ -500,15 +500,15 @@ function linguator_enqueue_script( string $name, array $dependencies = array(), 
  *
  * @phpstan-param non-empty-string $name
  */
-function linguator_register_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'lmat-' ): void {
+function linguator_pro_register_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'lmat-' ): void {
 	$suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$src     = plugins_url( "admin/assets/js/build/{$name}{$suffix}.js", LINGUATOR_ROOT_FILE );
+	$src     = plugins_url( "admin/assets/js/build/{$name}{$suffix}.js", LINGUATOR_PRO_ROOT_FILE );
 
 	if ( '' === $src ) {
 		return;
 	}
 
-	$version = WP_DEBUG ? time() : LINGUATOR_VERSION;
+	$version = WP_DEBUG ? time() : LINGUATOR_PRO_VERSION;
 
 	wp_register_script( $prefix . $name, $src, array_filter( $dependencies ), (string) $version, $args );
 }
@@ -523,8 +523,8 @@ function linguator_register_script( string $name, array $dependencies = array(),
  *
  * @phpstan-param non-empty-string $name
  */
-function linguator_enqueue_style( string $name, array $dependencies = array(), string $prefix = 'lmat-' ): void {
-	linguator_register_style( $name, $dependencies, $prefix );
+function linguator_pro_enqueue_style( string $name, array $dependencies = array(), string $prefix = 'lmat-' ): void {
+	linguator_pro_register_style( $name, $dependencies, $prefix );
 	wp_styles()->enqueue( $prefix . $name );
 }
 
@@ -538,15 +538,15 @@ function linguator_enqueue_style( string $name, array $dependencies = array(), s
  *
  * @phpstan-param non-empty-string $name
  */
-function linguator_register_style( string $name, array $dependencies = array(), string $prefix = 'lmat-' ): void {
+function linguator_pro_register_style( string $name, array $dependencies = array(), string $prefix = 'lmat-' ): void {
 	$suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	$src     = plugins_url( "admin/assets/css/build/{$name}{$suffix}.css", LINGUATOR_ROOT_FILE );
+	$src     = plugins_url( "admin/assets/css/build/{$name}{$suffix}.css", LINGUATOR_PRO_ROOT_FILE );
 
 	if ( '' === $src ) {
 		return;
 	}
 
-	$version = WP_DEBUG ? time() : LINGUATOR_VERSION;
+	$version = WP_DEBUG ? time() : LINGUATOR_PRO_VERSION;
 
 	wp_register_style( $prefix . $name, $src, $dependencies, (string) $version );
 }

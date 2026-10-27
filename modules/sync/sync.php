@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sync {
+class Linguator_Pro_Sync {
 	/**
-	 * @var Linguator_Sync_Tax
+	 * @var Linguator_Pro_Sync_Tax
 	 */
 	public $taxonomies;
 
 	/**
-	 * @var Linguator_Sync_Post_Metas
+	 * @var Linguator_Pro_Sync_Post_Metas
 	 */
 	public $post_metas;
 
 	/**
-	 * @var Linguator_Sync_Term_Metas
+	 * @var Linguator_Pro_Sync_Term_Metas
 	 */
 	public $term_metas;
 
@@ -51,9 +51,9 @@ class Linguator_Sync {
 		$this->model   = &$linguator->model;
 		$this->options = &$linguator->options;
 
-		$this->taxonomies = new Linguator_Sync_Tax( $linguator );
-		$this->post_metas = new Linguator_Sync_Post_Metas( $linguator );
-		$this->term_metas = new Linguator_Sync_Term_Metas( $linguator );
+		$this->taxonomies = new Linguator_Pro_Sync_Tax( $linguator );
+		$this->post_metas = new Linguator_Pro_Sync_Post_Metas( $linguator );
+		$this->term_metas = new Linguator_Pro_Sync_Term_Metas( $linguator );
 
 		add_filter( 'wp_insert_post_parent', array( $this, 'can_sync_post_parent' ), 10, 3 );
 		add_filter( 'wp_insert_post_data', array( $this, 'can_sync_post_data' ), 10, 2 );

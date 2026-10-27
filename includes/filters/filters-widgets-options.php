@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Filters;
+namespace LinguatorPro\Includes\Filters;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
 
 
 /**

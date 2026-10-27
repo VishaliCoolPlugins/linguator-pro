@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Modules\Full_Site_Editing;
+namespace LinguatorPro\Modules\Full_Site_Editing;
 
 defined( 'ABSPATH' ) || exit;
 

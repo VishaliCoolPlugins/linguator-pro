@@ -2,12 +2,12 @@
 /**
  * Handles deactivation logic for the Linguator plugin.
  *
- * IMPORTANT: Make sure the constants LINGUATOR_BASENAME and LINGUATOR_VERSION are defined before using this class.
+ * IMPORTANT: Make sure the constants LINGUATOR_PRO_BASENAME and LINGUATOR_PRO_VERSION are defined before using this class.
  *
  * @package Linguator
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 /**
  * Class to take care of plugin deactivation.

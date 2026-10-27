@@ -11,11 +11,11 @@ add_action(
 	'lmat_init',
 	function ( $linguator ) {
 
-		if ( $linguator->model->has_languages() && linguator_use_block_editor_plugin() ) {
+		if ( $linguator->model->has_languages() && linguator_pro_use_block_editor_plugin() ) {
 			// Only register blocks if 'block' switcher is enabled
-			if ( linguator_is_switcher_type_enabled( 'block' ) ) {
-				$linguator->switcher_block   = ( new \Linguator\Modules\Blocks\Linguator_Language_Switcher_Block( $linguator ) )->init();
-				$linguator->navigation_block = ( new \Linguator\Modules\Blocks\Linguator_Navigation_Language_Switcher_Block( $linguator ) )->init();
+			if ( linguator_pro_is_switcher_type_enabled( 'block' ) ) {
+				$linguator->switcher_block   = ( new \LinguatorPro\Modules\Blocks\Linguator_Language_Switcher_Block( $linguator ) )->init();
+				$linguator->navigation_block = ( new \LinguatorPro\Modules\Blocks\Linguator_Navigation_Language_Switcher_Block( $linguator ) )->init();
 			}
 		}
 	}

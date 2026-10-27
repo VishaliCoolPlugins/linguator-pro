@@ -5,7 +5,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

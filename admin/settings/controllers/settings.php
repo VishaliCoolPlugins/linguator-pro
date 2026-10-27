@@ -2,26 +2,26 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Settings\Controllers;
+namespace LinguatorPro\Settings\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
-use Linguator\Admin\Controllers\Linguator_Admin_Strings;
-use Linguator\Admin\Controllers\Linguator_Admin_Model;
-use Linguator\Settings\Controllers\Linguator_Settings_Module;
-use Linguator\Settings\Tables\Linguator_Table_Languages;
-use Linguator\Settings\Tables\Linguator_Table_String;
-use Linguator\Settings\Header\Header;
-use Linguator\Includes\Other\Linguator_Translation_Dashboard;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Model;
+use LinguatorPro\Settings\Controllers\Linguator_Settings_Module;
+use LinguatorPro\Settings\Tables\Linguator_Table_Languages;
+use LinguatorPro\Settings\Tables\Linguator_Table_String;
+use LinguatorPro\Settings\Header\Header;
+use LinguatorPro\Includes\Other\Linguator_Translation_Dashboard;
 
 use WP_Error;
 
 /**
- * A class for the Linguator settings pages, accessible from @see LMAT().
+ * A class for the Linguator settings pages, accessible from @see LMATP().
  *
  *  
  */
@@ -195,7 +195,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 		foreach ( $modules as $key => $class ) {
 			// Handle namespace mapping for remaining modules (mainly sync)
 			if ( 'Linguator_Settings_Sync' === $class ) {
-				$class = \Linguator\Modules\sync\Linguator_Settings_Sync::class;
+				$class = \LinguatorPro\Modules\sync\Linguator_Settings_Sync::class;
 			}
 			
 			// Extract class name for the key if it's a full class name
@@ -281,7 +281,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 		}
 		
 
-		wp_enqueue_script('lmat-loco-redirect-script', plugins_url('admin/assets/js/loco-redirect-script.js', LINGUATOR_ROOT_FILE), array('jquery'), LINGUATOR_VERSION, true);
+		wp_enqueue_script('lmat-loco-redirect-script', plugins_url('admin/assets/js/loco-redirect-script.js', LINGUATOR_PRO_ROOT_FILE), array('jquery'), LINGUATOR_PRO_VERSION, true);
 		wp_localize_script('lmat-loco-redirect-script', 'lmat_loco_redirect_script', array('admin_' => esc_url(admin_url('admin.php?page=lmat_settings')), 'loco_iframe_page_url' => array("url" => esc_url( $plugin_info_url ), "title" => esc_js( __( 'Plugin: Loco Translate', 'linguator-pro' ) )), 'loco_install' => $loco_install));
 	}
 
@@ -343,16 +343,16 @@ class Linguator_Settings extends Linguator_Admin_Base {
 				$language = $this->model->add_language( $sanitized_data );
 
 				if ( is_wp_error( $language ) ) {
-						linguator_add_notice( $language );
+						linguator_pro_add_notice( $language );
 				} else {
-					linguator_add_notice( new WP_Error( 'lmat_languages_created', __( 'Language added.', 'linguator-pro' ), 'success' ) );
+					linguator_pro_add_notice( new WP_Error( 'lmat_languages_created', __( 'Language added.', 'linguator-pro' ), 'success' ) );
 					$locale = $language->locale;
 
 					if ( 'en_US' !== $language->locale && current_user_can( 'install_languages' ) ) {
 						// Attempts to install the language pack
 						require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 						if ( ! wp_download_language_pack( $language->locale ) ) {
-							linguator_add_notice( new WP_Error( 'lmat_download_mo', __( 'The language was created, but the WordPress language file was not downloaded. Please install it manually.', 'linguator-pro' ), 'warning' ) );
+							linguator_pro_add_notice( new WP_Error( 'lmat_download_mo', __( 'The language was created, but the WordPress language file was not downloaded. Please install it manually.', 'linguator-pro' ), 'warning' ) );
 						}
 
 						// Force checking for themes and plugins translations updates
@@ -368,7 +368,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 
 				$lang_id = ! empty( $_GET['lang'] ) ? absint( wp_unslash( $_GET['lang'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 				if ( $lang_id && $this->model->delete_language( $lang_id ) ) {
-					linguator_add_notice( new WP_Error( 'lmat_languages_deleted', __( 'Language deleted.', 'linguator-pro' ), 'success' ) );
+					linguator_pro_add_notice( new WP_Error( 'lmat_languages_deleted', __( 'Language deleted.', 'linguator-pro' ), 'success' ) );
 				}
 
 				
@@ -388,9 +388,9 @@ class Linguator_Settings extends Linguator_Admin_Base {
 				$errors = $this->model->update_language( $sanitized_data );
 
 				if ( is_wp_error( $errors ) ) {
-					linguator_add_notice( $errors );
+					linguator_pro_add_notice( $errors );
 				} else {
-					linguator_add_notice( new WP_Error( 'lmat_languages_updated', __( 'Language updated.', 'linguator-pro' ), 'success' ) );
+					linguator_pro_add_notice( new WP_Error( 'lmat_languages_updated', __( 'Language updated.', 'linguator-pro' ), 'success' ) );
 				}
 
 
@@ -547,8 +547,8 @@ class Linguator_Settings extends Linguator_Admin_Base {
 	 */
 	private function linguator_get_sync_options() {
 		// Use the static method from Linguator_Settings_Sync to get sync options
-		if ( class_exists( 'Linguator\Modules\sync\Linguator_Settings_Sync' ) ) {
-			$sync_metas = \Linguator\Modules\sync\Linguator_Settings_Sync::list_metas_to_sync();
+		if ( class_exists( 'LinguatorPro\Modules\sync\Linguator_Settings_Sync' ) ) {
+			$sync_metas = \LinguatorPro\Modules\sync\Linguator_Settings_Sync::list_metas_to_sync();
 			
 			// Format for JavaScript consumption
 			$formatted_options = array();
@@ -586,7 +586,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 				'subheading' => 'Gutenberg block widget for the block editor, compatible with modern WordPress themes.'
             )
         );
-        if(linguator_is_plugin_active('elementor/elementor.php')){
+        if(linguator_pro_is_plugin_active('elementor/elementor.php')){
             $language_switcher_options[] = array(
                 'label' => __( 'Elementor Widget Based', 'linguator-pro' ),
                 'value' => 'elementor',
@@ -654,7 +654,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 
 		if ( $is_settings_tab && (!$active_tab || empty($active_tab) || 'strings' !== $active_tab) && $frontend_settings_assets ) {
 			// Enqueue React-based settings for settings tabs
-			$asset_file = plugin_dir_path( LINGUATOR_ROOT_FILE ) . 'admin/assets/frontend/settings/settings.asset.php';
+			$asset_file = plugin_dir_path( LINGUATOR_PRO_ROOT_FILE ) . 'admin/assets/frontend/settings/settings.asset.php';
 
 			if ( ! file_exists( $asset_file ) ) {
 				return;
@@ -691,14 +691,14 @@ class Linguator_Settings extends Linguator_Admin_Base {
 			}
 
 			// Built-in AI (Chrome/Edge) setup card and provider list used by the AI Translation tab.
-			wp_enqueue_style( 'lmat-chrome-ai-setup', plugins_url( 'admin/chrome-ai-setup/css/chrome-ai-setup-framework.css', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
-			wp_enqueue_style( 'lmat-provider-list', plugins_url( 'admin/assets/css/lmat-provider-list.css', LINGUATOR_ROOT_FILE ), array( 'lmat-chrome-ai-setup' ), LINGUATOR_VERSION );
-			wp_enqueue_script( 'lmat-chrome-ai-setup', plugins_url( 'admin/chrome-ai-setup/js/chrome-ai-setup-framework.js', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION, true );
+			wp_enqueue_style( 'lmat-chrome-ai-setup', plugins_url( 'admin/chrome-ai-setup/css/chrome-ai-setup-framework.css', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
+			wp_enqueue_style( 'lmat-provider-list', plugins_url( 'admin/assets/css/lmat-provider-list.css', LINGUATOR_PRO_ROOT_FILE ), array( 'lmat-chrome-ai-setup' ), LINGUATOR_PRO_VERSION );
+			wp_enqueue_script( 'lmat-chrome-ai-setup', plugins_url( 'admin/chrome-ai-setup/js/chrome-ai-setup-framework.js', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION, true );
 
 			// Enqueue React-based settings script
 			wp_enqueue_script(
 				'lmat_settings',
-				plugins_url( 'admin/assets/frontend/settings/settings.js', LINGUATOR_ROOT_FILE ),
+				plugins_url( 'admin/assets/frontend/settings/settings.js', LINGUATOR_PRO_ROOT_FILE ),
 				array_merge( $asset['dependencies'], array( 'lmat-chrome-ai-setup' ) ),
 				$asset['version'],
 				true
@@ -723,8 +723,8 @@ class Linguator_Settings extends Linguator_Admin_Base {
 					'sync_options'   => $this->linguator_get_sync_options(),
 					'language_switcher_options' => $this->get_language_switcher_options(),
 					'translations_data' => $translations_data,
-					'wp_ai_client_available' => function_exists( 'linguator_is_ai_provider_allowed' ) ? linguator_is_ai_provider_allowed( 'gemini' ) : false,
-					'allowed_providers'     => function_exists( 'linguator_get_allowed_ai_providers' ) ? linguator_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
+					'wp_ai_client_available' => function_exists( 'linguator_pro_is_ai_provider_allowed' ) ? linguator_pro_is_ai_provider_allowed( 'gemini' ) : false,
+					'allowed_providers'     => function_exists( 'linguator_pro_get_allowed_ai_providers' ) ? linguator_pro_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
 					'chrome_ai_setup'           => $this->get_chrome_ai_setup_data(),
 				)
 			);
@@ -732,7 +732,7 @@ class Linguator_Settings extends Linguator_Admin_Base {
 				'lmat_settings',
 				'lmat_settings_logo_data',
 				[
-					'logoUrl' => plugin_dir_url(LINGUATOR_ROOT_FILE) . '/assets/logo/',
+					'logoUrl' => plugin_dir_url(LINGUATOR_PRO_ROOT_FILE) . '/assets/logo/',
 					'nonce' => wp_create_nonce('wp_rest'),
 					'restUrl' => rest_url('lmat/v1/'),
 				]
@@ -741,17 +741,17 @@ class Linguator_Settings extends Linguator_Admin_Base {
 			// Enqueue styles
 			wp_enqueue_style(
 				'lmat_settings',
-				plugins_url( 'admin/assets/css/build/main.css', LINGUATOR_ROOT_FILE ),
+				plugins_url( 'admin/assets/css/build/main.css', LINGUATOR_PRO_ROOT_FILE ),
 				array(),
-				LINGUATOR_VERSION
+				LINGUATOR_PRO_VERSION
 			);
 
 			if ( 'scan' === $this->active_tab ) {
 				wp_enqueue_style(
 					'lmat_scan_inspector',
-					plugins_url( 'admin/assets/css/scan-inspector.css', LINGUATOR_ROOT_FILE ),
+					plugins_url( 'admin/assets/css/scan-inspector.css', LINGUATOR_PRO_ROOT_FILE ),
 					array( 'lmat_settings' ),
-					(string) filemtime( LINGUATOR_DIR . '/admin/assets/css/scan-inspector.css' )
+					(string) filemtime( LINGUATOR_PRO_DIR . '/admin/assets/css/scan-inspector.css' )
 				);
 			}
 		}else if($admin_settings_assets){
@@ -760,10 +760,10 @@ class Linguator_Settings extends Linguator_Admin_Base {
 			// Original scripts for lang and strings tabs
 			$suffix = '.min';
 
-			wp_enqueue_script( 'lmat_settings', plugins_url( 'admin/assets/js/build/settings' . $suffix . '.js', LINGUATOR_ROOT_FILE ), array( 'jquery', 'wp-ajax-response', 'postbox', 'jquery-ui-selectmenu', 'wp-hooks' ), LINGUATOR_VERSION, true );
+			wp_enqueue_script( 'lmat_settings', plugins_url( 'admin/assets/js/build/settings' . $suffix . '.js', LINGUATOR_PRO_ROOT_FILE ), array( 'jquery', 'wp-ajax-response', 'postbox', 'jquery-ui-selectmenu', 'wp-hooks' ), LINGUATOR_PRO_VERSION, true );
 			wp_localize_script( 'lmat_settings', 'lmat_settings', array( 'dismiss_notice' => esc_html__( 'Dismiss this notice.', 'linguator-pro' ) ) );
 
-			wp_enqueue_style( 'lmat_selectmenu', plugins_url( 'admin/assets/css/build/selectmenu' . $suffix . '.css', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
+			wp_enqueue_style( 'lmat_selectmenu', plugins_url( 'admin/assets/css/build/selectmenu' . $suffix . '.css', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
 		}
 
 		$this->loco_page_assets();
@@ -891,8 +891,8 @@ class Linguator_Settings extends Linguator_Admin_Base {
 			'source_language'       => $source_language,
 			'source_language_label' => $source_label,
 			'all_languages'         => $languages,
-			'chrome_icon_url'       => esc_url( plugins_url( 'admin/assets/images/chrome.png', LINGUATOR_ROOT_FILE ) ),
-			'edge_icon_url'         => esc_url( plugins_url( 'admin/assets/images/edge.png', LINGUATOR_ROOT_FILE ) ),
+			'chrome_icon_url'       => esc_url( plugins_url( 'admin/assets/images/chrome.png', LINGUATOR_PRO_ROOT_FILE ) ),
+			'edge_icon_url'         => esc_url( plugins_url( 'admin/assets/images/edge.png', LINGUATOR_PRO_ROOT_FILE ) ),
 			'alternative_url'       => esc_url( admin_url( 'admin.php?page=lmat_settings&tab=translation' ) ),
 			'texts'                 => array(
 				'cardTitle'                   => esc_html__( 'Chrome AI Setup', 'linguator-pro' ),

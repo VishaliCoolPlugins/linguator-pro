@@ -2,15 +2,15 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Filters\Linguator_Filter_REST_Routes;
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Filters\Linguator_Filter_REST_Routes;
+use LinguatorPro\Includes\Other\Linguator_Model;
 use WP_Block_Editor_Context;
 use WP_Post;
 

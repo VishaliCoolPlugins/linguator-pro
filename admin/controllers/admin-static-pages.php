@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Controllers\Linguator_Static_Pages;
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Includes\Controllers\Linguator_Static_Pages;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
 
 /**
  * Manages the static front page and the page for posts on admin side

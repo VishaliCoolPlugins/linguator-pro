@@ -9,13 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 /**
- * Class Linguator_Admin_Site_Health to add debug info in WP Site Health.
+ * Class Linguator_Pro_Admin_Site_Health to add debug info in WP Site Health.
  *
  * @see https://make.wordpress.org/core/2019/04/25/site-health-check-in-5-2/ since WordPress 5.2
  *
  * @since 2.8
  */
-class Linguator_Admin_Site_Health {
+class Linguator_Pro_Admin_Site_Health {
 	/**
 	 * A reference to the Linguator_Model instance.
 	 *
@@ -33,7 +33,7 @@ class Linguator_Admin_Site_Health {
 	protected $static_pages;
 
 	/**
-	 * Linguator_Admin_Site_Health constructor.
+	 * Linguator_Pro_Admin_Site_Health constructor.
 	 *
 	 *
 	 * @param object $linguator The Linguator object.
@@ -93,7 +93,7 @@ class Linguator_Admin_Site_Health {
 
 		$debug_info['lmat_options'] = array(
 			/* translators: placeholder is the plugin name */
-			'label'  => sprintf( __( '%s options', 'linguator-pro' ), LINGUATOR ),
+			'label'  => sprintf( __( '%s options', 'linguator-pro' ), LINGUATOR_PRO ),
 			'fields' => $fields,
 		);
 
@@ -326,7 +326,7 @@ class Linguator_Admin_Site_Health {
 			'label'       => __( 'All languages have a translated homepage', 'linguator-pro' ),
 			'status'      => 'good',
 			'badge'       => array(
-				'label' => LINGUATOR,
+				'label' => LINGUATOR_PRO,
 				'color' => 'blue',
 			),
 			'description' => sprintf(
@@ -374,7 +374,7 @@ class Linguator_Admin_Site_Health {
 
 		// Multisite
 		if ( is_multisite() ) {
-			if ( is_plugin_active_for_network( LINGUATOR_BASENAME ) ) {
+			if ( is_plugin_active_for_network( LINGUATOR_PRO_BASENAME ) ) {
 				$network_activated = __( 'Yes', 'linguator-pro' );
 			} else {
 				$network_activated = __( 'No', 'linguator-pro' );
@@ -389,7 +389,7 @@ class Linguator_Admin_Site_Health {
 		if ( ! empty( $fields ) ) {
 			$debug_info['lmat_warnings'] = array(
 				/* translators: placeholder is the plugin name */
-				'label'  => sprintf( __( '%s information', 'linguator-pro' ), LINGUATOR ),
+				'label'  => sprintf( __( '%s information', 'linguator-pro' ), LINGUATOR_PRO ),
 				'fields' => $fields,
 			);
 		}

@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Settings\Controllers;
+namespace LinguatorPro\Settings\Controllers;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
 }

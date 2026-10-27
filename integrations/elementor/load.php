@@ -7,17 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly.
 }
 // Load Elementor compatibility
-if ( linguator_is_plugin_active( 'elementor/elementor.php' ) ) {
+if ( linguator_pro_is_plugin_active( 'elementor/elementor.php' ) ) {
 	require_once __DIR__ . '/elementor.php';
 	require_once __DIR__ . '/lmat-template-translation.php';
 	require_once __DIR__ . '/lmat-display-conditions.php';
-	new Linguator\Integrations\elementor\Linguator_Elementor();
-	new Linguator\Integrations\elementor\Linguator_Template_Translation();
-	new Linguator\Integrations\elementor\Linguator_Display_Conditions();
+	new LinguatorPro\Integrations\elementor\Linguator_Elementor();
+	new LinguatorPro\Integrations\elementor\Linguator_Template_Translation();
+	new LinguatorPro\Integrations\elementor\Linguator_Display_Conditions();
 	$linguator = get_option( 'linguator' );
 	// Only load Elementor widget if 'elementor' switcher is enabled
 	if ( isset($linguator['lmat_language_switcher_options']) && is_array($linguator['lmat_language_switcher_options']) && in_array( 'elementor', $linguator['lmat_language_switcher_options'] ) ) {
 		require_once __DIR__ . '/lmat-register-widget.php';
-		new Linguator\Integrations\elementor\Linguator_Register_Widget();
+		new LinguatorPro\Integrations\elementor\Linguator_Register_Widget();
 	}
 }

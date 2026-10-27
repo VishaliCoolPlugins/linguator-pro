@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models\Translatable;
+namespace LinguatorPro\Includes\Models\Translatable;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Models\Translated\Linguator_Translated_Object;
+use LinguatorPro\Includes\Models\Translated\Linguator_Translated_Object;
 
 
 /**

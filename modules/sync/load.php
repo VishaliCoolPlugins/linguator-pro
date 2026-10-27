@@ -9,15 +9,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Base;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Base;
 
 
 
 if ( $linguator->model->has_languages() ) {
 	if ( $linguator instanceof Linguator_Admin_Base ) {
-		$linguator->sync = new Linguator_Admin_Sync( $linguator );
+		$linguator->sync = new Linguator_Pro_Admin_Sync( $linguator );
 	} else {
-		$linguator->sync = new Linguator_Sync( $linguator );
+		$linguator->sync = new Linguator_Pro_Sync( $linguator );
 	}
 
 	add_filter(

@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\wp_offload_media;
+namespace LinguatorPro\Integrations\wp_offload_media;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -55,7 +55,7 @@ class Linguator_AS3CF {
 	 * @param int $post_id Id of the attachment being deleted.
 	 */
 	public function linguator_check_translated_media( $post_id ) {
-		$this->is_media_translated[ $post_id ] = ( count( linguator_get_post_translations( $post_id ) ) > 1 );
+		$this->is_media_translated[ $post_id ] = ( count( linguator_pro_get_post_translations( $post_id ) ) > 1 );
 	}
 
 	/**

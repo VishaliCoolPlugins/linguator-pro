@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher\Element;
+namespace LinguatorPro\Includes\Switcher\Element;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

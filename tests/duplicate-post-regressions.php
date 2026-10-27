@@ -17,7 +17,7 @@ function get_post_meta( $post_id, $key, $single ) {
 
 require_once dirname( __DIR__ ) . '/integrations/duplicate-post/duplicate-post.php';
 
-$integration = new \Linguator\Integrations\duplicate_post\Linguator_Duplicate_Post();
+$integration = new \LinguatorPro\Integrations\duplicate_post\Linguator_Duplicate_Post();
 $integration->init();
 
 if ( ! isset( $GLOBALS['filters']['lmat_sync_post_fields'] ) || 2 !== $GLOBALS['filters']['lmat_sync_post_fields'][2] ) {

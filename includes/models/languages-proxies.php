@@ -3,10 +3,10 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models;
+namespace LinguatorPro\Includes\Models;
 
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Models\Languages_Proxy_Interface;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Models\Languages_Proxy_Interface;
 
 defined( 'ABSPATH' ) || exit;
 

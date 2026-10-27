@@ -3,11 +3,11 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Blocks;
+namespace LinguatorPro\Modules\Blocks;
 
-use Linguator\Includes\Switcher\Assets;
-use Linguator\Includes\Switcher\Settings\Settings;
-use Linguator\Includes\Switcher\Switcher;
+use LinguatorPro\Includes\Switcher\Assets;
+use LinguatorPro\Includes\Switcher\Settings\Settings;
+use LinguatorPro\Includes\Switcher\Switcher;
 
 /**
  * Language switcher block.
@@ -40,9 +40,9 @@ class Linguator_Language_Switcher_Block extends Linguator_Abstract_Language_Swit
 		Assets::register_styles();
 		wp_register_style(
 			self::EDITOR_STYLE_HANDLE,
-			plugins_url( "admin/assets/css/build/language-switcher-editor{$suffix}.css", LINGUATOR_ROOT_FILE ),
+			plugins_url( "admin/assets/css/build/language-switcher-editor{$suffix}.css", LINGUATOR_PRO_ROOT_FILE ),
 			array( Assets::FRONTEND_ASSET_HANDLE ),
-			LINGUATOR_VERSION
+			LINGUATOR_PRO_VERSION
 		);
 	}
 

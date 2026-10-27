@@ -2,18 +2,18 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Controllers;
+namespace LinguatorPro\Frontend\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Core\Linguator;
-use Linguator\Frontend\Services\Linguator_Accept_Languages_Collection;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Helpers\Linguator_Cookie;
-use Linguator\Includes\Other\Linguator_Query;
-use Linguator\Includes\Models\Languages;
+use LinguatorPro\Includes\Core\Linguator;
+use LinguatorPro\Frontend\Services\Linguator_Accept_Languages_Collection;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Helpers\Linguator_Cookie;
+use LinguatorPro\Includes\Other\Linguator_Query;
+use LinguatorPro\Includes\Models\Languages;
 
 
 
@@ -144,7 +144,7 @@ abstract class Linguator_Choose_Lang {
 	 */
 	public function linguator_maybe_setcookie() {
 		// Don't set cookie in javascript when a cache plugin is active.
-		if ( ! linguator_is_cache_active() && ! empty( $this->curlang ) && ! is_404() && ! is_favicon() ) {
+		if ( ! linguator_pro_is_cache_active() && ! empty( $this->curlang ) && ! is_404() && ! is_favicon() ) {
 			$args = array(
 				'domain'   => 2 === $this->options['force_lang'] ? wp_parse_url( $this->links_model->home, PHP_URL_HOST ) : COOKIE_DOMAIN,
 				'samesite' => 3 === $this->options['force_lang'] ? 'None' : 'Lax',
@@ -197,9 +197,9 @@ abstract class Linguator_Choose_Lang {
 		$language = false;
 		$cookie   = false;
 
-		if ( isset( $_COOKIE[ LMAT_COOKIE ] ) ) {
+		if ( isset( $_COOKIE[ LMATP_COOKIE ] ) ) {
 			// Check first if the user was already browsing this site.
-			$language = sanitize_key( $_COOKIE[ LMAT_COOKIE ] );
+			$language = sanitize_key( $_COOKIE[ LMATP_COOKIE ] );
 			$cookie   = true;
 		} elseif ( $this->options['browser'] ) {
 			$language = $this->linguator_get_preferred_browser_language();
@@ -269,7 +269,7 @@ abstract class Linguator_Choose_Lang {
 		// of a URL string. Don't redirect if $_POST is not empty as it could break other plugins.
 		elseif ( is_string( $redirect = $this->curlang->get_home_url() ) && empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			// Don't forget the query string which may be added by plugins
-			$query_string = wp_parse_url( linguator_get_requested_url(), PHP_URL_QUERY );
+			$query_string = wp_parse_url( linguator_pro_get_requested_url(), PHP_URL_QUERY );
 			if ( ! empty( $query_string ) ) {
 				$redirect .= ( $this->links_model->using_permalinks ? '?' : '&' ) . $query_string;
 			}
@@ -287,7 +287,7 @@ abstract class Linguator_Choose_Lang {
 			if ( $redirect && wp_validate_redirect( $redirect ) ) {
 				$this->linguator_maybe_setcookie();
 				header( 'Vary: Accept-Language' );
-				wp_safe_redirect( $redirect, 302, LINGUATOR );
+				wp_safe_redirect( $redirect, 302, LINGUATOR_PRO );
 				exit;
 			}
 		}

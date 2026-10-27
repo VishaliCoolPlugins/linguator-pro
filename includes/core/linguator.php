@@ -3,32 +3,32 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Core;
+namespace LinguatorPro\Includes\Core;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly
 }
 
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Options\Registry as Options_Registry;
-use Linguator\Includes\Other\Linguator_OLT_Manager;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Admin\Controllers\Linguator_Admin_Model;
-use Linguator\Admin\Controllers\Linguator_Admin;
-use Linguator\Frontend\Controllers\Linguator_Frontend;
-use Linguator\Includes\Controllers\Linguator_REST_Request;
-use Linguator\Integrations\Linguator_Integrations;
-use Linguator\Settings\Controllers\Linguator_Settings;
-use Linguator\Supported_Blocks\Supported_Blocks;
-use Linguator\Supported_Blocks\Custom_Block_Post;
-use Linguator\Custom_Fields\Custom_Fields;
-use Linguator\Includes\Other\Linguator_Translation_Dashboard;
-use Linguator\Install\Linguator_Upgrade;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Registry as Options_Registry;
+use LinguatorPro\Includes\Other\Linguator_OLT_Manager;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Model;
+use LinguatorPro\Admin\Controllers\Linguator_Admin;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend;
+use LinguatorPro\Includes\Controllers\Linguator_REST_Request;
+use LinguatorPro\Integrations\Linguator_Integrations;
+use LinguatorPro\Settings\Controllers\Linguator_Settings;
+use LinguatorPro\Supported_Blocks\Supported_Blocks;
+use LinguatorPro\Supported_Blocks\Custom_Block_Post;
+use LinguatorPro\Custom_Fields\Custom_Fields;
+use LinguatorPro\Includes\Other\Linguator_Translation_Dashboard;
+use LinguatorPro\Install\Linguator_Upgrade;
 
 // Define directory safely
-if ( ! defined( 'LMAT_LOCAL_DIR' ) ) {
+if ( ! defined( 'LMATP_LOCAL_DIR' ) ) {
 	$lmat_upload_dir = wp_upload_dir();
 
 	if ( empty( $lmat_upload_dir['basedir'] ) || ! empty( $lmat_upload_dir['error'] ) ) {
@@ -38,18 +38,18 @@ if ( ! defined( 'LMAT_LOCAL_DIR' ) ) {
 		$lmat_base_dir = $lmat_upload_dir['basedir'];
 	}
 
-	define( 'LMAT_LOCAL_DIR', path_join( $lmat_base_dir, 'linguator' ) );
+	define( 'LMATP_LOCAL_DIR', path_join( $lmat_base_dir, 'linguator' ) );
 }
 
 // Ensure directory exists
-if ( ! file_exists( LMAT_LOCAL_DIR ) ) {
-	wp_mkdir_p( LMAT_LOCAL_DIR );
+if ( ! file_exists( LMATP_LOCAL_DIR ) ) {
+	wp_mkdir_p( LMATP_LOCAL_DIR );
 }
 
 // Load config safely
 $lmat_config = array();
 
-$lmat_config_file = path_join( LMAT_LOCAL_DIR, 'lmat-config.json' );
+$lmat_config_file = path_join( LMATP_LOCAL_DIR, 'lmat-config.json' );
 
 if ( is_readable( $lmat_config_file ) ) {
 
@@ -68,7 +68,7 @@ if ( is_readable( $lmat_config_file ) ) {
 }
 
 /**
- * Raw JSON config loaded from `LMAT_LOCAL_DIR/lmat-config.json`.
+ * Raw JSON config loaded from `LMATP_LOCAL_DIR/lmat-config.json`.
  *
  * Allow third parties to adjust/augment the local config.
  *
@@ -200,7 +200,7 @@ class Linguator {
 		$home_path       = trim( (string) wp_parse_url( home_url(), PHP_URL_PATH ), '/' );
 		$home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
 
-		$req_uri = trim( (string) wp_parse_url( linguator_get_requested_url(), PHP_URL_PATH ), '/' );
+		$req_uri = trim( (string) wp_parse_url( linguator_pro_get_requested_url(), PHP_URL_PATH ), '/' );
 		$req_uri = (string) preg_replace( $home_path_regex, '', $req_uri );
 		$req_uri = trim( $req_uri, '/' );
 		$req_uri = str_replace( 'index.php', '', $req_uri );
@@ -208,7 +208,7 @@ class Linguator {
 
 		// And also test rest_route query string parameter is not empty for plain permalinks.
 		$query_string = array();
-		wp_parse_str( (string) wp_parse_url( linguator_get_requested_url(), PHP_URL_QUERY ), $query_string );
+		wp_parse_str( (string) wp_parse_url( linguator_pro_get_requested_url(), PHP_URL_QUERY ), $query_string );
 		$rest_route = isset( $query_string['rest_route'] ) && is_string( $query_string['rest_route'] ) ? trim( $query_string['rest_route'], '/' ) : false;
 
 		return 0 === strpos( $req_uri, rest_get_url_prefix() . '/' ) || ! empty( $rest_route );
@@ -235,20 +235,20 @@ class Linguator {
 	 */
 	public static function define_constants() {
 		// Cookie name. no cookie will be used if set to false
-		if ( ! defined( 'LMAT_COOKIE' ) ) {
-			define( 'LMAT_COOKIE', 'lmat_language' );
+		if ( ! defined( 'LMATP_COOKIE' ) ) {
+			define( 'LMATP_COOKIE', 'lmat_language' );
 		}
 
 
 
 		// Admin
-		if ( ! defined( 'LMAT_ADMIN' ) ) {
-			define( 'LMAT_ADMIN', wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( is_admin() && ! self::is_ajax_on_front() ) );
+		if ( ! defined( 'LMATP_ADMIN' ) ) {
+			define( 'LMATP_ADMIN', wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) || ( is_admin() && ! self::is_ajax_on_front() ) );
 		}
 
 		// Settings page whatever the tab except for the wizard which needs to be an admin process.
-		if ( ! defined( 'LMAT_SETTINGS' ) ) {
-			define( 'LMAT_SETTINGS', is_admin() && ( ( isset( $_GET['page'] ) && 0 === strpos( sanitize_key( wp_unslash( $_GET['page'] ) ), 'lmat' ) && ! self::is_wizard() ) || ! empty( $_REQUEST['lmat_ajax_settings'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! defined( 'LMATP_SETTINGS' ) ) {
+			define( 'LMATP_SETTINGS', is_admin() && ( ( isset( $_GET['page'] ) && 0 === strpos( sanitize_key( wp_unslash( $_GET['page'] ) ), 'lmat' ) && ! self::is_wizard() ) || ! empty( $_REQUEST['lmat_ajax_settings'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 	}
 
@@ -275,7 +275,7 @@ class Linguator {
 		 *
 		 * @param string $class either Linguator_Model or Linguator_Admin_Model
 		 */
-		$class = apply_filters( 'lmat_model', LMAT_SETTINGS || self::is_wizard() ? 'Linguator_Admin_Model' : 'Linguator_Model' );
+		$class = apply_filters( 'lmat_model', LMATP_SETTINGS || self::is_wizard() ? 'Linguator_Admin_Model' : 'Linguator_Model' );
 		
 		// Handle namespaced classes for dynamic instantiation
 		if ( 'Linguator_Admin_Model' === $class ) {
@@ -292,7 +292,7 @@ class Linguator {
 		 * then store the current version so they never run again.
 		 */
 		( new Linguator_Upgrade( $options ) )->maybe_upgrade();
-		$options['version'] = LINGUATOR_VERSION;
+		$options['version'] = LINGUATOR_PRO_VERSION;
 
 		if ( ! $model->has_languages() ) {
 			/**
@@ -306,9 +306,9 @@ class Linguator {
 
 		$class = '';
 
-		if ( LMAT_SETTINGS ) {
+		if ( LMATP_SETTINGS ) {
 			$class = 'Linguator_Settings';
-		} elseif ( LMAT_ADMIN ) {
+		} elseif ( LMATP_ADMIN ) {
 			$class = 'Linguator_Admin';
 		} elseif ( self::is_rest_request() ) {
 			$class = 'Linguator_REST_Request';
@@ -388,15 +388,15 @@ class Linguator {
 		do_action_ref_array( 'lmat_pre_init', array( &$linguator ) );
 
 		// Loads the API
-		require_once LINGUATOR_DIR . '/includes/api/language-api.php';
+		require_once LINGUATOR_PRO_DIR . '/includes/api/language-api.php';
 
 		// Loads the modules.
 		// Loads the modules.
-		$load_scripts = require LINGUATOR_DIR . '/modules/module-build.php';
+		$load_scripts = require LINGUATOR_PRO_DIR . '/modules/module-build.php';
 
 		foreach ( $load_scripts as $load_script ) {
-			if(file_exists(LINGUATOR_DIR . "/modules/{$load_script}/load.php")) {
-				require_once LINGUATOR_DIR . "/modules/{$load_script}/load.php";
+			if(file_exists(LINGUATOR_PRO_DIR . "/modules/{$load_script}/load.php")) {
+				require_once LINGUATOR_PRO_DIR . "/modules/{$load_script}/load.php";
 			}
 		}
 		
@@ -420,7 +420,7 @@ class Linguator {
 	 */
 	public function register_cpfm_feedback() {
 		if ( ! class_exists( 'CPFM_Loader' ) ) {
-			$file = LINGUATOR_DIR . '/admin/cpfm-feedback/class-cpfm-loader.php';
+			$file = LINGUATOR_PRO_DIR . '/admin/cpfm-feedback/class-cpfm-loader.php';
 			if ( file_exists( $file ) ) {
 				require_once $file;
 			}
@@ -477,8 +477,8 @@ class Linguator {
 			array(
 				'id'                     => 'lmat',
 				'plugin_name'            => 'Linguator AI – Auto Translate & Create Multilingual Sites',
-				'version'                => LINGUATOR_VERSION,
-				'api'                    => LINGUATOR_FEEDBACK_API,
+				'version'                => LINGUATOR_PRO_VERSION,
+				'api'                    => LINGUATOR_PRO_FEEDBACK_API,
 				'cron_hook'              => 'lmat_extra_data_update',
 				'consent_master_option'  => 'cpfm_opt_in_choice_cool_translations',
 				'consent_callback'       => array( $this, 'has_usage_tracking_consent' ),

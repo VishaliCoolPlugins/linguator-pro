@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Controllers;
+namespace LinguatorPro\Includes\Controllers;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Switcher\Switcher;
-use Linguator\Includes\Switcher\Settings\Settings;
-use Linguator\Admin\Controllers\Linguator_Admin_Links;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Switcher\Switcher;
+use LinguatorPro\Includes\Switcher\Settings\Settings;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Links;
 
 
 

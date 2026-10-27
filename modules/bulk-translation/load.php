@@ -4,7 +4,7 @@
  *
  * @package Linguator
  */
-namespace Linguator\Modules\Bulk_Translation;
+namespace LinguatorPro\Modules\Bulk_Translation;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly

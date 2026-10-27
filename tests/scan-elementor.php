@@ -1,6 +1,6 @@
 <?php
 /** Standalone regression checks: php tests/scan-elementor.php. No WordPress data is changed. */
-namespace Linguator\Includes\Other {
+namespace LinguatorPro\Includes\Other {
 	class Linguator_Model {
 		public $post;
 		public $options;
@@ -68,7 +68,7 @@ namespace {
 	require __DIR__ . '/../modules/scan/checks/switcher.php';
 	require __DIR__ . '/../modules/scan/checks/content.php';
 	require __DIR__ . '/../modules/scan/scanner.php';
-	$model = new \Linguator\Includes\Other\Linguator_Model();
+	$model = new \LinguatorPro\Includes\Other\Linguator_Model();
 	$model->post = new class {
 		public function get_language( $id ) { return 30 === $id ? false : (object) array( 'slug' => in_array( $id, array( 20, 40 ), true ) ? 'hi' : 'en' ); }
 		public function get_translations( $id ) { return $GLOBALS['translation_override'][$id] ?? ( in_array( $id, array( 10, 20 ), true ) ? array( 'en' => 10, 'hi' => 20 ) : array() ); }
@@ -78,7 +78,7 @@ namespace {
 		public function get( $key ) { return $this->enabled ? array( 'elementor' ) : array(); }
 	};
 	function check( $condition, $message ) { if ( ! $condition ) throw new \RuntimeException( $message ); }
-	$scan = new \Linguator\Modules\Scan\Checks\Elementor( $model );
+	$scan = new \LinguatorPro\Modules\Scan\Checks\Elementor( $model );
 	$results = array();
 	foreach ( $scan->run() as $result ) $results[$result->id] = $result->to_array();
 	foreach ( array( 'missing', 'unpublished', 'language', 'layout', 'type', 'orphan' ) as $kind ) check( 'warning' === $results['elementor_' . $kind]['status'], 'Missing finding: ' . $kind );
@@ -88,18 +88,18 @@ namespace {
 	check( false !== strpos( $missing_by_key['elementor:missing:50:hi']['action_url'], 'from_post=50' ), 'Translation action must use Linguator source ID.' );
 	$scan->only( 'elementor_layout' );
 	check( 1 === count( $scan->run() ), 'Single issue rescans should return only the requested check.' );
-	check( \Linguator\Modules\Scan\Checks\Elementor::contains_switcher( json_decode( $meta[10]['_elementor_data'], true ) ), 'Nested switcher widget was missed.' );
-	check( ! \Linguator\Modules\Scan\Checks\Elementor::contains_switcher( array( array( 'widgetType' => 'heading', 'settings' => array( 'title' => 'lmat_widget' ) ) ) ), 'Widget name in text must not count as a switcher.' );
-	$switcher = new \Linguator\Modules\Scan\Checks\Switcher( $model );
+	check( \LinguatorPro\Modules\Scan\Checks\Elementor::contains_switcher( json_decode( $meta[10]['_elementor_data'], true ) ), 'Nested switcher widget was missed.' );
+	check( ! \LinguatorPro\Modules\Scan\Checks\Elementor::contains_switcher( array( array( 'widgetType' => 'heading', 'settings' => array( 'title' => 'lmat_widget' ) ) ) ), 'Widget name in text must not count as a switcher.' );
+	$switcher = new \LinguatorPro\Modules\Scan\Checks\Switcher( $model );
 	$detect = new \ReflectionMethod( $switcher, 'has_elementor_switcher' );
 	$detect->setAccessible( true );
 	check( $detect->invoke( $switcher ), 'Enabled Elementor switcher was not detected.' );
 	$model->options->enabled = false;
 	check( ! $detect->invoke( $switcher ), 'Disabled Elementor widget integration must not pass detection.' );
 	$saved = array( 'time' => 100, 'partial_scans' => array( 'elementor' => 200 ), 'coverage' => array( array( 'slug' => 'hi', 'percent' => 10 ) ), 'results' => array_values( $results ) );
-	$GLOBALS['options'][\Linguator\Modules\Scan\Scanner::REPORT_OPTION] = $saved;
+	$GLOBALS['options'][\LinguatorPro\Modules\Scan\Scanner::REPORT_OPTION] = $saved;
 	$GLOBALS['translation_override'][50] = array( 'en' => 50, 'hi' => 20 );
-	$runner = new \Linguator\Modules\Scan\Scanner( $model );
+	$runner = new \LinguatorPro\Modules\Scan\Scanner( $model );
 	$updated = $runner->recheck_rows( 'elementor', array( 'elementor:missing:50:hi' ) );
 	check( array( 50 ) === $GLOBALS['last_query']['post__in'], 'Row rescan queried unrelated templates.' );
 	check( $updated['time'] === $saved['time'] && $updated['partial_scans'] === $saved['partial_scans'] && $updated['coverage'] === $saved['coverage'], 'Row rescans must preserve full/section scan times and coverage.' );
@@ -111,7 +111,7 @@ namespace {
 	$GLOBALS['translation_override'][70] = array( 'en' => 70, 'hi' => 20 );
 	$all_resolved = $runner->recheck_rows( 'elementor', array( 'elementor:missing:70:hi' ) );
 	check( 'pass' === array_column( $all_resolved['results'], null, 'id' )['elementor_missing']['status'], 'Resolving the last stored row should pass the check.' );
-	$content = new \Linguator\Modules\Scan\Checks\Content( $model );
+	$content = new \LinguatorPro\Modules\Scan\Checks\Content( $model );
 	$content->scope_rows( array( 'content:50:hi' ) );
 	$coverage = new \ReflectionProperty( $content, 'coverage' );
 	$coverage->setAccessible( true );

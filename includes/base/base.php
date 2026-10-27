@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Base;
+namespace LinguatorPro\Includes\Base;
 
 
 
@@ -16,17 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-use Linguator\Modules\REST\Request;
-use Linguator\Includes\Capabilities\Capabilities;
-use Linguator\Includes\Core\Linguator;
-use Linguator\Includes\Services\Crud\Linguator_CRUD_Posts;
-use Linguator\Includes\Services\Crud\Linguator_CRUD_Terms;
-use Linguator\Includes\Options\Linguator_Translate_Option;
-use Linguator\Includes\Helpers\Linguator_MO;
-use Linguator\Includes\Widgets\Linguator_Widget_Languages;
-use Linguator\Includes\Widgets\Linguator_Widget_Calendar;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Switch_Language;
+use LinguatorPro\Modules\REST\Request;
+use LinguatorPro\Includes\Capabilities\Capabilities;
+use LinguatorPro\Includes\Core\Linguator;
+use LinguatorPro\Includes\Services\Crud\Linguator_CRUD_Posts;
+use LinguatorPro\Includes\Services\Crud\Linguator_CRUD_Terms;
+use LinguatorPro\Includes\Options\Linguator_Translate_Option;
+use LinguatorPro\Includes\Helpers\Linguator_MO;
+use LinguatorPro\Includes\Widgets\Linguator_Widget_Languages;
+use LinguatorPro\Includes\Widgets\Linguator_Widget_Calendar;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Switch_Language;
 use WP_Hook;
 
 
@@ -153,7 +153,7 @@ abstract class Linguator_Base {
 	 * @return void
 	 */
 	public function linguator_widgets_init() {
-		if ( linguator_is_switcher_type_enabled( 'default' ) ) {
+		if ( linguator_pro_is_switcher_type_enabled( 'default' ) ) {
 			register_widget( Linguator_Widget_Languages::class );
 		}
 
@@ -220,7 +220,7 @@ abstract class Linguator_Base {
 	 * @return bool
 	 */
 	protected function is_active_on_current_site(): bool {
-		return linguator_is_plugin_active( LINGUATOR_BASENAME ) && ! empty( $this->options['version'] );
+		return linguator_pro_is_plugin_active( LINGUATOR_PRO_BASENAME ) && ! empty( $this->options['version'] );
 	}
 
 	/**

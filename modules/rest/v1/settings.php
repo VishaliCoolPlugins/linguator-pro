@@ -3,24 +3,24 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\REST\V1;
+namespace LinguatorPro\Modules\REST\V1;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Model;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Options\Business\Api_Keys as Api_Keys_Option;
-use Linguator\Modules\REST\Abstract_Controller;
-use Linguator\Includes\Migration\Polylang_Migration;
-use Linguator\Includes\Migration\WPML_Migration;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Business\Api_Keys as Api_Keys_Option;
+use LinguatorPro\Modules\REST\Abstract_Controller;
+use LinguatorPro\Includes\Migration\Polylang_Migration;
+use LinguatorPro\Includes\Migration\WPML_Migration;
 
 
 /**
@@ -391,7 +391,7 @@ class Settings extends Abstract_Controller {
 		
 		$stored_bool = $this->sanitize_boolean_param( $stored_value );
 		if ( $result !== false || $stored_bool === $complete ) {
-				$cpfm_opt_in_choice = linguator_get_cpfm_opt_in_choice();
+				$cpfm_opt_in_choice = linguator_pro_get_cpfm_opt_in_choice();
 				$lmat_feedback_data = (bool) $this->options->get( 'lmat_feedback_data' );
 				if ( $complete && ( 'yes' === $cpfm_opt_in_choice || $lmat_feedback_data ) ) {
 					if ( class_exists( '\\CPFM_Usage_Cron' ) ) {
@@ -510,7 +510,7 @@ class Settings extends Abstract_Controller {
 		} elseif ( ! $is_setup_complete ) {
 			$response['lmat_feedback_data'] = true;
 		} else {
-			$cpfm_opt_in_choice = linguator_get_cpfm_opt_in_choice();
+			$cpfm_opt_in_choice = linguator_pro_get_cpfm_opt_in_choice();
 			$response['lmat_feedback_data'] = ( 'no' !== $cpfm_opt_in_choice );
 		}
 
@@ -900,7 +900,7 @@ class Settings extends Abstract_Controller {
 	 *  
 	 */
 	private function handle_cron_scheduling() {
-		$cpfm_opt_in_choice = linguator_get_cpfm_opt_in_choice();
+		$cpfm_opt_in_choice = linguator_pro_get_cpfm_opt_in_choice();
 		$lmat_feedback_data = (bool) $this->options->get( 'lmat_feedback_data' );
 		$is_setup_complete  = get_option( 'lmat_setup_complete' );
 		

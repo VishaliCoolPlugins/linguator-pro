@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Links;
+namespace LinguatorPro\Includes\Services\Links;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 
 

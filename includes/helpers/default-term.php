@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Helpers;
+namespace LinguatorPro\Includes\Helpers;
 
 use WP_Term;
 

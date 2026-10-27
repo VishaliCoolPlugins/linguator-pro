@@ -3,18 +3,18 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models\Translatable;
+namespace LinguatorPro\Includes\Models\Translatable;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Options\Options;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Helpers\Linguator_Cache;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Options\Options;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_Term;
 
 
@@ -241,7 +241,7 @@ abstract class Linguator_Translatable_Object {
 	 *              the object).
 	 */
 	public function set_language( $id, $lang ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return false;
@@ -275,7 +275,7 @@ abstract class Linguator_Translatable_Object {
 	 *                            ID is invalid.
 	 */
 	public function get_language( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return false;
@@ -300,7 +300,7 @@ abstract class Linguator_Translatable_Object {
 	 * @return void
 	 */
 	public function delete_language( $id ) {
-		$id = linguator_sanitize_id( $id );
+		$id = linguator_pro_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -320,7 +320,7 @@ abstract class Linguator_Translatable_Object {
 	 * @return array<int,WP_Term> Array of terms with object ID as key.
 	 */
 	protected function get_object_terms( array $object_ids, string $taxonomy ) {
-		$object_ids = linguator_sanitize_ids( $object_ids );
+		$object_ids = linguator_pro_sanitize_ids( $object_ids );
 		if ( empty( $object_ids ) ) {
 			return array();
 		}
@@ -531,7 +531,7 @@ abstract class Linguator_Translatable_Object {
 
 		$object_ids = $this->query_objects_with_no_lang( $language_ids, $limit, $args );
 
-		return array_values( linguator_sanitize_ids( $object_ids ) );
+		return array_values( linguator_pro_sanitize_ids( $object_ids ) );
 	}
 
 	/**
@@ -649,7 +649,7 @@ abstract class Linguator_Translatable_Object {
 	 * Returns the description to use for the "language properties" in the REST API.
 	 *
 	 *  
-	 * @see Linguator\modules\REST\V2\Languages::get_item_schema()
+	 * @see LinguatorPro\modules\REST\V2\Languages::get_item_schema()
 	 *
 	 * @return string
 	 */

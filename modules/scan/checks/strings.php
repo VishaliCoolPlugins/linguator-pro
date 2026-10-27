@@ -5,16 +5,16 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Strings;
-use Linguator\Includes\Helpers\Linguator_MO;
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
+use LinguatorPro\Includes\Helpers\Linguator_MO;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Result;
 
 /**
  * Reports registered strings (site title, widgets…) with no translation in a secondary language.

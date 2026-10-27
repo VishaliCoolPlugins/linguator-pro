@@ -3,18 +3,18 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options;
+namespace LinguatorPro\Includes\Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 
-use Linguator\Admin\Controllers\Linguator_Admin_Strings;
-use Linguator\Includes\Other\Linguator;
-use Linguator\Includes\Helpers\Linguator_Cache;
-use Linguator\Includes\Helpers\Linguator_MO;
-use Linguator\Includes\Helpers\Linguator_Format_Util;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
+use LinguatorPro\Includes\Other\Linguator;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Helpers\Linguator_MO;
+use LinguatorPro\Includes\Helpers\Linguator_Format_Util;
 
 
 
@@ -193,7 +193,7 @@ class Linguator_Translate_Option {
 				}
 			}
 		} else {
-			$values = linguator__( $values );
+			$values = linguator_pro__( $values );
 		}
 
 		return $values;
@@ -288,7 +288,7 @@ class Linguator_Translate_Option {
 		// Stores the unfiltered old option value before it is updated in DB.
 		$unfiltered_old_value = $this->get_raw_option( $name );
 
-		$languages = LMAT()->model->get_languages_list();
+		$languages = LMATP()->model->get_languages_list();
 
 		if ( empty( $languages ) ) {
 			return $value;
@@ -300,9 +300,9 @@ class Linguator_Translate_Option {
 			$this->translations[ $language->slug ]->import_from_db( $language );
 		}
 
-		$lang = linguator_current_language();
+		$lang = linguator_pro_current_language();
 		if ( empty( $lang ) ) {
-			$lang = linguator_default_language();
+			$lang = linguator_pro_default_language();
 		}
 
 		if ( empty( $lang ) ) {
@@ -327,10 +327,10 @@ class Linguator_Translate_Option {
 	 * @return void
 	 */
 	public function update_option() {
-		$curlang = linguator_current_language();
+		$curlang = linguator_pro_current_language();
 
 		if ( ! empty( $this->updated_strings ) ) {
-			foreach ( LMAT()->model->get_languages_list() as $language ) {
+			foreach ( LMATP()->model->get_languages_list() as $language ) {
 
 				$mo = &$this->translations[ $language->slug ];
 

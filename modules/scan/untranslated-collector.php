@@ -5,7 +5,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,10 +38,10 @@ class Untranslated_Collector {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return \Linguator\Includes\Other\Linguator_Model|null
+	 * @return \LinguatorPro\Includes\Other\Linguator_Model|null
 	 */
 	private static function model() {
-		return function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
+		return function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Untranslated_Collector {
 			return $result;
 		}
 
-		$cache_key = 'lmat_untr_' . md5( $post_id . '_' . $source_id . '_' . $translation->post_modified . '_' . $source->post_modified . '_' . ( defined( 'LINGUATOR_VERSION' ) ? LINGUATOR_VERSION : '1' ) );
+		$cache_key = 'lmat_untr_' . md5( $post_id . '_' . $source_id . '_' . $translation->post_modified . '_' . $source->post_modified . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) );
 		$cached    = get_transient( $cache_key );
 		if ( is_array( $cached ) && isset( $cached['rows'], $cached['total'] ) ) {
 			$result['rows']  = $cached['rows'];
@@ -146,7 +146,7 @@ class Untranslated_Collector {
 		}
 
 		$template_post = get_post( $template_id );
-		$cache_key     = 'lmat_untr_tpl_' . md5( $template_id . '_' . $current_lang . '_' . $source_lang . '_' . ( $template_post instanceof \WP_Post ? $template_post->post_modified : '' ) . '_' . ( defined( 'LINGUATOR_VERSION' ) ? LINGUATOR_VERSION : '1' ) );
+		$cache_key     = 'lmat_untr_tpl_' . md5( $template_id . '_' . $current_lang . '_' . $source_lang . '_' . ( $template_post instanceof \WP_Post ? $template_post->post_modified : '' ) . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) );
 		$cached        = get_transient( $cache_key );
 		if ( is_array( $cached ) && isset( $cached['rows'], $cached['total'] ) ) {
 			return $cached;

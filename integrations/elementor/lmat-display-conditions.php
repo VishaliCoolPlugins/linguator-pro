@@ -6,7 +6,7 @@
  * @wordpress-plugin
  */
 
-namespace Linguator\Integrations\elementor;
+namespace LinguatorPro\Integrations\elementor;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -40,7 +40,7 @@ class Linguator_Display_Conditions {
 		if ( ! $post || 'elementor_library' !== get_post_type( $post->ID ) ) {
 			return null;
 		}
-		$translations = linguator_get_post_translations( $post->ID );
+		$translations = linguator_pro_get_post_translations( $post->ID );
 		if ( empty( $translations ) ) {
 			return null;
 		}
@@ -67,7 +67,7 @@ class Linguator_Display_Conditions {
 			line-height:1.6;
 			color:orange;
 		}';
-		wp_register_style( 'lmat_elementor_conditions_note', false, array(), LINGUATOR_VERSION );
+		wp_register_style( 'lmat_elementor_conditions_note', false, array(), LINGUATOR_PRO_VERSION );
 		wp_enqueue_style( 'lmat_elementor_conditions_note' );
 		wp_add_inline_style( 'lmat_elementor_conditions_note', $css );
 	}

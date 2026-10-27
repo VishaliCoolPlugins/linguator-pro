@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Admin_Sync extends Linguator_Sync {
+class Linguator_Pro_Admin_Sync extends Linguator_Pro_Sync {
 	/**
 	 * @var Linguator_Admin_Links
 	 */

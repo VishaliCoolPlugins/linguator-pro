@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Links;
+namespace LinguatorPro\Includes\Services\Links;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -48,7 +48,7 @@ abstract class Linguator_Links_Abstract_Domain extends Linguator_Links_Permalink
 	 */
 	public function get_language_from_url( $url = '' ) {
 		if ( empty( $url ) ) {
-			$url = linguator_get_requested_url();
+			$url = linguator_pro_get_requested_url();
 		}
 
 		$host = wp_parse_url( $url, PHP_URL_HOST );

@@ -3,20 +3,20 @@
  * @package Linguator
  */
 
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Filters\Linguator_Filters_Sanitization;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Sanitization;
 
 
 
 
 /**
- * Main Linguator class for admin (except Linguator pages), accessible from @see LMAT().
+ * Main Linguator class for admin (except Linguator pages), accessible from @see LMATP().
  *
  *  
  */
@@ -144,8 +144,8 @@ class Linguator_Admin extends Linguator_Admin_Base {
 		parent::__construct( $links_model );
 		
 		// Adds a 'settings' link in the plugins table
-		add_filter( 'plugin_action_links_' . LINGUATOR_BASENAME, array( $this, 'linguator_plugin_action_links' ) );
-		add_action( 'in_plugin_update_message-' . LINGUATOR_BASENAME, array( $this, 'linguator_plugin_update_message' ), 10, 2 );
+		add_filter( 'plugin_action_links_' . LINGUATOR_PRO_BASENAME, array( $this, 'linguator_plugin_action_links' ) );
+		add_action( 'in_plugin_update_message-' . LINGUATOR_PRO_BASENAME, array( $this, 'linguator_plugin_update_message' ), 10, 2 );
 	}
 
 	/**

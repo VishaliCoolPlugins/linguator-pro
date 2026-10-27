@@ -2,17 +2,17 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Settings\Tables;
+namespace LinguatorPro\Settings\Tables;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Strings;
-use Linguator\Includes\Helpers\Linguator_MO;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Settings\Controllers\Linguator_Settings;
-use Linguator\Includes\Models\Languages;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
+use LinguatorPro\Includes\Helpers\Linguator_MO;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Settings\Controllers\Linguator_Settings;
+use LinguatorPro\Includes\Models\Languages;
 use WP_List_Table;
 use WP_Error;
 
@@ -409,15 +409,15 @@ class Linguator_Table_String extends WP_List_Table {
 				foreach ( $translations as $key => $translation ) {
 					/**
 					 * Filters the string translation before it is saved in DB.
-					 * Allows to sanitize strings registered with linguator_register_string().
+					 * Allows to sanitize strings registered with linguator_pro_register_string().
 					 *
 					 *  
 					 *   The translation passed to the filter is unslashed.
 					 *   Add original string as 4th parameter.
 					 *
 					 * @param string $translation The string translation.
-					 * @param string $name        The name as defined in linguator_register_string.
-					 * @param string $context     The context as defined in linguator_register_string.
+					 * @param string $name        The name as defined in linguator_pro_register_string.
+					 * @param string $context     The context as defined in linguator_pro_register_string.
 					 * @param string $original    The original string to translate.
 					 */
 					$translation = apply_filters( 'lmat_sanitize_string_translation', $translation, $this->strings[ $key ]['name'], $this->strings[ $key ]['context'], $this->strings[ $key ]['string'] );
@@ -441,7 +441,7 @@ class Linguator_Table_String extends WP_List_Table {
 				isset( $new_mo ) ? $new_mo->export_to_db( $language ) : $mo->export_to_db( $language );
 			}
 
-			linguator_add_notice( new WP_Error( 'lmat_strings_translations_updated', __( 'Translations updated.', 'linguator-pro' ), 'success' ) );
+			linguator_pro_add_notice( new WP_Error( 'lmat_strings_translations_updated', __( 'Translations updated.', 'linguator-pro' ), 'success' ) );
 
 			/**
 			 * Fires after the strings translations are saved in DB

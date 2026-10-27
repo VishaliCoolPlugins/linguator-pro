@@ -4,7 +4,7 @@
  *
  * @package Linguator
  */
-namespace Linguator\Integrations\wpbakery;
+namespace LinguatorPro\Integrations\wpbakery;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -286,7 +286,7 @@ class Linguator_WPBakery {
 
 		// Check if this is a translated post
 		global $post;
-		if ( $post && linguator_get_post_language( $post->ID ) ) {
+		if ( $post && linguator_pro_get_post_language( $post->ID ) ) {
 			// If it has a language assigned, it's likely a translation
 			// Allow WPBakery editor
 			return true;

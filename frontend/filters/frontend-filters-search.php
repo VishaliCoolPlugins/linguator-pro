@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Filters;
+namespace LinguatorPro\Frontend\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

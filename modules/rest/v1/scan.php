@@ -3,17 +3,17 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\REST\V1;
+namespace LinguatorPro\Modules\REST\V1;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Modules\REST\Abstract_Controller;
-use Linguator\Modules\Scan\Freshness;
-use Linguator\Modules\Scan\Issue_Copy;
-use Linguator\Modules\Scan\Scanner;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Modules\REST\Abstract_Controller;
+use LinguatorPro\Modules\Scan\Freshness;
+use LinguatorPro\Modules\Scan\Issue_Copy;
+use LinguatorPro\Modules\Scan\Scanner;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -597,8 +597,8 @@ class Scan extends Abstract_Controller {
 	private function prepare_report( ?array $report ): array {
 		$base = array(
 			'unassigned'          => Scanner::has_unassigned_content( $this->model ),
-			'elementor_available' => \Linguator\Modules\Scan\Checks\Elementor::available(),
-			'scan_icon_url' => plugins_url( 'assets/logo/site-scan.svg', LINGUATOR_ROOT_FILE ),
+			'elementor_available' => \LinguatorPro\Modules\Scan\Checks\Elementor::available(),
+			'scan_icon_url' => plugins_url( 'assets/logo/site-scan.svg', LINGUATOR_PRO_ROOT_FILE ),
 			'environment' => $this->environment(),
 			'ignored'     => Scanner::get_ignored(),
 			'languages'   => array_map(
@@ -707,7 +707,7 @@ class Scan extends Abstract_Controller {
 		}
 		$addons = array();
 		foreach ( get_plugins() as $basename => $plugin ) {
-			if ( plugin_basename( LINGUATOR_ROOT_FILE ) === $basename || ! is_plugin_active( $basename ) ) {
+			if ( plugin_basename( LINGUATOR_PRO_ROOT_FILE ) === $basename || ! is_plugin_active( $basename ) ) {
 				continue;
 			}
 			if ( false !== strpos( dirname( $basename ), 'linguator' ) || false !== strpos( dirname( $basename ), 'lmat-' ) ) {

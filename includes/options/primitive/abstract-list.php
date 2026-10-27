@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Includes\Options\Primitive;
+namespace LinguatorPro\Includes\Options\Primitive;
 /**
  * @package Linguator
  */
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Abstract_Option;
 
 
 

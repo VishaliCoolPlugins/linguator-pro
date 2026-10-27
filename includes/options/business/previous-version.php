@@ -3,9 +3,9 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Linguator\Modules\Glossary;
+namespace LinguatorPro\Modules\Glossary;
 
-use Linguator\Settings\Header\Header;
+use LinguatorPro\Settings\Header\Header;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-// use Linguator\Utils\Sanitize;
+// use LinguatorPro\Utils\Sanitize;
 
 if (!class_exists('Glossary')) {
     class Glossary {
@@ -108,22 +108,22 @@ if (!class_exists('Glossary')) {
 		@return bool
 		*/
 		public function linguator_supported_blocks_assets($status, $tab, $is_settings_tab){
-			if($is_settings_tab && $tab === 'glossary' && function_exists('LMAT')){
+			if($is_settings_tab && $tab === 'glossary' && function_exists('LMATP')){
 
-				$header = Header::get_instance('glossary', LMAT()->model);
+				$header = Header::get_instance('glossary', LMATP()->model);
 				$header->header_assets();
 
-				wp_enqueue_style( 'lmat-glossary-style', plugins_url( 'admin/assets/css/lmat-glossary.css', LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
+				wp_enqueue_style( 'lmat-glossary-style', plugins_url( 'admin/assets/css/lmat-glossary.css', LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
 
-				$glossary_js_base = plugins_url( 'admin/assets/js/glossary/', LINGUATOR_ROOT_FILE );
-				wp_enqueue_script( 'lmat-glossary-core', $glossary_js_base . 'glossary-core.js', array( 'jquery' ), LINGUATOR_VERSION, true );
-				wp_enqueue_script( 'lmat-glossary-ui', $glossary_js_base . 'glossary-ui.js', array( 'lmat-glossary-core', 'underscore' ), LINGUATOR_VERSION, true );
-				wp_enqueue_script( 'lmat-glossary-filters', $glossary_js_base . 'glossary-filters.js', array( 'lmat-glossary-core' ), LINGUATOR_VERSION, true );
-				wp_enqueue_script( 'lmat-glossary-crud', $glossary_js_base . 'glossary-crud.js', array( 'lmat-glossary-core', 'underscore' ), LINGUATOR_VERSION, true );
-				wp_enqueue_script( 'lmat-glossary-import-export', $glossary_js_base . 'glossary-import-export.js', array( 'lmat-glossary-core' ), LINGUATOR_VERSION, true );
+				$glossary_js_base = plugins_url( 'admin/assets/js/glossary/', LINGUATOR_PRO_ROOT_FILE );
+				wp_enqueue_script( 'lmat-glossary-core', $glossary_js_base . 'glossary-core.js', array( 'jquery' ), LINGUATOR_PRO_VERSION, true );
+				wp_enqueue_script( 'lmat-glossary-ui', $glossary_js_base . 'glossary-ui.js', array( 'lmat-glossary-core', 'underscore' ), LINGUATOR_PRO_VERSION, true );
+				wp_enqueue_script( 'lmat-glossary-filters', $glossary_js_base . 'glossary-filters.js', array( 'lmat-glossary-core' ), LINGUATOR_PRO_VERSION, true );
+				wp_enqueue_script( 'lmat-glossary-crud', $glossary_js_base . 'glossary-crud.js', array( 'lmat-glossary-core', 'underscore' ), LINGUATOR_PRO_VERSION, true );
+				wp_enqueue_script( 'lmat-glossary-import-export', $glossary_js_base . 'glossary-import-export.js', array( 'lmat-glossary-core' ), LINGUATOR_PRO_VERSION, true );
 				wp_enqueue_script(
 					'lmat-glossary-script',
-					plugins_url( 'admin/assets/js/lmat-glossary.js', LINGUATOR_ROOT_FILE ),
+					plugins_url( 'admin/assets/js/lmat-glossary.js', LINGUATOR_PRO_ROOT_FILE ),
 					array(
 						'jquery',
 						'lmat-glossary-core',
@@ -132,14 +132,14 @@ if (!class_exists('Glossary')) {
 						'lmat-glossary-crud',
 						'lmat-glossary-import-export',
 					),
-					LINGUATOR_VERSION,
+					LINGUATOR_PRO_VERSION,
 					true
 				);
 
                 wp_localize_script('lmat-glossary-script', 'lmat_glossary', array(
                     'ajaxurl' => admin_url('admin-ajax.php'),
                     'lmat_languages' => self::get_lmat_languages_list(),
-                    'url' => plugins_url( '', LINGUATOR_ROOT_FILE ).'/',
+                    'url' => plugins_url( '', LINGUATOR_PRO_ROOT_FILE ).'/',
                     'file' => 'file.svg',
                     'import_glossary_validate' => wp_create_nonce('lmat_import_glossary_nonce'),
                     'update_glossary_validate' => wp_create_nonce('lmat_update_glossary_nonce'),
@@ -180,7 +180,7 @@ if (!class_exists('Glossary')) {
 		public function linguator_render_supported_blocks_page($status, $selected_tab, $active_tab) {
 			if($selected_tab === 'glossary' && $active_tab === 'settings'){
 
-				$header = Header::get_instance('glossary', LMAT()->model);
+				$header = Header::get_instance('glossary', LMATP()->model);
 
 				$header->header();
 
@@ -607,8 +607,8 @@ if (!class_exists('Glossary')) {
             // --- ADD THIS BLOCK: Fetch Linguator languages for use everywhere ---
             $lmat_languages = [];
 
-            if(function_exists('LMAT') && property_exists(LMAT(), 'model')) {
-                $lmat_languages_list = LMAT()->model->get_languages_list();
+            if(function_exists('LMATP') && property_exists(LMATP(), 'model')) {
+                $lmat_languages_list = LMATP()->model->get_languages_list();
                 
                 if(is_array($lmat_languages_list) && count($lmat_languages_list) > 0){
                     foreach($lmat_languages_list as $lmat_lang){
@@ -621,7 +621,7 @@ if (!class_exists('Glossary')) {
                 $lmat_languages_serialized = get_option('_transient_lmat_languages_list');
 
                 if($lmat_languages_serialized){
-                    $lmat_languages = linguator_maybe_unserialize($lmat_languages_serialized);
+                    $lmat_languages = linguator_pro_maybe_unserialize($lmat_languages_serialized);
                 }
             }
 

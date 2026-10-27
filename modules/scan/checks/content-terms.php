@@ -5,14 +5,14 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Result;
 
 /**
  * Finds default-language terms (categories, tags, custom taxonomies) with no translation in an active language.

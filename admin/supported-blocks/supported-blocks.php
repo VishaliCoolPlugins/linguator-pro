@@ -1,7 +1,7 @@
 <?php
-namespace Linguator\Supported_Blocks;
+namespace LinguatorPro\Supported_Blocks;
 
-use Linguator\Settings\Header\Header;
+use LinguatorPro\Settings\Header\Header;
 use WP_Block_Type_Registry;
 
 /**
@@ -76,12 +76,12 @@ if ( ! class_exists( 'Supported_Blocks' ) ) {
 		@return bool
 		*/
 		public function linguator_supported_blocks_assets($status, $tab, $is_settings_tab){
-			if($is_settings_tab && $tab === 'supported-blocks' && function_exists('LMAT')){
+			if($is_settings_tab && $tab === 'supported-blocks' && function_exists('LMATP')){
 
-				$header = Header::get_instance('supported-blocks', LMAT()->model);
+				$header = Header::get_instance('supported-blocks', LMATP()->model);
 				$header->header_assets();
 
-				linguator_enqueue_datatable_assets();
+				linguator_pro_enqueue_datatable_assets();
 				
 				return false;
 			}
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Supported_Blocks' ) ) {
 		public function linguator_render_supported_blocks_page($status, $selected_tab, $active_tab) {
 			if($selected_tab === 'supported-blocks' && $active_tab === 'settings'){
 
-				$header = Header::get_instance('supported-blocks', LMAT()->model);
+				$header = Header::get_instance('supported-blocks', LMATP()->model);
 
 				$header->header();
 
@@ -308,7 +308,7 @@ if ( ! class_exists( 'Supported_Blocks' ) ) {
 		 *               When custom rules add attribute paths, those paths are also listed under 'LmatUserBlockRules' in the same structure.
 		 */
 		public function linguator_get_block_parse_rules() {
-			$config_path = trailingslashit( plugin_dir_path( LINGUATOR_ROOT_FILE ) ) . 'modules/page-translation/block-translation-rules/wpml-config.xml';
+			$config_path = trailingslashit( plugin_dir_path( LINGUATOR_PRO_ROOT_FILE ) ) . 'modules/page-translation/block-translation-rules/wpml-config.xml';
 			$xml_rules   = $this->linguator_parse_single_wpml_config( $config_path );
 
 			if ( empty( $xml_rules ) ) {
@@ -466,7 +466,7 @@ if ( ! class_exists( 'Supported_Blocks' ) ) {
 		 */
 		private function linguator_parse_wpml_config_blocks() {
 			$config_files = $this->linguator_get_wpml_config_files();
-			$signature    = array( LINGUATOR_VERSION, 'xpaths' );
+			$signature    = array( LINGUATOR_PRO_VERSION, 'xpaths' );
 
 			foreach ( $config_files as $config_file ) {
 				$signature[] = $config_file . '|' . (int) filemtime( $config_file );
@@ -520,7 +520,7 @@ if ( ! class_exists( 'Supported_Blocks' ) ) {
 				$active_plugins = array_merge( $active_plugins, array_keys( (array) get_site_option( 'active_sitewide_plugins', array() ) ) );
 			}
 
-			$own_dir = wp_normalize_path( untrailingslashit( plugin_dir_path( LINGUATOR_ROOT_FILE ) ) );
+			$own_dir = wp_normalize_path( untrailingslashit( plugin_dir_path( LINGUATOR_PRO_ROOT_FILE ) ) );
 			$dirs    = array();
 
 			foreach ( $active_plugins as $plugin ) {

@@ -3,15 +3,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Primitive\Abstract_Boolean;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Primitive\Abstract_Boolean;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Class defining the "Display/Hide URL language information for default language" boolean option.

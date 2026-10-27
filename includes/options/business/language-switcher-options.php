@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Primitive\Abstract_List;
+use LinguatorPro\Includes\Options\Primitive\Abstract_List;
 
 /**
  * Class defining language switcher options list.

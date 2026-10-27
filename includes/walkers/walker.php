@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Includes\Walkers;
+namespace LinguatorPro\Includes\Walkers;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 use Walker;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 
 

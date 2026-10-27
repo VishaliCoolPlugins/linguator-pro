@@ -1,7 +1,7 @@
 <?php
-namespace Linguator\Modules\Bulk_Translation;
+namespace LinguatorPro\Modules\Bulk_Translation;
 
-use Linguator\Admin\Controllers\Linguator_Admin;
+use LinguatorPro\Admin\Controllers\Linguator_Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -72,8 +72,8 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 		public function linguator_bulk_translate_button( $views ) {
 			$providers_config_class=' providers-config-no-active';
 
-			if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['provider'])){
-				$providers = LMAT()->options['ai_translation_configuration']['provider'];
+			if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['provider'])){
+				$providers = LMATP()->options['ai_translation_configuration']['provider'];
 
 				foreach($providers as $provider => $value){
 					if($value){
@@ -203,31 +203,31 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
             }
         }
 
-        $editor_script_asset = include LINGUATOR_DIR . '/admin/assets/bulk-translate/index.asset.php';
+        $editor_script_asset = include LINGUATOR_PRO_DIR . '/admin/assets/bulk-translate/index.asset.php';
 
 		if ( ! is_array( $editor_script_asset ) ) {
 			$editor_script_asset = array(
 				'dependencies' => array(),
-				'version'      => LINGUATOR_VERSION,
+				'version'      => LINGUATOR_PRO_VERSION,
 			);
 		}
                 
         $rtl=function_exists('is_rtl') ? is_rtl() : false;
         $css_file=$rtl ? 'index-rtl.css' : 'index.css';
       
-		wp_enqueue_script( 'lmat-google-api', 'https://translate.google.com/translate_a/element.js', '', LINGUATOR_VERSION, true );
-		wp_enqueue_script( 'lmat-bulk-translate', plugins_url( 'admin/assets/bulk-translate/index.js', LINGUATOR_ROOT_FILE ), array_merge( $editor_script_asset['dependencies'], array( 'lmat-google-api' ) ), $editor_script_asset['version'], true );
+		wp_enqueue_script( 'lmat-google-api', 'https://translate.google.com/translate_a/element.js', '', LINGUATOR_PRO_VERSION, true );
+		wp_enqueue_script( 'lmat-bulk-translate', plugins_url( 'admin/assets/bulk-translate/index.js', LINGUATOR_PRO_ROOT_FILE ), array_merge( $editor_script_asset['dependencies'], array( 'lmat-google-api' ) ), $editor_script_asset['version'], true );
    
 		// Set script translations for wp-i18n functions (required for WordPress 6.9+)
 		wp_set_script_translations( 'lmat-bulk-translate', 'linguator-pro' );
 		
-		wp_enqueue_style( 'lmat-bulk-translate', plugins_url( 'admin/assets/bulk-translate/index.css', LINGUATOR_ROOT_FILE ), array(), $editor_script_asset['version'] );
+		wp_enqueue_style( 'lmat-bulk-translate', plugins_url( 'admin/assets/bulk-translate/index.css', LINGUATOR_PRO_ROOT_FILE ), array(), $editor_script_asset['version'] );
 
-        $languages = LMAT()->model->get_languages_list();
+        $languages = LMATP()->model->get_languages_list();
 
         $lang_object = array();
 
-		$default_language=LMAT()->model->get_default_language();
+		$default_language=LMATP()->model->get_default_language();
 		$default_language_slug=false;
 
 		if(isset($default_language->slug) && !empty($default_language->slug)){
@@ -240,8 +240,8 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 
 		$providers=array();
 
-		if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['provider'])){
-			$providers = LMAT()->options['ai_translation_configuration']['provider'];
+		if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['provider'])){
+			$providers = LMATP()->options['ai_translation_configuration']['provider'];
 		}
 
 		$active_providers=array();
@@ -257,7 +257,7 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 				$active_providers[] = 'edgeLocalAiTranslator';
 			} elseif ( 'google' === $provider ) {
 				$active_providers[] = 'google';
-			} elseif ( 'gemini' === $provider && function_exists( 'linguator_is_ai_provider_allowed' ) && linguator_is_ai_provider_allowed( 'gemini' ) ) {
+			} elseif ( 'gemini' === $provider && function_exists( 'linguator_pro_is_ai_provider_allowed' ) && linguator_pro_is_ai_provider_allowed( 'gemini' ) ) {
 				$active_providers[] = $provider;
 			}
 		}
@@ -266,7 +266,7 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 			'gemini' => false,
 		);
 
-		if ( function_exists( 'linguator_is_ai_provider_allowed' ) && linguator_is_ai_provider_allowed( 'gemini' ) ) {
+		if ( function_exists( 'linguator_pro_is_ai_provider_allowed' ) && linguator_pro_is_ai_provider_allowed( 'gemini' ) ) {
 			foreach ( $api_keys_status as $key => $status ) {
 				$api_key = get_option( 'connectors_ai_google_api_key', '' );
 				if ( ! empty( $api_key ) ) {
@@ -276,18 +276,18 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 		}
 
 			// Provider the modal pre-selects; empty when the saved default is not enabled.
-			$default_provider = linguator_get_default_ai_provider_service( $active_providers );
+			$default_provider = linguator_pro_get_default_ai_provider_service( $active_providers );
 
 		$slug_translation_option = 'title_translate';
 
-		if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-			$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+		if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+			$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 		}
 
 		$extra_data = array();
 
         if(!$taxonomy_page || empty($taxonomy_page)){
-            if (!isset(LMAT()->options['sync']) || (isset(LMAT()->options['sync']) && !in_array('post_meta', LMAT()->options['sync']))) {
+            if (!isset(LMATP()->options['sync']) || (isset(LMATP()->options['sync']) && !in_array('post_meta', LMATP()->options['sync']))) {
                 $extra_data['postMetaSync'] = 'false';
             } else {
                 $extra_data['postMetaSync'] = 'true';
@@ -304,7 +304,7 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
                 'bulkTranslateRouteUrl' =>  get_rest_url( null, 'lmat/v1/bulk-translate' ),
                 'bulkTranslatePrivateKey' => wp_create_nonce('lmat_bulk_translate_entries_nonce'),
 				'get_glossary_validate' => wp_create_nonce('lmat_get_glossary_private'),
-                'lmat_url'                => plugins_url( '', LINGUATOR_ROOT_FILE ) . '/',
+                'lmat_url'                => plugins_url( '', LINGUATOR_PRO_ROOT_FILE ) . '/',
                 'admin_url' => admin_url(),
                 'post_label'          => $post_label,
                 'post_label_singular' => $post_label_singular,
@@ -315,8 +315,8 @@ if ( ! class_exists( 'Linguator_Bulk_Translation' ) ) :
 				'default_provider'        => $default_provider,
 				'api_keys_status'          => $api_keys_status,
 				'default_language_slug' => $default_language_slug,
-				'mediaSupport'          => ! empty( LMAT()->options['media_support'] ),
-				'ai_models'                => ( property_exists( LMAT(), 'model' ) && isset( LMAT()->model->options ) ) ? ( LMAT()->model->options->get( 'api_keys' ) ?: array() ) : array(),
+				'mediaSupport'          => ! empty( LMATP()->options['media_support'] ),
+				'ai_models'                => ( property_exists( LMATP(), 'model' ) && isset( LMATP()->model->options ) ) ? ( LMATP()->model->options->get( 'api_keys' ) ?: array() ) : array(),
                 'AIRequestMaxTokens' => (int) get_option('lmat_ai_request_token_per_request', 500),
                 'AIRequestBatchSize' => (int) get_option('lmat_ai_request_batch_size', 5),
             ), $extra_data)

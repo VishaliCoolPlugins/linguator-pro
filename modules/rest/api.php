@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\REST;
+namespace LinguatorPro\Modules\REST;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Model;
 
 
 

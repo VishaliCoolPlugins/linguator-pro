@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Includes\Walkers;
+namespace LinguatorPro\Includes\Walkers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

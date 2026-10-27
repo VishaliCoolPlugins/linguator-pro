@@ -3,12 +3,12 @@
  * @package Linguator 
  */
 
-namespace Linguator\Modules\Editors\Screens;
+namespace LinguatorPro\Modules\Editors\Screens;
 
-use Linguator\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Base\Linguator_Base;
 use WP_Screen;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Services\Crud\Linguator_CRUD_Posts;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Services\Crud\Linguator_CRUD_Posts;
 
 /**
  * Class to manage Post editor scripts.

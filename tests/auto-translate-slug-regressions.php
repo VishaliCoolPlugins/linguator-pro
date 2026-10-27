@@ -16,7 +16,7 @@ function get_taxonomy( $taxonomy ) {
 
 require_once dirname( __DIR__ ) . '/frontend/controllers/frontend-auto-translate.php';
 
-$translator          = ( new ReflectionClass( \Linguator\Frontend\Controllers\Linguator_Frontend_Auto_Translate::class ) )->newInstanceWithoutConstructor();
+$translator          = ( new ReflectionClass( \LinguatorPro\Frontend\Controllers\Linguator_Frontend_Auto_Translate::class ) )->newInstanceWithoutConstructor();
 $translator->curlang = (object) array( 'slug' => 'fr' );
 $translator->model   = new class() {
 	public $term;

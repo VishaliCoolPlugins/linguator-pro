@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\wpseo;
+namespace LinguatorPro\Integrations\wpseo;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

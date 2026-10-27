@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-abstract class Linguator_Abstract_Sitemaps {
+abstract class Linguator_Pro_Abstract_Sitemaps {
 	/**
 	 * Setups actions and filters.
 	 *

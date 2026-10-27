@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Capabilities;
+namespace LinguatorPro\Includes\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 

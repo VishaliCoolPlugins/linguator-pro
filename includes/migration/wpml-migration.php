@@ -5,13 +5,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Migration;
+namespace LinguatorPro\Includes\Migration;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 use WP_Error;
 
 /**
@@ -58,12 +58,12 @@ class WPML_Migration {
 		}
 
 		// Load Linguator's language data file (same approach as wpml-to-polylang)
-		if ( ! defined( 'LINGUATOR_DIR' ) ) {
+		if ( ! defined( 'LINGUATOR_PRO_DIR' ) ) {
 			return '';
 		}
 
 		// Ensure proper path with trailing slash
-		$languages_file = trailingslashit( LINGUATOR_DIR ) . 'admin/settings/controllers/languages.php';
+		$languages_file = trailingslashit( LINGUATOR_PRO_DIR ) . 'admin/settings/controllers/languages.php';
 		if ( ! file_exists( $languages_file ) ) {
 			return '';
 		}
@@ -126,8 +126,8 @@ class WPML_Migration {
 			if ( count( $locale_parts ) >= 2 ) {
 				$country_code = strtolower( $locale_parts[1] );
 				// Validate the country code exists as a flag file
-				if ( defined( 'LINGUATOR_DIR' ) ) {
-					$flag_path = trailingslashit( LINGUATOR_DIR ) . 'assets/flags/' . $country_code . '.svg';
+				if ( defined( 'LINGUATOR_PRO_DIR' ) ) {
+					$flag_path = trailingslashit( LINGUATOR_PRO_DIR ) . 'assets/flags/' . $country_code . '.svg';
 					if ( is_readable( $flag_path ) ) {
 						$flag = $country_code;
 					}
@@ -1134,8 +1134,8 @@ class WPML_Migration {
 
 		// Clear cache after migration
 		if ( $results['strings_migrated'] > 0 ) {
-			if ( class_exists( '\Linguator\Includes\Helpers\Linguator_Cache' ) ) {
-				$cache = new \Linguator\Includes\Helpers\Linguator_Cache();
+			if ( class_exists( '\LinguatorPro\Includes\Helpers\Linguator_Cache' ) ) {
+				$cache = new \LinguatorPro\Includes\Helpers\Linguator_Cache();
 				foreach ( $wpml_languages as $wpml_lang ) {
 					$lmat_lang = $this->model->languages->get( $wpml_lang );
 					if ( $lmat_lang ) {

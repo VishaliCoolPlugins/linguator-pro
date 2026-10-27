@@ -22,7 +22,7 @@
  *  * * NOTE: While this is a fork of the free version, it incorporates the 
  * 'Abstract_Screen' class structure originally from the 
  * 'WP_Syntex\Polylang_Pro\Editors\Screens' namespace. This has been 
- * refactored into the 'Linguator\Modules\Editors\Screens' namespace 
+ * refactored into the 'LinguatorPro\Modules\Editors\Screens' namespace 
  * to ensure a unique environment and prevent naming collisions.
  * ----------------------------------
  */
@@ -31,42 +31,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Core\Linguator;
-use Linguator\Install\Linguator_Activate;
-use Linguator\Install\Linguator_Deactivate;
-use Linguator\Install\Linguator_Usable;
+use LinguatorPro\Includes\Core\Linguator;
+use LinguatorPro\Install\Linguator_Activate;
+use LinguatorPro\Install\Linguator_Deactivate;
+use LinguatorPro\Install\Linguator_Usable;
 
 
 
 // Linguator constants - wrapped in checks to prevent redeclaration
-if ( ! defined( 'LINGUATOR_VERSION' ) ) {
-	define( 'LINGUATOR_VERSION', '2.2.1' );
+if ( ! defined( 'LINGUATOR_PRO_VERSION' ) ) {
+	define( 'LINGUATOR_PRO_VERSION', '2.2.1' );
 }
-if ( ! defined( 'LMAT_MIN_WP_VERSION' ) ) {
-	define( 'LMAT_MIN_WP_VERSION', '6.8' );
+if ( ! defined( 'LMATP_MIN_WP_VERSION' ) ) {
+	define( 'LMATP_MIN_WP_VERSION', '6.8' );
 }
-if ( ! defined( 'LMAT_MIN_PHP_VERSION' ) ) {
-	define( 'LMAT_MIN_PHP_VERSION', '7.2' );
+if ( ! defined( 'LMATP_MIN_PHP_VERSION' ) ) {
+	define( 'LMATP_MIN_PHP_VERSION', '7.2' );
 }
-if ( ! defined( 'LINGUATOR_FILE' ) ) {
-	define( 'LINGUATOR_FILE', __FILE__ );
+if ( ! defined( 'LINGUATOR_PRO_FILE' ) ) {
+	define( 'LINGUATOR_PRO_FILE', __FILE__ );
 }
-if ( ! defined( 'LINGUATOR_DIR' ) ) {
-	define( 'LINGUATOR_DIR', __DIR__ );
+if ( ! defined( 'LINGUATOR_PRO_DIR' ) ) {
+	define( 'LINGUATOR_PRO_DIR', __DIR__ );
 }
-if ( ! defined( 'LINGUATOR_URL' ) ) {
-	define( 'LINGUATOR_URL', plugin_dir_url( LINGUATOR_FILE ) );
+if ( ! defined( 'LINGUATOR_PRO_URL' ) ) {
+	define( 'LINGUATOR_PRO_URL', plugin_dir_url( LINGUATOR_PRO_FILE ) );
 }
-if ( ! defined( 'LINGUATOR_FEEDBACK_API' ) ) {
-	define( 'LINGUATOR_FEEDBACK_API', 'https://feedback.coolplugins.net/' );
+if ( ! defined( 'LINGUATOR_PRO_FEEDBACK_API' ) ) {
+	define( 'LINGUATOR_PRO_FEEDBACK_API', 'https://feedback.coolplugins.net/' );
 }
 // Whether we are using Linguator, get the filename of the plugin in use.
-if ( ! defined( 'LINGUATOR_ROOT_FILE' ) ) {
-	define( 'LINGUATOR_ROOT_FILE', __FILE__ );
+if ( ! defined( 'LINGUATOR_PRO_ROOT_FILE' ) ) {
+	define( 'LINGUATOR_PRO_ROOT_FILE', __FILE__ );
 }
 
-if ( ! defined( 'LINGUATOR_BASENAME' ) ) {
-	define( 'LINGUATOR_BASENAME', plugin_basename( __FILE__ ) ); // Plugin name as known by WP.
+if ( ! defined( 'LINGUATOR_PRO_BASENAME' ) ) {
+	define( 'LINGUATOR_PRO_BASENAME', plugin_basename( __FILE__ ) ); // Plugin name as known by WP.
 	require __DIR__ . '/vendor/autoload.php';
 }
 
@@ -75,7 +75,7 @@ if ( ! defined( 'LINGUATOR_BASENAME' ) ) {
 add_action(
 	'plugins_loaded',
 	static function () {
-		if ( ! function_exists( 'linguator_is_ai_provider_allowed' ) || ! linguator_is_ai_provider_allowed( 'gemini' ) ) {
+		if ( ! function_exists( 'linguator_pro_is_ai_provider_allowed' ) || ! linguator_pro_is_ai_provider_allowed( 'gemini' ) ) {
 			return;
 		}
 
@@ -84,7 +84,7 @@ add_action(
 		add_action(
 			'init',
 			static function () {
-				if ( ! function_exists( 'linguator_is_ai_provider_allowed' ) || ! linguator_is_ai_provider_allowed( 'gemini' ) ) {
+				if ( ! function_exists( 'linguator_pro_is_ai_provider_allowed' ) || ! linguator_pro_is_ai_provider_allowed( 'gemini' ) ) {
 					return;
 				}
 
@@ -116,8 +116,8 @@ add_action(
 	20
 );
 
-if ( ! defined( 'LINGUATOR' ) ) {
-	define( 'LINGUATOR', ucwords( str_replace( '-', ' ', dirname( LINGUATOR_BASENAME ) ) ) );
+if ( ! defined( 'LINGUATOR_PRO' ) ) {
+	define( 'LINGUATOR_PRO', ucwords( str_replace( '-', ' ', dirname( LINGUATOR_PRO_BASENAME ) ) ) );
 }
 
 // Handle redirect after activation and language switcher visibility
@@ -187,7 +187,7 @@ add_action('admin_init', function() {
 	}
 });
 
-if ( ! function_exists( 'lmat_has_constant' ) ) {
+if ( ! function_exists( 'lmatp_has_constant' ) ) {
 	require __DIR__ . '/includes/helpers/constant-functions.php';
 }
 if ( ! Linguator_Usable::can_activate() ) {

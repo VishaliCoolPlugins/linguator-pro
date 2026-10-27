@@ -5,17 +5,17 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Elementor_Fields;
-use Linguator\Modules\Scan\Frontend_Inspector;
-use Linguator\Modules\Scan\Result;
-use Linguator\Modules\Scan\Untranslated_Collector;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Elementor_Fields;
+use LinguatorPro\Modules\Scan\Frontend_Inspector;
+use LinguatorPro\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Untranslated_Collector;
 
 /**
  * Flags published translations whose title or body still matches the default language.

@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Supported_Blocks;
+namespace LinguatorPro\Supported_Blocks;
 
 /**
  * Do not access the page directly
@@ -53,15 +53,15 @@ if ( ! class_exists( 'Custom_Block_Post' ) ) {
 		public function enqueue_scripts( $hook ) {
 			$current_screen = get_current_screen();
 			if ( 'lmat_add_blocks' === $current_screen->post_type && is_object( $current_screen ) && 'post.php' === $hook && $current_screen->is_block_editor ) {
-				wp_enqueue_script( 'lmat-add-new-block', plugins_url('admin/assets/js/lmat-add-new-custom-block.min.js', LINGUATOR_ROOT_FILE), array( 'jquery','wp-data', 'wp-element' ), LINGUATOR_VERSION, true );
-				linguator_enqueue_datatable_assets();
+				wp_enqueue_script( 'lmat-add-new-block', plugins_url('admin/assets/js/lmat-add-new-custom-block.min.js', LINGUATOR_PRO_ROOT_FILE), array( 'jquery','wp-data', 'wp-element' ), LINGUATOR_PRO_VERSION, true );
+				linguator_pro_enqueue_datatable_assets();
 
 				wp_localize_script( 'lmat-add-new-block', 'lmatAddBlockVars', array(
 					'lmat_demo_page_url' => esc_url('https://coolplugins.net/product/automatic-translations-for-polylang/'),
 				) );
 
-				wp_enqueue_style('lmat-update-custom-blocks', plugins_url('admin/assets/css/lmat-update-custom-blocks.min.css', LINGUATOR_ROOT_FILE), array(), LINGUATOR_VERSION);
-				wp_enqueue_script('lmat-update-custom-blocks', plugins_url('admin/assets/js/lmat-update-custom-blocks.min.js', LINGUATOR_ROOT_FILE), array('jquery'), LINGUATOR_VERSION, true);
+				wp_enqueue_style('lmat-update-custom-blocks', plugins_url('admin/assets/css/lmat-update-custom-blocks.min.css', LINGUATOR_PRO_ROOT_FILE), array(), LINGUATOR_PRO_VERSION);
+				wp_enqueue_script('lmat-update-custom-blocks', plugins_url('admin/assets/js/lmat-update-custom-blocks.min.js', LINGUATOR_PRO_ROOT_FILE), array('jquery'), LINGUATOR_PRO_VERSION, true);
 			
 				wp_localize_script(
 					'lmat-update-custom-blocks',
@@ -69,7 +69,7 @@ if ( ! class_exists( 'Custom_Block_Post' ) ) {
 					array(
 						'ajax_url'       => admin_url('admin-ajax.php'),
 						'ajax_nonce'     => wp_create_nonce('lmat_block_update_nonce'),
-						'lmat_url'       => esc_url(plugins_url('admin/assets/css/lmat-update-custom-blocks.min.css', LINGUATOR_ROOT_FILE)),
+						'lmat_url'       => esc_url(plugins_url('admin/assets/css/lmat-update-custom-blocks.min.css', LINGUATOR_PRO_ROOT_FILE)),
 						'action_get_content' => 'lmat_get_custom_blocks_content',
 						'action_update_content' => 'lmat_update_custom_blocks_content',
 					)

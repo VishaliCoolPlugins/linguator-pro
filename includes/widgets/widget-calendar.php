@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Widgets;
+namespace LinguatorPro\Includes\Widgets;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -54,7 +54,7 @@ class Linguator_Widget_Calendar extends WP_Widget_Calendar {
 		} else {
 			echo '<div class="calendar_wrap">';
 		}
-		empty( LMAT()->curlang ) ? get_calendar() : self::get_calendar(); 
+		empty( LMATP()->curlang ) ? get_calendar() : self::get_calendar(); 
 		echo '</div>';
 		echo wp_kses_post( $args['after_widget'] );
 
@@ -137,7 +137,7 @@ class Linguator_Widget_Calendar extends WP_Widget_Calendar {
 		/** This filter is documented in wp-includes/general-template.php */
 		$args = apply_filters( 'lmat_get_calendar_args', wp_parse_args( $args, $defaults ) );
 
-		$args['lang'] = LMAT()->curlang->slug; 
+		$args['lang'] = LMATP()->curlang->slug; 
 
 		if ( ! post_type_exists( $args['post_type'] ) ) {
 			$args['post_type'] = 'post';
@@ -251,8 +251,8 @@ class Linguator_Widget_Calendar extends WP_Widget_Calendar {
 		$unixmonth = mktime( 0, 0, 0, $thismonth, 1, $thisyear );
 		$last_day  = gmdate( 't', $unixmonth );
 
-		$join_clause  = LMAT()->model->post->join_clause();
-		$where_clause = LMAT()->model->post->where_clause( LMAT()->curlang );
+		$join_clause  = LMATP()->model->post->join_clause();
+		$where_clause = LMATP()->model->post->where_clause( LMATP()->curlang );
 
 		// Get the next and previous month and year with at least one post.
 

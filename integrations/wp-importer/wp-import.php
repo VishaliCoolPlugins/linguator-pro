@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_WP_Import extends WP_Import {
+class Linguator_Pro_WP_Import extends WP_Import {
 	/**
 	 * Stores post_translations terms.
 	 *
@@ -44,14 +44,14 @@ class Linguator_WP_Import extends WP_Import {
 		wp_cache_set_terms_last_changed();
 
 		// Assign the default language in case the importer created the first language.
-		if ( empty( LMAT()->options['default_lang'] ) ) {
+		if ( empty( LMATP()->options['default_lang'] ) ) {
 			$languages = get_terms( array( 'taxonomy' => 'lmat_language', 'hide_empty' => false, 'orderby' => 'term_id' ) );
 			$default_lang = reset( $languages );
-			LMAT()->options['default_lang'] = $default_lang->slug;
+			LMATP()->options['default_lang'] = $default_lang->slug;
 		}
 
 		// Clean languages cache in case some of them were created during import.
-		LMAT()->model->clean_languages_cache();
+		LMATP()->model->clean_languages_cache();
 
 		$this->remap_terms_relations( $term_translations );
 		$this->remap_translations( $term_translations, $this->processed_terms );
@@ -83,7 +83,7 @@ class Linguator_WP_Import extends WP_Import {
 
 		parent::process_posts();
 
-		LMAT()->model->clean_languages_cache(); // To update the posts count in ( cached ) languages list
+		LMATP()->model->clean_languages_cache(); // To update the posts count in ( cached ) languages list
 
 		$this->remap_translations( $this->post_translations, $this->processed_posts );
 		unset( $this->post_translations );
@@ -92,7 +92,7 @@ class Linguator_WP_Import extends WP_Import {
 		foreach ( $menu_items as $item ) {
 			foreach ( $item['postmeta'] as $meta ) {
 				if ( '_lmat_menu_item' == $meta['key'] ) {
-					update_post_meta( $this->processed_menu_items[ $item['post_id'] ], '_lmat_menu_item', linguator_maybe_unserialize( $meta['value'] ) );
+					update_post_meta( $this->processed_menu_items[ $item['post_id'] ], '_lmat_menu_item', linguator_pro_maybe_unserialize( $meta['value'] ) );
 				}
 			}
 		}
@@ -102,7 +102,7 @@ class Linguator_WP_Import extends WP_Import {
 			$lang_id = (int) substr( $post['post_title'], 12 );
 
 			if ( ! empty( $this->processed_terms[ $lang_id ] ) ) {
-				if ( $strings = linguator_maybe_unserialize( $post['post_content'] ) ) {
+				if ( $strings = linguator_pro_maybe_unserialize( $post['post_content'] ) ) {
 					$mo = new Linguator_MO();
 					$mo->import_from_db( $this->processed_terms[ $lang_id ] );
 					foreach ( $strings as $msg ) {
@@ -127,13 +127,13 @@ class Linguator_WP_Import extends WP_Import {
 		$term_relationships = array();
 
 		foreach ( $terms as $term ) {
-			$translations = linguator_maybe_unserialize( $term['term_description'] );
+			$translations = linguator_pro_maybe_unserialize( $term['term_description'] );
 			if ( ! is_array( $translations ) ) {
 				continue;
 			}
 			foreach ( $translations as $slug => $old_id ) {
 				$slug = sanitize_key( (string) $slug );
-				if ( $old_id && ! empty( $this->processed_terms[ $old_id ] ) && $lang = LMAT()->model->get_language( $slug ) ) {
+				if ( $old_id && ! empty( $this->processed_terms[ $old_id ] ) && $lang = LMATP()->model->get_language( $slug ) ) {
 					$object_id = $this->processed_terms[ $old_id ];
 					
 					// Language relationship.
@@ -174,11 +174,11 @@ class Linguator_WP_Import extends WP_Import {
 	protected function remap_translations( &$terms, &$processed_objects ) {
 		global $wpdb;
 
-		$languages = linguator_languages_list();
+		$languages = linguator_pro_languages_list();
 		$u         = array();
 
 		foreach ( $terms as $term ) {
-			$translations = linguator_maybe_unserialize( $term['term_description'] );
+			$translations = linguator_pro_maybe_unserialize( $term['term_description'] );
 			if ( ! is_array( $translations ) ) {
 				continue;
 			}

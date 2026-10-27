@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Helpers;
+namespace LinguatorPro\Includes\Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -90,12 +90,12 @@ class Linguator_Cookie {
 	public static function set( $lang, $args = array() ) {
 		$args = self::parse_args( $args );
 
-		if ( ! headers_sent() && LMAT_COOKIE !== false && self::get() !== $lang ) {
+		if ( ! headers_sent() && LMATP_COOKIE !== false && self::get() !== $lang ) {
 			if ( version_compare( PHP_VERSION, '7.3', '<' ) ) {
 				$args['path'] .= '; SameSite=' . $args['samesite']; // Hack to set SameSite value in PHP < 7.3. Doesn't work with newer versions.
-				setcookie( LMAT_COOKIE, $lang, $args['expires'], $args['path'], $args['domain'], $args['secure'], $args['httponly'] );
+				setcookie( LMATP_COOKIE, $lang, $args['expires'], $args['path'], $args['domain'], $args['secure'], $args['httponly'] );
 			} else {
-				setcookie( LMAT_COOKIE, $lang, $args );
+				setcookie( LMATP_COOKIE, $lang, $args );
 			}
 		}
 	}
@@ -108,6 +108,6 @@ class Linguator_Cookie {
 	 * @return string
 	 */
 	public static function get() {
-		return isset( $_COOKIE[ LMAT_COOKIE ] ) ? sanitize_key( $_COOKIE[ LMAT_COOKIE ] ) : '';
+		return isset( $_COOKIE[ LMATP_COOKIE ] ) ? sanitize_key( $_COOKIE[ LMATP_COOKIE ] ) : '';
 	}
 }

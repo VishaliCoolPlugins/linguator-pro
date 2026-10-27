@@ -5,7 +5,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Migration;
+namespace LinguatorPro\Includes\Migration;
 
 // phpcs:disable
 
@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Models\Languages;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Models\Languages;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Handles migration from Polylang to Linguator
@@ -240,7 +240,7 @@ class Polylang_Migration {
 
 		foreach ( $polylang_languages as $pll_lang ) {
 			// Parse language metadata from description
-			$lang_data = linguator_maybe_unserialize( $pll_lang->description );
+			$lang_data = linguator_pro_maybe_unserialize( $pll_lang->description );
 			if ( ! is_array( $lang_data ) ) {
 				$lang_data = array();
 			}
@@ -527,12 +527,12 @@ class Polylang_Migration {
 				continue;
 			}
 	
-			$data = linguator_maybe_unserialize( $row->description );
+			$data = linguator_pro_maybe_unserialize( $row->description );
 			if ( ! is_array( $data ) ) {
 				continue;
 			}
 
-			$pll_term_desc=linguator_maybe_unserialize($row->description);
+			$pll_term_desc=linguator_pro_maybe_unserialize($row->description);
 			$filter_description=array();
 
 			if(is_array($pll_term_desc)){
@@ -846,12 +846,12 @@ class Polylang_Migration {
 				continue;
 			}
 	
-			$data = linguator_maybe_unserialize( $row->description );
+			$data = linguator_pro_maybe_unserialize( $row->description );
 			if ( ! is_array( $data ) ) {
 				continue;
 			}
 
-			$pll_term_desc=linguator_maybe_unserialize($row->description);
+			$pll_term_desc=linguator_pro_maybe_unserialize($row->description);
 			$filter_description=array();
 
 			if(is_array($pll_term_desc)){
@@ -1410,8 +1410,8 @@ class Polylang_Migration {
 		// Clear cache after migration
 		if ( $results['strings_migrated'] > 0 ) {
 			// Clear Linguator strings cache
-			if ( class_exists( '\Linguator\Includes\Helpers\Linguator_Cache' ) ) {
-				$cache = new \Linguator\Includes\Helpers\Linguator_Cache();
+			if ( class_exists( '\LinguatorPro\Includes\Helpers\Linguator_Cache' ) ) {
+				$cache = new \LinguatorPro\Includes\Helpers\Linguator_Cache();
 				foreach ( $polylang_languages as $pll_lang ) {
 					$linguator_lang = $this->model->languages->get( $pll_lang->slug );
 					if ( $linguator_lang ) {

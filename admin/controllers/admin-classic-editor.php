@@ -2,16 +2,16 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
-use Linguator\Includes\Capabilities\User;
+namespace LinguatorPro\Admin\Controllers;
+use LinguatorPro\Includes\Capabilities\User;
 use WP_Post;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
 use WP_Ajax_Response;
 
 
@@ -90,7 +90,7 @@ class Linguator_Admin_Classic_Editor {
 				'side',
 				'high',
 				array(
-					'__back_compat_meta_box' => linguator_use_block_editor_plugin(),
+					'__back_compat_meta_box' => linguator_pro_use_block_editor_plugin(),
 				)
 			);
 		}

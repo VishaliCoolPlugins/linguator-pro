@@ -5,15 +5,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan\Checks;
+namespace LinguatorPro\Modules\Scan\Checks;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Modules\Scan\Abstract_Check;
-use Linguator\Modules\Scan\Link_Tools;
-use Linguator\Modules\Scan\Result;
+use LinguatorPro\Modules\Scan\Abstract_Check;
+use LinguatorPro\Modules\Scan\Link_Tools;
+use LinguatorPro\Modules\Scan\Result;
 
 /**
  * Checks the header navigation of a block theme for every language.

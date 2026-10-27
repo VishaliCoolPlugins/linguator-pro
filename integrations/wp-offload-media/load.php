@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/as3cf.php';
 
-use Linguator\Integrations\wp_offload_media\Linguator_AS3CF;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\wp_offload_media\Linguator_AS3CF;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

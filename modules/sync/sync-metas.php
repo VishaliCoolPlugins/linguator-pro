@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-abstract class Linguator_Sync_Metas {
+abstract class Linguator_Pro_Sync_Metas {
 	/**
 	 * @var Linguator_Model
 	 */

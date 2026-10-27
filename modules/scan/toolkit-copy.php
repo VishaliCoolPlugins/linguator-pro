@@ -1,6 +1,6 @@
 <?php
 /** Shared accordion wording ported from Toolkit for Polylang. */
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 if ( ! defined( 'ABSPATH' ) ) exit;
 final class Toolkit_Copy {
  public static function for_key( string $key ): ?array {

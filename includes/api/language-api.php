@@ -6,15 +6,15 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-use Linguator\Admin\Controllers\Linguator_Admin_Strings;
-use Linguator\Includes\Controllers\Linguator_Switcher;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Helpers\Linguator_MO;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
+use LinguatorPro\Includes\Controllers\Linguator_Switcher;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Helpers\Linguator_MO;
 
 /**
  * API for languages and translations management.
  * All API functions are loaded when 'linguator_init' action is fired.
- * You can check if Linguator is active by checking if the function 'linguator_the_languages' exists.
+ * You can check if Linguator is active by checking if the function 'linguator_pro_the_languages' exists.
  *
  *  
  */
@@ -52,8 +52,8 @@ use Linguator\Includes\Helpers\Linguator_MO;
  * }
  * @return string|array Either the html markup of the switcher or the raw elements to build a custom language switcher.
  */
-function linguator_the_languages( $args = array() ) {
-	$linguator = LMAT();
+function linguator_pro_the_languages( $args = array() ) {
+	$linguator = LMATP();
 	if ( ! $linguator || empty( $linguator->links ) ) {
 		return empty( $args['raw'] ) ? '' : array();
 	}
@@ -82,8 +82,8 @@ function linguator_the_languages( $args = array() ) {
  *     )
  * )|false
  */
-function linguator_current_language( $field = 'slug' ) {
-	$linguator = LMAT();
+function linguator_pro_current_language( $field = 'slug' ) {
+	$linguator = LMATP();
 	if ( ! $linguator || empty( $linguator->curlang ) ) {
 		return false;
 	}
@@ -114,8 +114,8 @@ function linguator_current_language( $field = 'slug' ) {
  *     )
  * )|false
  */
-function linguator_default_language( $field = 'slug' ) {
-	$linguator = LMAT();
+function linguator_pro_default_language( $field = 'slug' ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return false;
 	}
@@ -147,14 +147,14 @@ function linguator_default_language( $field = 'slug' ) {
  *
  * @phpstan-return int<0, max>
  */
-function linguator_get_post( $post_id, $lang = '' ) {
-	$lang = $lang ?: linguator_current_language();
+function linguator_pro_get_post( $post_id, $lang = '' ) {
+	$lang = $lang ?: linguator_pro_current_language();
 
 	if ( empty( $lang ) ) {
 		return 0;
 	}
 
-	$linguator = LMAT();
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return 0;
 	}
@@ -176,14 +176,14 @@ function linguator_get_post( $post_id, $lang = '' ) {
  *
  * @phpstan-return int<0, max>
  */
-function linguator_get_term( $term_id, $lang = '' ) {
-	$lang = $lang ?: linguator_current_language();
+function linguator_pro_get_term( $term_id, $lang = '' ) {
+	$lang = $lang ?: linguator_pro_current_language();
 
 	if ( empty( $lang ) ) {
 		return 0;
 	}
 
-	$linguator = LMAT();
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return 0;
 	}
@@ -200,12 +200,12 @@ function linguator_get_term( $term_id, $lang = '' ) {
  * @param string $lang Optional language code, defaults to the current language.
  * @return string
  */
-function linguator_home_url( $lang = '' ) {
+function linguator_pro_home_url( $lang = '' ) {
 	if ( empty( $lang ) ) {
-		$lang = linguator_current_language();
+		$lang = linguator_pro_current_language();
 	}
 
-	$linguator = LMAT();
+	$linguator = LMATP();
 	if ( empty( $lang ) || ! $linguator || empty( $linguator->links ) ) {
 		return home_url( '/' );
 	}
@@ -226,14 +226,14 @@ function linguator_home_url( $lang = '' ) {
  *                          false if should display a single line input, defaults to false.
  * @return void
  */
-function linguator_register_string( $name, $string, $context = 'Linguator', $multiline = false ) {
-	if ( LMAT() instanceof Linguator_Admin_Base ) {
+function linguator_pro_register_string( $name, $string, $context = 'Linguator', $multiline = false ) {
+	if ( LMATP() instanceof Linguator_Admin_Base ) {
 		Linguator_Admin_Strings::register_string( $name, $string, $context, $multiline );
 	}
 }
 
 /**
- * Translates a string ( previously registered with linguator_register_string ).
+ * Translates a string ( previously registered with linguator_pro_register_string ).
  *
  * @api
  *  
@@ -241,7 +241,7 @@ function linguator_register_string( $name, $string, $context = 'Linguator', $mul
  * @param string $string The string to translate.
  * @return string The string translated in the current language.
  */
-function linguator__( $string ) {
+function linguator_pro__( $string ) {
 	if ( ! is_scalar( $string ) || '' === $string ) {
 		return $string;
 	}
@@ -260,8 +260,8 @@ function linguator__( $string ) {
  * @param string $string The string to translate.
  * @return string The string translated in the current language.
  */
-function linguator_esc_html__( $string ) {
-	return esc_html( linguator__( $string ) );
+function linguator_pro_esc_html__( $string ) {
+	return esc_html( linguator_pro__( $string ) );
 }
 
 /**
@@ -273,12 +273,12 @@ function linguator_esc_html__( $string ) {
  * @param string $string The string to translate.
  * @return string The string translated in the current language.
  */
-function linguator_esc_attr__( $string ) {
-	return esc_attr( linguator__( $string ) );
+function linguator_pro_esc_attr__( $string ) {
+	return esc_attr( linguator_pro__( $string ) );
 }
 
 /**
- * Echoes a translated string ( previously registered with linguator_register_string )
+ * Echoes a translated string ( previously registered with linguator_pro_register_string )
  * It is an equivalent of _e() and is not escaped.
  *
  * @api
@@ -287,12 +287,12 @@ function linguator_esc_attr__( $string ) {
  * @param string $string The string to translate.
  * @return void
  */
-function linguator_e( $string ) {
-	echo esc_html( linguator__( $string ) );
+function linguator_pro_e( $string ) {
+	echo esc_html( linguator_pro__( $string ) );
 }
 
 /**
- * Echoes a translated string ( previously registered with linguator_register_string ) and escapes it for safe use in HTML output.
+ * Echoes a translated string ( previously registered with linguator_pro_register_string ) and escapes it for safe use in HTML output.
  *
  * @api
  *  
@@ -300,12 +300,12 @@ function linguator_e( $string ) {
  * @param string $string The string to translate.
  * @return void
  */
-function linguator_esc_html_e( $string ) {
-	echo linguator_esc_html__( $string ); // phpcs:ignore WordPress.Security.EscapeOutput
+function linguator_pro_esc_html_e( $string ) {
+	echo linguator_pro_esc_html__( $string ); // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 /**
- * Echoes a translated a string ( previously registered with linguator_register_string ) and escapes it for safe use in HTML attributes.
+ * Echoes a translated a string ( previously registered with linguator_pro_register_string ) and escapes it for safe use in HTML attributes.
  *
  * @api
  *  
@@ -313,12 +313,12 @@ function linguator_esc_html_e( $string ) {
  * @param string $string The string to translate.
  * @return void
  */
-function linguator_esc_attr_e( $string ) {
-	echo linguator_esc_attr__( $string ); // phpcs:ignore WordPress.Security.EscapeOutput
+function linguator_pro_esc_attr_e( $string ) {
+	echo linguator_pro_esc_attr__( $string ); // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
 /**
- * Translates a string ( previously registered with linguator_register_string ).
+ * Translates a string ( previously registered with linguator_pro_register_string ).
  *
  * @api
  *  
@@ -327,16 +327,16 @@ function linguator_esc_attr_e( $string ) {
  * @param string $lang   Language code.
  * @return string The string translated in the requested language.
  */
-function linguator_translate_string( $string, $lang ) {
-	if ( LMAT() instanceof Linguator_Frontend && linguator_current_language() === $lang ) {
-		return linguator__( $string );
+function linguator_pro_translate_string( $string, $lang ) {
+	if ( LMATP() instanceof Linguator_Frontend && linguator_pro_current_language() === $lang ) {
+		return linguator_pro__( $string );
 	}
 
 	if ( ! is_scalar( $string ) || '' === $string ) {
 		return $string;
 	}
 
-	$lang = LMAT()->model->get_language( $lang );
+	$lang = LMATP()->model->get_language( $lang );
 
 	if ( empty( $lang ) ) {
 		return $string;
@@ -357,8 +357,8 @@ function linguator_translate_string( $string, $lang ) {
  * @param string $post_type Post type name.
  * @return bool
  */
-function linguator_is_translated_post_type( $post_type ) {
-	$linguator = LMAT();
+function linguator_pro_is_translated_post_type( $post_type ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return false;
 	}
@@ -374,8 +374,8 @@ function linguator_is_translated_post_type( $post_type ) {
  * @param string $tax Taxonomy name.
  * @return bool
  */
-function linguator_is_translated_taxonomy( $tax ) {
-	$linguator = LMAT();
+function linguator_pro_is_translated_taxonomy( $tax ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return false;
 	}
@@ -396,8 +396,8 @@ function linguator_is_translated_taxonomy( $tax ) {
  * }
  * @return string[]
  */
-function linguator_languages_list( $args = array() ) {
-	$linguator = LMAT();
+function linguator_pro_languages_list( $args = array() ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return array();
 	}
@@ -426,8 +426,8 @@ function linguator_languages_list( $args = array() ) {
  * @return bool True when successfully assigned. False otherwise (or if the given language is already assigned to
  *              the post).
  */
-function linguator_set_post_language( $id, $lang ) {
-	return LMAT()->model->post->set_language( $id, $lang );
+function linguator_pro_set_post_language( $id, $lang ) {
+	return LMATP()->model->post->set_language( $id, $lang );
 }
 
 /**
@@ -443,8 +443,8 @@ function linguator_set_post_language( $id, $lang ) {
  * @return bool True when successfully assigned. False otherwise (or if the given language is already assigned to
  *              the term).
  */
-function linguator_set_term_language( $id, $lang ) {
-	return LMAT()->model->term->set_language( $id, $lang );
+function linguator_pro_set_term_language( $id, $lang ) {
+	return LMATP()->model->term->set_language( $id, $lang );
 }
 
 /**
@@ -459,10 +459,10 @@ function linguator_set_term_language( $id, $lang ) {
  *
  * @phpstan-return array<non-empty-string, positive-int>
  */
-function linguator_save_post_translations( $arr ) {
+function linguator_pro_save_post_translations( $arr ) {
 	$id = reset( $arr );
 	if ( $id ) {
-		return LMAT()->model->post->save_translations( $id, $arr );
+		return LMATP()->model->post->save_translations( $id, $arr );
 	}
 
 	return array();
@@ -480,10 +480,10 @@ function linguator_save_post_translations( $arr ) {
  *
  * @phpstan-return array<non-empty-string, positive-int>
  */
-function linguator_save_term_translations( $arr ) {
+function linguator_pro_save_term_translations( $arr ) {
 	$id = reset( $arr );
 	if ( $id ) {
-		return LMAT()->model->term->save_translations( $id, $arr );
+		return LMATP()->model->term->save_translations( $id, $arr );
 	}
 
 	return array();
@@ -509,8 +509,8 @@ function linguator_save_term_translations( $arr ) {
  *     )
  * )|false
  */
-function linguator_get_post_language( $post_id, $field = 'slug' ) {
-	$linguator = LMAT();
+function linguator_pro_get_post_language( $post_id, $field = 'slug' ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return false;
 	}
@@ -544,8 +544,8 @@ function linguator_get_post_language( $post_id, $field = 'slug' ) {
  *     )
  * )|false
  */
-function linguator_get_term_language( $term_id, $field = 'slug' ) {
-	$lang = LMAT()->model->term->get_language( $term_id );
+function linguator_pro_get_term_language( $term_id, $field = 'slug' ) {
+	$lang = LMATP()->model->term->get_language( $term_id );
 
 	if ( empty( $lang ) || \OBJECT === $field ) {
 		return $lang;
@@ -565,8 +565,8 @@ function linguator_get_term_language( $term_id, $field = 'slug' ) {
  *
  * @phpstan-return array<non-empty-string, positive-int>
  */
-function linguator_get_post_translations( $post_id ) {
-	$linguator = LMAT();
+function linguator_pro_get_post_translations( $post_id ) {
+	$linguator = LMATP();
 	if ( ! $linguator || ! isset( $linguator->model ) ) {
 		return array();
 	}
@@ -584,8 +584,8 @@ function linguator_get_post_translations( $post_id ) {
  *
  * @phpstan-return array<non-empty-string, positive-int>
  */
-function linguator_get_term_translations( $term_id ) {
-	return LMAT()->model->term->get_translations( $term_id );
+function linguator_pro_get_term_translations( $term_id ) {
+	return LMATP()->model->term->get_translations( $term_id );
 }
 
 /**
@@ -611,14 +611,14 @@ function linguator_get_term_translations( $term_id ) {
  * }
  * @return int Posts count.
  */
-function linguator_count_posts( $lang, $args = array() ) {
-	$lang = LMAT()->model->get_language( $lang );
+function linguator_pro_count_posts( $lang, $args = array() ) {
+	$lang = LMATP()->model->get_language( $lang );
 
 	if ( empty( $lang ) ) {
 		return 0;
 	}
 
-	return LMAT()->model->count_posts( $lang, $args );
+	return LMATP()->model->count_posts( $lang, $args );
 }
 
 /**
@@ -635,14 +635,14 @@ function linguator_count_posts( $lang, $args = array() ) {
  * @param Linguator_Language|string $language The post language object or slug.
  * @return int|WP_Error The post ID on success. The value `WP_Error` on failure.
  */
-function linguator_insert_post( array $postarr, $language ) {
-	$language = LMAT()->model->get_language( $language );
+function linguator_pro_insert_post( array $postarr, $language ) {
+	$language = LMATP()->model->get_language( $language );
 
 	if ( ! $language instanceof Linguator_Language ) {
 		return new WP_Error( 'invalid_language', __( 'Please provide a valid language.', 'linguator-pro' ) );
 	}
 
-	return LMAT()->model->post->insert( $postarr, $language );
+	return LMATP()->model->post->insert( $postarr, $language );
 }
 
 /**
@@ -670,14 +670,14 @@ function linguator_insert_post( array $postarr, $language ) {
  *     @type int|string $term_taxonomy_id The new term taxonomy ID. Can be a numeric string.
  * }
  */
-function linguator_insert_term( string $term, string $taxonomy, $language, array $args = array() ) {
-	$language = LMAT()->model->get_language( $language );
+function linguator_pro_insert_term( string $term, string $taxonomy, $language, array $args = array() ) {
+	$language = LMATP()->model->get_language( $language );
 
 	if ( ! $language instanceof Linguator_Language ) {
 		return new WP_Error( 'invalid_language', __( 'Please provide a valid language.', 'linguator-pro' ) );
 	}
 
-	return LMAT()->model->term->insert( $term, $taxonomy, $language, $args );
+	return LMATP()->model->term->insert( $term, $taxonomy, $language, $args );
 }
 
 /**
@@ -694,8 +694,8 @@ function linguator_insert_term( string $term, string $taxonomy, $language, array
  * }
  * @return int|WP_Error The post ID on success. The value `WP_Error` on failure.
  */
-function linguator_update_post( array $postarr ) {
-	return LMAT()->model->post->update( $postarr );
+function linguator_pro_update_post( array $postarr ) {
+	return LMATP()->model->post->update( $postarr );
 }
 
 /**
@@ -723,8 +723,8 @@ function linguator_update_post( array $postarr ) {
  *     @type int|string $term_taxonomy_id The new term taxonomy ID. Can be a numeric string.
  * }
  */
-function linguator_update_term( int $term_id, array $args = array() ) {
-	return LMAT()->model->term->update( $term_id, $args );
+function linguator_pro_update_term( int $term_id, array $args = array() ) {
+	return LMATP()->model->term->update( $term_id, $args );
 }
 
 /**
@@ -736,7 +736,7 @@ function linguator_update_term( int $term_id, array $args = array() ) {
  *
  * @return Linguator_Frontend|Linguator_Admin|Linguator_Settings|Linguator_REST_Request|null
  */
-function LMAT() { // PHPCS:ignore WordPress.NamingConventions.ValidFunctionName
+function LMATP() { // PHPCS:ignore WordPress.NamingConventions.ValidFunctionName
 	return isset( $GLOBALS['linguator'] ) ? $GLOBALS['linguator'] : null;
 }
 

@@ -3,25 +3,25 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Controllers;
+namespace LinguatorPro\Includes\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Includes\Helpers\Linguator_Default_Term;
-use Linguator\Includes\Filters\Linguator_Filters;
-use Linguator\Includes\Filters\Linguator_Filters_Links;
-use Linguator\Includes\Filters\Linguator_Filters_Sanitization;
-use Linguator\Includes\Filters\Linguator_Filters_Widgets_Options;
-use Linguator\Admin\Controllers\Linguator_Admin_Links;
-use Linguator\Frontend\Controllers\Linguator_Frontend_Nav_Menu;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Helpers\Linguator_Default_Term;
+use LinguatorPro\Includes\Filters\Linguator_Filters;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Links;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Sanitization;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Widgets_Options;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Links;
+use LinguatorPro\Frontend\Controllers\Linguator_Frontend_Nav_Menu;
 
 
 
 /**
- * Main Linguator class for REST API requests, accessible from @see LMAT().
+ * Main Linguator class for REST API requests, accessible from @see LMATP().
  *
  *  
  */

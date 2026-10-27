@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Services;
+namespace LinguatorPro\Frontend\Services;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Services\Links\Linguator_Links;
-use Linguator\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Services\Links\Linguator_Links;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
 use WP_Term;
 
 
@@ -212,7 +212,7 @@ class Linguator_Frontend_Links extends Linguator_Links {
 	 * @return string
 	 */
 	public function linguator_get_archive_url( $language ) {
-		$url = linguator_get_requested_url();
+		$url = linguator_pro_get_requested_url();
 		$url = $this->links_model->switch_language_in_link( $url, $language );
 		$url = $this->links_model->remove_paged_from_link( $url );
 

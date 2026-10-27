@@ -2,17 +2,17 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Walkers\Linguator_Walker_Dropdown;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_Term;
 use WP_Ajax_Response;
-use Linguator\Includes\Capabilities\User;
+use LinguatorPro\Includes\Capabilities\User;
 
 /**
  * Manages filters and actions related to terms on admin side

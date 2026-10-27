@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sitemaps_Domain extends Linguator_Abstract_Sitemaps {
+class Linguator_Pro_Sitemaps_Domain extends Linguator_Pro_Abstract_Sitemaps {
 	/**
 	 * @var Linguator_Links_Abstract_Domain
 	 */

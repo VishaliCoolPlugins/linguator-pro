@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Filters;
+namespace LinguatorPro\Includes\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Model;
 
 
 /**

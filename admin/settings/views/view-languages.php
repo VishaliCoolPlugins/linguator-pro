@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // retrieve errors from transient
 // add them back to settings errors
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-if ( isset($header) && $header instanceof \Linguator\Settings\Header\Header ) {
+if ( isset($header) && $header instanceof \LinguatorPro\Settings\Header\Header ) {
 	$header->header();
 }
 

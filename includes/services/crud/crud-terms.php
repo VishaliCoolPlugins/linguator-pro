@@ -3,18 +3,18 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Crud;
+namespace LinguatorPro\Includes\Services\Crud;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Helpers\Linguator_Term_Slug;
-use Linguator\Modules\REST\Request;
-use Linguator\Includes\Capabilities\User;
-use Linguator\Includes\Capabilities\Create\Term as Create_Term;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Helpers\Linguator_Term_Slug;
+use LinguatorPro\Modules\REST\Request;
+use LinguatorPro\Includes\Capabilities\User;
+use LinguatorPro\Includes\Capabilities\Create\Term as Create_Term;
 
 /**
  * Adds actions and filters related to languages when creating, reading, updating or deleting posts

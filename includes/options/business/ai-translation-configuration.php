@@ -3,14 +3,14 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Options\Business;
+namespace LinguatorPro\Includes\Options\Business;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Options\Abstract_Option;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Abstract_Option;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Class defining post types list option.
@@ -102,8 +102,8 @@ class Ai_Translation_Configuration extends Abstract_Option {
         $filtered_value = array();
         $data_structure=self::get_data_structure();
         $provider_data=array_keys($data_structure['properties']['provider']['properties']);
-		$allowed_providers = function_exists( 'linguator_get_allowed_ai_providers' )
-			? linguator_get_allowed_ai_providers()
+		$allowed_providers = function_exists( 'linguator_pro_get_allowed_ai_providers' )
+			? linguator_pro_get_allowed_ai_providers()
 			: array( 'chrome_local_ai', 'google' );
 
         if(isset($value['provider'])){

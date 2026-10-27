@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Services;
+namespace LinguatorPro\Frontend\Services;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

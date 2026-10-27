@@ -2,14 +2,14 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Filters;
+namespace LinguatorPro\Frontend\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Filters\Linguator_Filters_Links;
-use Linguator\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Filters\Linguator_Filters_Links;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
 
 
 
@@ -70,7 +70,7 @@ class Linguator_Frontend_Filters_Links extends Linguator_Filters_Links {
 		add_action( 'wp_head', array( $this, 'wp_head' ), 1 );
 
 		// Modifies the home url
-		if ( linguator_get_constant( 'LINGUATOR_FILTER_HOME_URL', true ) ) {
+		if ( linguator_pro_get_constant( 'LINGUATOR_FILTER_HOME_URL', true ) ) {
 			add_filter( 'home_url', array( $this, 'home_url' ), 10, 2 );
 		}
 

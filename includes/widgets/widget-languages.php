@@ -3,16 +3,16 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Widgets;
+namespace LinguatorPro\Includes\Widgets;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Switcher\Assets;
-use Linguator\Includes\Switcher\Fields\Widget as Fields;
-use Linguator\Includes\Switcher\Settings\Settings;
-use Linguator\Includes\Switcher\Switcher;
+use LinguatorPro\Includes\Switcher\Assets;
+use LinguatorPro\Includes\Switcher\Fields\Widget as Fields;
+use LinguatorPro\Includes\Switcher\Settings\Settings;
+use LinguatorPro\Includes\Switcher\Switcher;
 use WP_Widget;
 
 /**
@@ -56,7 +56,7 @@ class Linguator_Widget_Languages extends WP_Widget {
 			$instance['layout'] = empty( $instance['dropdown'] ) ? 'vertical' : 'select';
 		}
 
-		$linguator = function_exists( 'LMAT' ) ? LMAT() : null;
+		$linguator = function_exists( 'LMATP' ) ? LMATP() : null;
 
 		if ( empty( $linguator->links ) ) {
 			return;

@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Includes\Other;
+namespace LinguatorPro\Includes\Other;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -383,12 +383,12 @@ class Linguator_Language {
 		}
 
 		// Linguator builtin flags, displayed at 18x12 pixels.
-		if ( ! empty( $code ) && is_readable( LINGUATOR_DIR . '/assets/flags/' . $code . '.svg' ) ) {
-			$default_flag['url']    = plugins_url( 'assets/flags/' . $code . '.svg', LINGUATOR_FILE );
+		if ( ! empty( $code ) && is_readable( LINGUATOR_PRO_DIR . '/assets/flags/' . $code . '.svg' ) ) {
+			$default_flag['url']    = plugins_url( 'assets/flags/' . $code . '.svg', LINGUATOR_PRO_FILE );
 			$default_flag['width']  = 18;
 			$default_flag['height'] = 12;
 
-			if ( linguator_get_constant( 'LINGUATOR_ENCODED_FLAGS', true ) ) {
+			if ( linguator_pro_get_constant( 'LINGUATOR_ENCODED_FLAGS', true ) ) {
 				$default_flag['src'] = $default_flag['url'];
 			}
 		}
@@ -645,7 +645,7 @@ class Linguator_Language {
 	 * @return string Language home URL.
 	 */
 	public function get_home_url() {
-		if ( ! linguator_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) || ! linguator_get_constant( 'LINGUATOR_CACHE_HOME_URL', true ) ) {
+		if ( ! linguator_pro_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) || ! linguator_pro_get_constant( 'LINGUATOR_CACHE_HOME_URL', true ) ) {
 			/**
 			 * Filters current `Linguator_Language` instance `home_url` property.
 			 *
@@ -668,7 +668,7 @@ class Linguator_Language {
 	 * @return string Language search URL.
 	 */
 	public function get_search_url() {
-		if ( ! linguator_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) || ! linguator_get_constant( 'LINGUATOR_CACHE_HOME_URL', true ) ) {
+		if ( ! linguator_pro_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) || ! linguator_pro_get_constant( 'LINGUATOR_CACHE_HOME_URL', true ) ) {
 			/**
 			 * Filters current `Linguator_Language` instance `search_url` property.
 			 *

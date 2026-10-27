@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @phpstan-param non-falsy-string $constant_name
  */
-function linguator_has_constant( string $constant_name ): bool {
+function linguator_pro_has_constant( string $constant_name ): bool {
 	return defined( $constant_name ); // phpcs:ignore WordPressVIPMinimum.Constants.ConstantString.NotCheckingConstantName
 }
 
@@ -36,8 +36,8 @@ function linguator_has_constant( string $constant_name ): bool {
  * @phpstan-param D $default
  * @phpstan-return D
  */
-function linguator_get_constant( string $constant_name, $default = null ) {
-	if ( ! linguator_has_constant( $constant_name ) ) {
+function linguator_pro_get_constant( string $constant_name, $default = null ) {
+	if ( ! linguator_pro_has_constant( $constant_name ) ) {
 		return $default;
 	}
 
@@ -56,8 +56,8 @@ function linguator_get_constant( string $constant_name, $default = null ) {
  * @phpstan-param non-falsy-string $constant_name
  * @phpstan-param int|float|string|bool|array|null $value
  */
-function linguator_set_constant( string $constant_name, $value ): bool {
-	if ( linguator_has_constant( $constant_name ) ) {
+function linguator_pro_set_constant( string $constant_name, $value ): bool {
+	if ( linguator_pro_has_constant( $constant_name ) ) {
 		return false;
 	}
 

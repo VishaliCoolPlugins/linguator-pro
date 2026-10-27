@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Services;
+namespace LinguatorPro\Frontend\Services;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -94,7 +94,7 @@ class Linguator_Canonical {
 		}
 
 		if ( empty( $requested_url ) ) {
-			$requested_url = linguator_get_requested_url();
+			$requested_url = linguator_pro_get_requested_url();
 		}
 
 		if ( ( is_single() && ( ! is_attachment() || get_option( 'wp_attachment_pages_enabled' ) ) ) || ( is_page() && ! is_front_page() ) ) {
@@ -164,7 +164,7 @@ class Linguator_Canonical {
 
 		// Protect against chained redirects.
 		if ( $redirect_url === $this->check_canonical_url( $redirect_url, false ) && wp_validate_redirect( $redirect_url ) ) {
-			wp_safe_redirect( $redirect_url, 301, LINGUATOR );
+			wp_safe_redirect( $redirect_url, 301, LINGUATOR_PRO );
 			exit;
 		}
 	}

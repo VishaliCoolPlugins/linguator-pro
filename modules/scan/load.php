@@ -44,6 +44,6 @@ require_once __DIR__ . '/checks/elementor.php';
 require_once __DIR__ . '/checks/elementor-headers.php';
 require_once __DIR__ . '/checks/elementor-loops.php';
 
-\Linguator\Modules\Scan\Freshness::init();
-\Linguator\Modules\Scan\Editor_Panel::init();
-\Linguator\Modules\Scan\Frontend_Inspector::init();
+\LinguatorPro\Modules\Scan\Freshness::init();
+\LinguatorPro\Modules\Scan\Editor_Panel::init();
+\LinguatorPro\Modules\Scan\Frontend_Inspector::init();

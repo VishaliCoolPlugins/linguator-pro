@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models;
+namespace LinguatorPro\Includes\Models;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-use Linguator\Includes\Helpers\Linguator_Cache;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Other\Linguator_Language_Factory;
-use Linguator\Includes\Models\Translatable\Linguator_Translatable_Objects;
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language_Factory;
+use LinguatorPro\Includes\Models\Translatable\Linguator_Translatable_Objects;
+use LinguatorPro\Includes\Options\Options;
 use WP_Term;
 use WP_Error;
 
@@ -63,7 +63,7 @@ class Languages {
 	private $is_creating_list = false;
 
 	/**
-	 * Tells if {@see Linguator\Includes\Models\Languages::get_list()} can be used.
+	 * Tells if {@see LinguatorPro\Includes\Models\Languages::get_list()} can be used.
 	 *
 	 * @var bool
 	 */
@@ -178,7 +178,7 @@ class Languages {
 		$args['term_group'] = $args['term_group'] ?? 0;
 
 		if ( ! empty( $args['locale'] ) && ( ! isset( $args['name'] ) || ! isset( $args['slug'] ) ) ) {
-			$languages = include LINGUATOR_DIR . 'admin/settings/controllers/languages.php';
+			$languages = include LINGUATOR_PRO_DIR . 'admin/settings/controllers/languages.php';
 			if ( ! empty( $languages[ $args['locale'] ] ) ) {
 				$found        = $languages[ $args['locale'] ];
 				$args['name'] = $args['name'] ?? $found['name'];
@@ -422,7 +422,7 @@ class Languages {
 		 *   Added $lang parameter.
 		 *
 		 * @param array $args {
-		 *   Arguments used to modify the language. @see Linguator\Includes\Models\Languages::update().
+		 *   Arguments used to modify the language. @see LinguatorPro\Includes\Models\Languages::update().
 		 *
 		 *   @type string $name           Language name (used only for display).
 		 *   @type string $slug           Language code (ideally 2-letters ISO 639-1 language code).
@@ -577,7 +577,7 @@ class Languages {
 
 			$this->is_creating_list = true;
 
-			if ( ! linguator_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) ) {
+			if ( ! linguator_pro_get_constant( 'LINGUATOR_CACHE_LANGUAGES', true ) ) {
 				// Create the languages from taxonomies.
 				$languages = $this->get_from_taxonomies();
 			} else {
@@ -625,7 +625,7 @@ class Languages {
 	}
 
 	/**
-	 * Tells if {@see Linguator\Includes\Models\Languages::get_list()} can be used.
+	 * Tells if {@see LinguatorPro\Includes\Models\Languages::get_list()} can be used.
 	 *
 	 *  
 	 *
@@ -636,7 +636,7 @@ class Languages {
 	}
 
 	/**
-	 * Sets the internal property `$languages_ready` to `true`, telling that {@see Linguator\Includes\Models\Languages::get_list()} can be used.
+	 * Sets the internal property `$languages_ready` to `true`, telling that {@see LinguatorPro\Includes\Models\Languages::get_list()} can be used.
 	 *
 	 *  
 	 *
@@ -899,7 +899,7 @@ class Languages {
 			$language_term = get_term( (int) $args['lang_id'] );
 
 			if ( $language_term instanceof WP_Term ) {
-				$old_data = linguator_maybe_unserialize( $language_term->description );
+				$old_data = linguator_pro_maybe_unserialize( $language_term->description );
 			}
 		}
 
@@ -956,7 +956,7 @@ class Languages {
 	 *
 	 *  
 	 *
-	 * @param array             $args Parameters of {@see Linguator\Includes\Models\Languages::add() or @see Linguator\Includes\Models\Languages::update()}.
+	 * @param array             $args Parameters of {@see LinguatorPro\Includes\Models\Languages::add() or @see LinguatorPro\Includes\Models\Languages::update()}.
 	 * @param Linguator_Language|null $lang Optional the language currently updated, the language is created if not set.
 	 * @return WP_Error
 	 *
@@ -995,7 +995,7 @@ class Languages {
 		}
 
 		// Validate flag.
-		if ( ! empty( $args['flag'] ) && ! is_readable( LINGUATOR_DIR . '/assets/flags/' . $args['flag'] . '.svg' ) ) {
+		if ( ! empty( $args['flag'] ) && ! is_readable( LINGUATOR_PRO_DIR . '/assets/flags/' . $args['flag'] . '.svg' ) ) {
 			$flag = Linguator_Language::get_flag_information( $args['flag'] );
 
 			if ( ! empty( $flag['url'] ) ) {
@@ -1036,7 +1036,7 @@ class Languages {
 		if ( is_array( $terms ) ) {
 			foreach ( $terms as $term ) {
 				$term_ids[ $term->taxonomy ][] = $term->term_id;
-				$tr = linguator_maybe_unserialize( $term->description );
+				$tr = linguator_pro_maybe_unserialize( $term->description );
 				$tr = is_array( $tr ) ? $tr : array();
 
 				/**
@@ -1336,7 +1336,7 @@ class Languages {
 	/**
 	 * Returns the list of existing language terms.
 	 * - Returns all terms, that are or not assigned to posts.
-	 * - Terms are ordered by `term_group` and `term_id` (see `Linguator\Includes\Models\Languages::filter_terms_orderby()`).
+	 * - Terms are ordered by `term_group` and `term_id` (see `LinguatorPro\Includes\Models\Languages::filter_terms_orderby()`).
 	 *
 	 *  
 	 *

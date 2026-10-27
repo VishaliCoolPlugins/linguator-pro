@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\yarpp;
+namespace LinguatorPro\Integrations\yarpp;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

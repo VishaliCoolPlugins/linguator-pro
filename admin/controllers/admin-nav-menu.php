@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 
-use Linguator\Includes\Controllers\Linguator_Nav_Menu;
-use Linguator\Includes\Switcher\Fields\Menu as Fields;
-use Linguator\Includes\Switcher\Settings\Menu as Settings;
+use LinguatorPro\Includes\Controllers\Linguator_Nav_Menu;
+use LinguatorPro\Includes\Switcher\Fields\Menu as Fields;
+use LinguatorPro\Includes\Switcher\Settings\Menu as Settings;
 
 
 
@@ -141,9 +141,9 @@ class Linguator_Admin_Nav_Menu extends Linguator_Nav_Menu {
 		}
 
 		$suffix = '.min';
-		wp_enqueue_script( 'lmat_nav_menu', plugins_url( "admin/assets/js/build/nav-menu{$suffix}.js", LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION, false );
-		wp_enqueue_style( 'lmat_nav_menu_filter', plugins_url( "admin/assets/css/admin-nav-menu-filter.css", LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION );
-		wp_enqueue_script( 'lmat_nav_menu_filter_js', plugins_url( "admin/assets/js/admin-nav-menu-filter.js", LINGUATOR_ROOT_FILE ), array(), LINGUATOR_VERSION, false );
+		wp_enqueue_script( 'lmat_nav_menu', plugins_url( "admin/assets/js/build/nav-menu{$suffix}.js", LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION, false );
+		wp_enqueue_style( 'lmat_nav_menu_filter', plugins_url( "admin/assets/css/admin-nav-menu-filter.css", LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION );
+		wp_enqueue_script( 'lmat_nav_menu_filter_js', plugins_url( "admin/assets/js/admin-nav-menu-filter.js", LINGUATOR_PRO_ROOT_FILE ), array(), LINGUATOR_PRO_VERSION, false );
 		
 		// Pass current language filter to JavaScript
 		$current_filter_lang = ! empty( $this->filter_lang ) ? $this->filter_lang->slug : 'all';

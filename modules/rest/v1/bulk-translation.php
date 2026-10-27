@@ -1,16 +1,16 @@
 <?php
 
-namespace Linguator\Modules\REST\V1;
+namespace LinguatorPro\Modules\REST\V1;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Capabilities\Capabilities;
-use Linguator\Includes\Services\Translation\Translation_Term_Model;
-use Linguator\Includes\Services\Media\Media_Translation_Service;
-use Linguator\Supported_Blocks\Supported_Blocks;
-use Linguator\Custom_Fields\Custom_Fields;
+use LinguatorPro\Includes\Capabilities\Capabilities;
+use LinguatorPro\Includes\Services\Translation\Translation_Term_Model;
+use LinguatorPro\Includes\Services\Media\Media_Translation_Service;
+use LinguatorPro\Supported_Blocks\Supported_Blocks;
+use LinguatorPro\Custom_Fields\Custom_Fields;
 use Translation_Entry;
 use Translations;
 use WP_Error;
@@ -20,7 +20,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 	/**
 	 * Bulk_Translation
 	 *
-	 * @package Linguator\Modules\Bulk_Translation
+	 * @package LinguatorPro\Modules\Bulk_Translation
 	 */
 	class Bulk_Translation {
 
@@ -333,8 +333,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			}
 
 			$ai_config = array();
-			if ( property_exists( LMAT(), 'options' ) && isset( LMAT()->options['ai_translation_configuration'] ) && is_array( LMAT()->options['ai_translation_configuration'] ) ) {
-				$ai_config = LMAT()->options['ai_translation_configuration'];
+			if ( property_exists( LMATP(), 'options' ) && isset( LMATP()->options['ai_translation_configuration'] ) && is_array( LMATP()->options['ai_translation_configuration'] ) ) {
+				$ai_config = LMATP()->options['ai_translation_configuration'];
 			}
 
 			$enabled = isset( $ai_config['provider'][ $provider ] ) && $ai_config['provider'][ $provider ];
@@ -462,8 +462,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 		 */
 		private function ai_translate_resolve_llm_model_id( string $model_override = '' ): string {
 			$models = array();
-			if ( property_exists( LMAT(), 'options' ) ) {
-				$m = LMAT()->model->options->get( 'api_keys' );
+			if ( property_exists( LMATP(), 'options' ) ) {
+				$m = LMATP()->model->options->get( 'api_keys' );
 				if ( is_array( $m ) ) {
 					$models = $m;
 				}
@@ -1560,12 +1560,12 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			$gutenberg_block = false;
 
 			$slug_translation_option = 'title_translate';
-			if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-				$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+			if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+				$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 			}
 
 			$post_meta_sync = true;
-			if ( ! isset( LMAT()->options['sync'] ) || ( isset( LMAT()->options['sync'] ) && ! in_array( 'post_meta', LMAT()->options['sync'] ) ) ) {
+			if ( ! isset( LMATP()->options['sync'] ) || ( isset( LMATP()->options['sync'] ) && ! in_array( 'post_meta', LMATP()->options['sync'] ) ) ) {
 				$post_meta_sync = false;
 			}
 
@@ -1621,7 +1621,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 						$posts_translate[ $postId ]['excerpt'] = $post_data->post_excerpt;
 					}
 
-					$posts_translate[ $postId ]['sourceLanguage'] = ! isset( $posts_translate[ $postId ]['sourceLanguage'] ) ? linguator_default_language() : $posts_translate[ $postId ]['sourceLanguage'];
+					$posts_translate[ $postId ]['sourceLanguage'] = ! isset( $posts_translate[ $postId ]['sourceLanguage'] ) ? linguator_pro_default_language() : $posts_translate[ $postId ]['sourceLanguage'];
 
 					if ( ! $post_meta_sync ) {
 						$post_meta_fields    = get_post_meta( $postId );
@@ -1629,7 +1629,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 
 						foreach ( $existed_meta_fields as $key ) {
 							if ( isset( $post_meta_fields[ $key ] ) && ! empty( $post_meta_fields[ $key ] ) && isset( $allowed_meta_fields[ $key ]['status'] ) && true === $allowed_meta_fields[ $key ]['status'] ) {
-								$value = $allowed_meta_fields[ $key ]['type'] && is_array( $post_meta_fields[ $key ] ) ? linguator_maybe_unserialize( $post_meta_fields[ $key ][0] ) : linguator_maybe_unserialize( $post_meta_fields[ $key ] );
+								$value = $allowed_meta_fields[ $key ]['type'] && is_array( $post_meta_fields[ $key ] ) ? linguator_pro_maybe_unserialize( $post_meta_fields[ $key ][0] ) : linguator_pro_maybe_unserialize( $post_meta_fields[ $key ] );
 								$posts_translate[ $postId ]['metaFields'][ $key ] = $value;
 							}
 						}
@@ -1694,8 +1694,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			}
 
 			// Append media strings per post when media translation is enabled.
-			if ( function_exists( 'LMAT' ) ) {
-				$media_service = new Media_Translation_Service( LMAT() );
+			if ( function_exists( 'LMATP' ) ) {
+				$media_service = new Media_Translation_Service( LMATP() );
 				if ( $media_service->is_enabled() ) {
 					foreach ( array_keys( $posts_translate ) as $pid ) {
 						$pid = absint( $pid );
@@ -1793,8 +1793,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			$content          = isset( $params['post_content'] ) ? $params['post_content'] : '';
 			$slug_translation_option = 'title_translate';
 
-			if ( property_exists( LMAT(), 'options' ) && isset( LMAT()->options['ai_translation_configuration']['slug_translation_option'] ) ) {
-				$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+			if ( property_exists( LMATP(), 'options' ) && isset( LMATP()->options['ai_translation_configuration']['slug_translation_option'] ) ) {
+				$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 			}
 
 			$meta_fields = isset( $params['post_meta_fields'] ) ? $params['post_meta_fields'] : '';
@@ -1888,7 +1888,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 				}
 			}
 
-			$media_service = new Media_Translation_Service( LMAT() );
+			$media_service = new Media_Translation_Service( LMATP() );
 			if ( $media_service->is_enabled() ) {
 				$media_validation = $media_service->validate_media_payload( $source_post_id, $target_language, $post_data );
 				if ( is_wp_error( $media_validation ) ) {
@@ -1897,7 +1897,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			}
 
 			global $linguator;
-			$post_clone   = new \Linguator_Sync_Post_Model( $linguator );
+			$post_clone   = new \Linguator_Pro_Sync_Post_Model( $linguator );
 			try {
 				// AI-supplied content must keep inline media text while IDs/URLs remap.
 				if ( isset( $post_data['post_content'] ) ) {
@@ -1990,8 +1990,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			$taxonomy_translate = array();
 
 			$slug_translation_option = 'title_translate';
-			if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-				$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+			if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+				$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 			}
 
 			if ( $translate_lang && count( $translate_lang ) > 0 ) {
@@ -2003,7 +2003,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 				$taxonomy_ids = json_decode( $params['ids'] );
 
 				foreach ( $taxonomy_ids as $taxonomy_id ) {
-					$taxonomy_translate[ $taxonomy_id ]['sourceLanguage'] = linguator_get_term_language( $taxonomy_id );
+					$taxonomy_translate[ $taxonomy_id ]['sourceLanguage'] = linguator_pro_get_term_language( $taxonomy_id );
 					$taxonomy_data                                        = get_term( $taxonomy_id, $taxonomy );
 
 					if ( ! $taxonomy_translate[ $taxonomy_id ]['sourceLanguage'] ) {
@@ -2028,7 +2028,7 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 
 					foreach ( $translate_lang as $lang ) {
 						if ( in_array( $lang, $lmat_langs_slugs ) ) {
-							$post_translate_status = linguator_get_term( $taxonomy_id, $lang );
+							$post_translate_status = linguator_pro_get_term( $taxonomy_id, $lang );
 
 							if ( ! $post_translate_status ) {
 								$taxonomy_translate[ $taxonomy_id ]['languages'][] = $lang;
@@ -2091,8 +2091,8 @@ if ( ! class_exists( 'Bulk_Translation' ) ) :
 			$taxonomy_slug           = isset( $params['taxonomy_slug'] ) ? sanitize_title( $params['taxonomy_slug'] ) : '';
 			$taxonomy_description    = isset( $params['taxonomy_description'] ) ? wp_kses_post( $this->ai_normalize_translation_string( (string) $params['taxonomy_description'] ) ) : '';
 					$slug_translation_option = 'title_translate';
-			if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-				$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+			if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+				$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 			}
 			if ( ! $target_language ) {
 				wp_send_json_error( 'Invalid target language' );

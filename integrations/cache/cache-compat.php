@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\cache;
+namespace LinguatorPro\Integrations\cache;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,7 +22,7 @@ class Linguator_Cache_Compat {
 	 *  
 	 */
 	public function init() {
-		if ( LMAT_COOKIE ) {
+		if ( LMATP_COOKIE ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'linguator_add_cookie_script' ) );
 		}
 
@@ -49,8 +49,8 @@ class Linguator_Cache_Compat {
 			return;
 		}
 
-		$domain   = ( 2 === LMAT()->options['force_lang'] ) ? wp_parse_url( LMAT()->links_model->home, PHP_URL_HOST ) : COOKIE_DOMAIN;
-		$samesite = ( 3 === LMAT()->options['force_lang'] ) ? 'None' : 'Lax';
+		$domain   = ( 2 === LMATP()->options['force_lang'] ) ? wp_parse_url( LMATP()->links_model->home, PHP_URL_HOST ) : COOKIE_DOMAIN;
+		$samesite = ( 3 === LMATP()->options['force_lang'] ) ? 'None' : 'Lax';
 
 		/** This filter is documented in include/cookie.php */
 		$expiration = (int) apply_filters( 'lmat_cookie_expiration', YEAR_IN_SECONDS );
@@ -67,8 +67,8 @@ class Linguator_Cache_Compat {
 			"(function() {
 				{$format}
 			}());\n",
-			esc_js( LMAT_COOKIE ),
-			esc_js( linguator_current_language() ),
+			esc_js( LMATP_COOKIE ),
+			esc_js( linguator_pro_current_language() ),
 			esc_js( COOKIEPATH ),
 			$domain ? '; domain=' . esc_js( $domain ) : '',
 			is_ssl() ? '; secure' : '',
@@ -77,7 +77,7 @@ class Linguator_Cache_Compat {
 		);
 
 		// Need to register prior to enqueue empty script and add extra code to it.
-		wp_register_script( 'lmat_cookie_script', '', array(), LINGUATOR_VERSION, true );
+		wp_register_script( 'lmat_cookie_script', '', array(), LINGUATOR_PRO_VERSION, true );
 		wp_enqueue_script( 'lmat_cookie_script' );
 		wp_add_inline_script( 'lmat_cookie_script', $js );
 	}
@@ -89,7 +89,7 @@ class Linguator_Cache_Compat {
 	 *  
 	 */
 	public function linguator_do_not_cache_site_home() {
-		if ( ! defined( 'DONOTCACHEPAGE' ) && LMAT()->options['browser'] && LMAT()->options['hide_default'] && is_front_page() && linguator_current_language() === linguator_default_language() ) {
+		if ( ! defined( 'DONOTCACHEPAGE' ) && LMATP()->options['browser'] && LMATP()->options['hide_default'] && is_front_page() && linguator_pro_current_language() === linguator_pro_default_language() ) {
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 			define( 'DONOTCACHEPAGE', true );
 		}
@@ -103,11 +103,11 @@ class Linguator_Cache_Compat {
 	 * @param int $post_id Post id.
 	 */
 	public function clean_post_cache( $post_id ) {
-		$lang = LMAT()->model->post->get_language( $post_id );
+		$lang = LMATP()->model->post->get_language( $post_id );
 
 		if ( $lang ) {
 			$filter_callback = function ( $link, $post_type ) use ( $lang ) {
-				return linguator_is_translated_post_type( $post_type ) && 'post' !== $post_type ? LMAT()->links_model->switch_language_in_link( $link, $lang ) : $link;
+				return linguator_pro_is_translated_post_type( $post_type ) && 'post' !== $post_type ? LMATP()->links_model->switch_language_in_link( $link, $lang ) : $link;
 			};
 			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			add_filter( 'post_type_archive_link', $filter_callback, 99, 2 );

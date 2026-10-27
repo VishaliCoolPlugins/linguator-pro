@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Filters;
+namespace LinguatorPro\Frontend\Filters;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Helpers\Linguator_Cache;
+use LinguatorPro\Includes\Helpers\Linguator_Cache;
 
 
 

@@ -1,5 +1,5 @@
 <?php
-namespace Linguator\Modules\Page_Translation;
+namespace LinguatorPro\Modules\Page_Translation;
 
 /**
  * LMAT Page Translation Ajax Handler
@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Other\Linguator_Translation_Dashboard;
-use Linguator\Custom_Fields\Custom_Fields;
-use Linguator\Includes\Services\Media\Media_Translation_Service;
+use LinguatorPro\Includes\Other\Linguator_Translation_Dashboard;
+use LinguatorPro\Custom_Fields\Custom_Fields;
+use LinguatorPro\Includes\Services\Media\Media_Translation_Service;
 
 /**
  * Handle LMAT Page Translation ajax requests
@@ -83,7 +83,7 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 
 			$post_meta_sync = true;
 
-            if (!isset(LMAT()->options['sync']) || (isset(LMAT()->options['sync']) && !in_array('post_meta', LMAT()->options['sync']))) {
+            if (!isset(LMATP()->options['sync']) || (isset(LMATP()->options['sync']) && !in_array('post_meta', LMATP()->options['sync']))) {
                 $post_meta_sync = false;
             }
 
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 
 			foreach($existed_meta_fields as $key){
 				if(isset($post_meta_fields[$key]) && !empty($post_meta_fields[$key]) && isset($allowed_meta_fields[$key]['status']) && true === $allowed_meta_fields[$key]['status']){
-					$value=$allowed_meta_fields[$key]['type'] && is_array($post_meta_fields[$key]) ? linguator_maybe_unserialize($post_meta_fields[$key][0]) : linguator_maybe_unserialize($post_meta_fields[$key]);
+					$value=$allowed_meta_fields[$key]['type'] && is_array($post_meta_fields[$key]) ? linguator_pro_maybe_unserialize($post_meta_fields[$key][0]) : linguator_pro_maybe_unserialize($post_meta_fields[$key]);
 					$filtered_meta_fields[$key]=$value;
 				}
 			}
@@ -129,8 +129,8 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 
 				$slug_translation_option = 'title_translate';
 
-				if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-					$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+				if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+					$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 				}
 
 				$content = $post_data->post_content;
@@ -144,8 +144,8 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 				 */
 				$content = apply_filters( 'lmat_post_content_for_translation', $content, $post_id );
 
-				if ( function_exists( 'linguator_replace_links_with_translations' ) ) {
-					$content = linguator_replace_links_with_translations( $content, $locale, $current_locale );
+				if ( function_exists( 'linguator_pro_replace_links_with_translations' ) ) {
+					$content = linguator_pro_replace_links_with_translations( $content, $locale, $current_locale );
 				}
 
 				$meta_fields = get_post_meta( $post_id );
@@ -161,8 +161,8 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 				}
 
 				// Append media strings when media translation is enabled.
-				if ( function_exists( 'LMAT' ) ) {
-					$media_service = new Media_Translation_Service( LMAT() );
+				if ( function_exists( 'LMATP' ) ) {
+					$media_service = new Media_Translation_Service( LMATP() );
 					if ( $media_service->is_enabled() ) {
 						$featured = $media_service->get_featured_image_strings( $post_id );
 						if ( ! empty( $featured ) ) {
@@ -300,19 +300,19 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 				wp_send_json_error( __( 'Unauthorized', 'linguator-pro' ), 403 );
 			}
 
-			if ( ! function_exists( 'LMAT' ) ) {
+			if ( ! function_exists( 'LMATP' ) ) {
 				wp_send_json_error( __( 'Linguator not available.', 'linguator-pro' ), 500 );
 			}
 
-			$media_service = new Media_Translation_Service( LMAT() );
+			$media_service = new Media_Translation_Service( LMATP() );
 
 			if ( ! $media_service->is_enabled() ) {
 				wp_send_json_success( array( 'message' => __( 'Media translation is disabled.', 'linguator-pro' ) ) );
 			}
 
-			$target_language = LMAT()->model->post->get_language( $post_id );
+			$target_language = LMATP()->model->post->get_language( $post_id );
 			$linked_post_id  = $target_language
-				? (int) LMAT()->model->post->get_translation( $source_post_id, $target_language )
+				? (int) LMATP()->model->post->get_translation( $source_post_id, $target_language )
 				: 0;
 
 			// Single-page translation applies content before the editor's first
@@ -401,7 +401,7 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 				return;
 			}
 
-			if ( ! current_user_can( 'edit_post', $post_id ) || ! function_exists( 'LMAT' ) ) {
+			if ( ! current_user_can( 'edit_post', $post_id ) || ! function_exists( 'LMATP' ) ) {
 				return;
 			}
 
@@ -410,7 +410,7 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 				return;
 			}
 
-			$media_service = new Media_Translation_Service( LMAT() );
+			$media_service = new Media_Translation_Service( LMATP() );
 			if ( ! $media_service->is_enabled() ) {
 				delete_post_meta( $post_id, '_lmat_pending_media_map' );
 				return;
@@ -467,8 +467,8 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 			$new_post_name           = false;
 			
 			$slug_translation_option = 'title_translate';
-			if(property_exists(LMAT(), 'options') && isset(LMAT()->options['ai_translation_configuration']['slug_translation_option'])){
-				$slug_translation_option = LMAT()->options['ai_translation_configuration']['slug_translation_option'];
+			if(property_exists(LMATP(), 'options') && isset(LMATP()->options['ai_translation_configuration']['slug_translation_option'])){
+				$slug_translation_option = LMATP()->options['ai_translation_configuration']['slug_translation_option'];
 			}
 
 			$elementor_data = ! empty( $_POST['elementor_data'] ) ? wp_unslash( $_POST['elementor_data'] ) : '';
@@ -494,10 +494,10 @@ if ( ! class_exists( 'Linguator_Page_Translation_Helper' ) ) {
 					}
 
 					// Remap attachment IDs and URLs when media translation is enabled.
-					if ( function_exists( 'LMAT' ) ) {
-						$media_service = new Media_Translation_Service( LMAT() );
+					if ( function_exists( 'LMATP' ) ) {
+						$media_service = new Media_Translation_Service( LMATP() );
 						if ( $media_service->is_enabled() ) {
-							$target_language = LMAT()->model->post->get_language( $post_id );
+							$target_language = LMATP()->model->post->get_language( $post_id );
 							if ( $target_language ) {
 								$elementor_data = $media_service->remap_elementor_media( $elementor_data, $target_language );
 							}

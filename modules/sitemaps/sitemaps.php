@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sitemaps extends Linguator_Abstract_Sitemaps {
+class Linguator_Pro_Sitemaps extends Linguator_Pro_Abstract_Sitemaps {
 	/**
 	 * @var Linguator_Links_Model
 	 */
@@ -122,7 +122,7 @@ class Linguator_Sitemaps extends Linguator_Abstract_Sitemaps {
 	 */
 	public function replace_provider( $provider ) {
 		if ( $provider instanceof WP_Sitemaps_Provider ) {
-			$provider = new Linguator_Multilingual_Sitemaps_Provider( $provider, $this->links_model );
+			$provider = new Linguator_Pro_Multilingual_Sitemaps_Provider( $provider, $this->links_model );
 		}
 		return $provider;
 	}

@@ -2,7 +2,7 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Integrations\wp_sweep;
+namespace LinguatorPro\Integrations\wp_sweep;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -49,13 +49,13 @@ class Linguator_WP_Sweep {
 		$_term_ids = array();
 
 		foreach ( $excluded_term_ids as $excluded_term_id ) {
-			$_term_ids = array_merge( $_term_ids, array_values( linguator_get_term_translations( $excluded_term_id ) ) );
+			$_term_ids = array_merge( $_term_ids, array_values( linguator_pro_get_term_translations( $excluded_term_id ) ) );
 		}
 
 		$excluded_term_ids = array_merge( $excluded_term_ids, $_term_ids );
 
 		// Add the terms of our languages.
-		foreach ( LMAT()->model->get_languages_list() as $language ) {
+		foreach ( LMATP()->model->get_languages_list() as $language ) {
 			$excluded_term_ids = array_merge(
 				$excluded_term_ids,
 				array_values( $language->get_tax_props( 'term_id' ) )

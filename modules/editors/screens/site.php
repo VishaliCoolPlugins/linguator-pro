@@ -3,16 +3,16 @@
  * @package Linguator 
  */
 
-namespace Linguator\Modules\Editors\Screens;
+namespace LinguatorPro\Modules\Editors\Screens;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Linguator\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Base\Linguator_Base;
 use WP_Screen;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Modules\Full_Site_Editing\Linguator_FSE_Tools;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Modules\Full_Site_Editing\Linguator_FSE_Tools;
 
 /**
  * Class to manage Site editor scripts.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Linguator\Modules\Blocks;
+namespace LinguatorPro\Modules\Blocks;
 
-use Linguator\Includes\Switcher\Switcher;
-use Linguator\Includes\Switcher\Element\Abstract_Element;
-use Linguator\Includes\Switcher\Element\Nav as Element;
-use Linguator\Includes\Switcher\Settings\Menu as Settings;
+use LinguatorPro\Includes\Switcher\Switcher;
+use LinguatorPro\Includes\Switcher\Element\Abstract_Element;
+use LinguatorPro\Includes\Switcher\Element\Nav as Element;
+use LinguatorPro\Includes\Switcher\Settings\Menu as Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

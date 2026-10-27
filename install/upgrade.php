@@ -3,13 +3,13 @@
  * @package Linguator
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Don't access directly.
 }
 
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Runs one-shot data upgrades when the stored plugin version is older than the code.
@@ -63,7 +63,7 @@ class Linguator_Upgrade {
 			return;
 		}
 
-		if ( version_compare( $previous_version, LINGUATOR_VERSION, '<' ) ) {
+		if ( version_compare( $previous_version, LINGUATOR_PRO_VERSION, '<' ) ) {
 			$this->upgrade( $previous_version );
 		}
 
@@ -150,7 +150,7 @@ class Linguator_Upgrade {
 		$updated = false;
 
 		foreach ( $terms as $term ) {
-			$description = linguator_maybe_unserialize( $term->description );
+			$description = linguator_pro_maybe_unserialize( $term->description );
 			$description = is_array( $description ) ? $description : array();
 
 			if ( isset( $description['flag_code'] ) && is_string( $description['flag_code'] ) && isset( $to_migrate[ $description['flag_code'] ] ) ) {

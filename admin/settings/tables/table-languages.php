@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Settings\Tables;
+namespace LinguatorPro\Settings\Tables;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 use WP_List_Table;
 
 

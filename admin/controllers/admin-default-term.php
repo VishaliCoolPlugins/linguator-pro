@@ -2,13 +2,13 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Helpers\Linguator_Default_Term;
+use LinguatorPro\Includes\Helpers\Linguator_Default_Term;
 
 
 

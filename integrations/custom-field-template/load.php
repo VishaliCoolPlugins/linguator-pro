@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/cft.php';
 
-use Linguator\Integrations\custom_field_template\Linguator_Cft;
-use Linguator\Integrations\Linguator_Integrations;
+use LinguatorPro\Integrations\custom_field_template\Linguator_Cft;
+use LinguatorPro\Integrations\Linguator_Integrations;
 
 add_action(
 	'plugins_loaded',

@@ -7,7 +7,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Admin\Controllers;
+namespace LinguatorPro\Admin\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -160,16 +160,16 @@ class Linguator_Admin_Menu_Sync {
 	private function enqueue_assets() {
 		wp_enqueue_style(
 			'lmat-menu-sync',
-			plugins_url( 'admin/assets/css/admin-menu-sync.css', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/css/admin-menu-sync.css', LINGUATOR_PRO_ROOT_FILE ),
 			array(),
-			LINGUATOR_VERSION
+			LINGUATOR_PRO_VERSION
 		);
 
 		wp_enqueue_script(
 			'lmat-menu-sync',
-			plugins_url( 'admin/assets/js/admin-menu-sync.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/admin-menu-sync.js', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'jquery' ),
-			LINGUATOR_VERSION,
+			LINGUATOR_PRO_VERSION,
 			true
 		);
 	}
@@ -201,7 +201,7 @@ class Linguator_Admin_Menu_Sync {
 	 */
 	private function build_language_data( $menu_id, $simplified = false ) {
 		$languages            = $this->model->languages->get_list();
-		$predefined_languages = include LINGUATOR_DIR . '/admin/settings/controllers/languages.php';
+		$predefined_languages = include LINGUATOR_PRO_DIR . '/admin/settings/controllers/languages.php';
 		$lang_data            = array();
 
 		if ( $simplified ) {
@@ -645,7 +645,7 @@ class Linguator_Admin_Menu_Sync {
 				return false;
 			}
 			
-			$translations = linguator_get_post_translations( $item->object_id );
+			$translations = linguator_pro_get_post_translations( $item->object_id );
 			
 			// If no translations array exists, the post isn't in a translation group yet
 			if ( empty( $translations ) ) {
@@ -669,7 +669,7 @@ class Linguator_Admin_Menu_Sync {
 
 		// Check if taxonomy item has translation
 		if ( $item->type === 'taxonomy' ) {
-			$translations = linguator_get_term_translations( $item->object_id );
+			$translations = linguator_pro_get_term_translations( $item->object_id );
 			
 			if ( ! isset( $translations[ $lang->slug ] ) ) {
 				return false;
@@ -729,7 +729,7 @@ class Linguator_Admin_Menu_Sync {
 			}
 			
 			// Get translated post (supports all post types including custom)
-			$translations = linguator_get_post_translations( $item->object_id );
+			$translations = linguator_pro_get_post_translations( $item->object_id );
 			
 			if ( ! isset( $translations[ $lang->slug ] ) ) {
 				return false; // No translation available
@@ -761,7 +761,7 @@ class Linguator_Admin_Menu_Sync {
 			}
 		} elseif ( $item->type === 'taxonomy' ) {
 			// Get translated term
-			$translations = linguator_get_term_translations( $item->object_id );
+			$translations = linguator_pro_get_term_translations( $item->object_id );
 			
 			if ( ! isset( $translations[ $lang->slug ] ) ) {
 				return false; // No translation available

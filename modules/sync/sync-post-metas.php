@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *  
  */
-class Linguator_Sync_Post_Metas extends Linguator_Sync_Metas {
+class Linguator_Pro_Sync_Post_Metas extends Linguator_Pro_Sync_Metas {
 	/**
 	 * Stores the plugin options.
 	 *

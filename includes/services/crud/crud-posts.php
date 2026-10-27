@@ -3,17 +3,17 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Services\Crud;
+namespace LinguatorPro\Includes\Services\Crud;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Modules\REST\Request;
-use Linguator\Includes\Capabilities\User;
-use Linguator\Includes\Capabilities\Create\Post as Create_Post;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Modules\REST\Request;
+use LinguatorPro\Includes\Capabilities\User;
+use LinguatorPro\Includes\Capabilities\Create\Post as Create_Post;
 use WP_Query;
 use WP_Term;
 

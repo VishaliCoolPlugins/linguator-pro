@@ -2,12 +2,12 @@
 /**
  * Handles plugin activation and deactivation for single and multisite installations.
  *
- * Note: This abstract class expects you to define the constants `LINGUATOR_BASENAME` and `LINGUATOR_VERSION`.
+ * Note: This abstract class expects you to define the constants `LINGUATOR_PRO_BASENAME` and `LINGUATOR_PRO_VERSION`.
  * 
  * @package Linguator
  */
 
-namespace Linguator\Install;
+namespace LinguatorPro\Install;
 
 /**
  * Provides a generic way to activate or deactivate plugins on all sites,
@@ -52,7 +52,7 @@ abstract class Linguator_Abstract_Activable {
 	 * @return string The plugin's basename, or empty string if not defined.
 	 */
 	public static function get_plugin_basename(): string {
-		return linguator_get_constant( 'LINGUATOR_BASENAME', '' );
+		return linguator_pro_get_constant( 'LINGUATOR_PRO_BASENAME', '' );
 	}
 
 	/**
@@ -62,7 +62,7 @@ abstract class Linguator_Abstract_Activable {
 	 * @return string The version number of the plugin, or empty string if not defined.
 	 */
 	public static function get_plugin_version(): string {
-		return linguator_get_constant( 'LINGUATOR_VERSION', '' );
+		return linguator_pro_get_constant( 'LINGUATOR_PRO_VERSION', '' );
 	}
 
 	/**

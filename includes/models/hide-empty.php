@@ -3,10 +3,10 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models;
+namespace LinguatorPro\Includes\Models;
 
-use Linguator\Includes\Models\Languages_Proxy_Interface;
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Models\Languages_Proxy_Interface;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 /**
  * This class helps to only show languages that are not empty.

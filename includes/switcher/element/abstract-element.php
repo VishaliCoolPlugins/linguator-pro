@@ -3,15 +3,15 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Switcher\Element;
+namespace LinguatorPro\Includes\Switcher\Element;
 
 use WP_Post;
-use Linguator\Includes\Services\Links\Linguator_Links;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Frontend\Services\Linguator_Frontend_Links;
-use Linguator\Includes\Models\Translated\Linguator_Translated_Post;
+use LinguatorPro\Includes\Services\Links\Linguator_Links;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Frontend\Services\Linguator_Frontend_Links;
+use LinguatorPro\Includes\Models\Translated\Linguator_Translated_Post;
 use WP_HTML_Tag_Processor;
-use Linguator\Includes\Switcher\Settings\Settings;
+use LinguatorPro\Includes\Switcher\Settings\Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

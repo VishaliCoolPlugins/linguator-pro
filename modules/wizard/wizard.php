@@ -4,20 +4,20 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Wizard;
+namespace LinguatorPro\Modules\Wizard;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Admin\Controllers\Linguator_Admin_Notices;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Admin\Controllers\Linguator_Admin_Model;
-use Linguator\Includes\Core\Linguator;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Notices;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Model;
+use LinguatorPro\Includes\Core\Linguator;
 
 
 
-use Linguator\Includes\Options\Options;
+use LinguatorPro\Includes\Options\Options;
 
 /**
  * Main class for Linguator wizard.
@@ -294,7 +294,7 @@ class Linguator_Wizard
 				'subheading' => 'Gutenberg block widget for the block editor, compatible with modern WordPress themes.'
             )
         );
-        if(linguator_is_plugin_active('elementor/elementor.php')){
+        if(linguator_pro_is_plugin_active('elementor/elementor.php')){
             $language_switcher_options[] = array(
                 'label' => __( 'Elementor Widget Based', 'linguator-pro' ),
                 'value' => 'elementor',
@@ -339,7 +339,7 @@ class Linguator_Wizard
 			$this->maybe_flush_rewrite_rules();
 			
 			// Enqueue React-based settings for settings tabs
-			$asset_file = plugin_dir_path(LINGUATOR_ROOT_FILE) . 'admin/assets/frontend/setup/setup.asset.php';
+			$asset_file = plugin_dir_path(LINGUATOR_PRO_ROOT_FILE) . 'admin/assets/frontend/setup/setup.asset.php';
 			$asset = require $asset_file;
 			$languages = $this->model->get_languages_list();
 			$home_page_id = get_option('page_on_front');
@@ -366,7 +366,7 @@ class Linguator_Wizard
 			// Enqueue React-based settings script
 			wp_enqueue_script(
 				'lmat_setup',
-				plugins_url('admin/assets/frontend/setup/setup.js', LINGUATOR_ROOT_FILE),
+				plugins_url('admin/assets/frontend/setup/setup.js', LINGUATOR_PRO_ROOT_FILE),
 				$asset['dependencies'],
 				$asset['version'],
 				true
@@ -382,13 +382,13 @@ class Linguator_Wizard
 			// Check for Polylang migration
 			$polylang_detection = false;
 			// Load migration class file directly to ensure it's available
-			$polylang_migration_file = LINGUATOR_DIR . '/includes/migration/polylang-migration.php';
+			$polylang_migration_file = LINGUATOR_PRO_DIR . '/includes/migration/polylang-migration.php';
 			if ( file_exists( $polylang_migration_file ) ) {
 				require_once $polylang_migration_file;
 				
-				if ( class_exists( '\Linguator\Includes\Migration\Polylang_Migration' ) ) {
+				if ( class_exists( '\LinguatorPro\Includes\Migration\Polylang_Migration' ) ) {
 					try {
-						$migration = new \Linguator\Includes\Migration\Polylang_Migration( $this->model, $this->options );
+						$migration = new \LinguatorPro\Includes\Migration\Polylang_Migration( $this->model, $this->options );
 						$polylang_detection = $migration->detect_polylang();
 					} catch ( \Exception $e ) {
 					}
@@ -398,13 +398,13 @@ class Linguator_Wizard
 			// Check for WPML migration
 			$wpml_detection = false;
 			// Load migration class file directly to ensure it's available
-			$wpml_migration_file = LINGUATOR_DIR . '/includes/migration/wpml-migration.php';
+			$wpml_migration_file = LINGUATOR_PRO_DIR . '/includes/migration/wpml-migration.php';
 			if ( file_exists( $wpml_migration_file ) ) {
 				require_once $wpml_migration_file;
 				
-				if ( class_exists( '\Linguator\Includes\Migration\WPML_Migration' ) ) {
+				if ( class_exists( '\LinguatorPro\Includes\Migration\WPML_Migration' ) ) {
 					try {
-						$wpml_migration = new \Linguator\Includes\Migration\WPML_Migration( $this->model, $this->options );
+						$wpml_migration = new \LinguatorPro\Includes\Migration\WPML_Migration( $this->model, $this->options );
 						$wpml_detection = $wpml_migration->detect_wpml();
 					} catch ( \Exception $e ) {
 					}
@@ -420,7 +420,7 @@ class Linguator_Wizard
 					'api_url'        => rest_url('lmat/v1/'),
 					'nonce'          => wp_create_nonce('wp_rest'),
 					'languages'      => $this->model->get_languages_list(),
-					'all_languages'  => \Linguator\Settings\Controllers\Linguator_Settings::get_predefined_languages(),
+					'all_languages'  => \LinguatorPro\Settings\Controllers\Linguator_Settings::get_predefined_languages(),
 					'media'          => $is_media_step_displayable,
 					'untranslated_contents' => $is_untranslated_contents_displayable,
 					'home_page' => $is_home_page_displayable,
@@ -430,8 +430,8 @@ class Linguator_Wizard
 					'language_switcher_options' => $this->get_language_switcher_options(),
 					'polylang_detection' => $polylang_detection,
 					'wpml_detection' => $wpml_detection,
-					'wp_ai_client_available' => function_exists( 'linguator_is_ai_provider_allowed' ) ? linguator_is_ai_provider_allowed( 'gemini' ) : false,
-					'allowed_providers'     => function_exists( 'linguator_get_allowed_ai_providers' ) ? linguator_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
+					'wp_ai_client_available' => function_exists( 'linguator_pro_is_ai_provider_allowed' ) ? linguator_pro_is_ai_provider_allowed( 'gemini' ) : false,
+					'allowed_providers'     => function_exists( 'linguator_pro_get_allowed_ai_providers' ) ? linguator_pro_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
 				)
 			);
 
@@ -439,7 +439,7 @@ class Linguator_Wizard
 				'lmat_setup',
 				'lmat_setup_flag_data',
 				[
-					'flagsUrl' => plugin_dir_url(LINGUATOR_ROOT_FILE) . '/assets/flags/',
+					'flagsUrl' => plugin_dir_url(LINGUATOR_PRO_ROOT_FILE) . '/assets/flags/',
 					'nonce' => wp_create_nonce('wp_rest'),
 					'restUrl' => rest_url('lmat/v1/'),
 				]
@@ -447,9 +447,9 @@ class Linguator_Wizard
 			// Enqueue styles
 			wp_enqueue_style(
 				'lmat_setup',
-				plugins_url('admin/assets/css/build/main.css', LINGUATOR_ROOT_FILE),
+				plugins_url('admin/assets/css/build/main.css', LINGUATOR_PRO_ROOT_FILE),
 				array(),
-				LINGUATOR_VERSION
+				LINGUATOR_PRO_VERSION
 			);
 			
 			// Enqueue custom font for icons using centralized method

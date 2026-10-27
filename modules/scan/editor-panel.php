@@ -5,7 +5,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Scan;
+namespace LinguatorPro\Modules\Scan;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,10 +40,10 @@ class Editor_Panel {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return \Linguator\Includes\Other\Linguator_Model|null
+	 * @return \LinguatorPro\Includes\Other\Linguator_Model|null
 	 */
 	private static function model() {
-		return function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
+		return function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
 	}
 
 	/**
@@ -126,16 +126,16 @@ class Editor_Panel {
 		wp_enqueue_style( 'revisions' );
 		wp_enqueue_style(
 			'lmat-scan-editor-panel',
-			plugins_url( 'admin/assets/css/scan-editor-panel.css', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/css/scan-editor-panel.css', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'revisions' ),
-			LINGUATOR_VERSION
+			LINGUATOR_PRO_VERSION
 		);
 
 		wp_enqueue_script(
 			'lmat-scan-classic-panel',
-			plugins_url( 'admin/assets/js/scan-classic-panel.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/scan-classic-panel.js', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'wp-api-fetch', 'wp-a11y' ),
-			LINGUATOR_VERSION,
+			LINGUATOR_PRO_VERSION,
 			true
 		);
 
@@ -235,11 +235,11 @@ class Editor_Panel {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		$post   = get_post();
 
-		if ( ! $screen || 'post' !== $screen->base || ! $post || ! function_exists( 'LMAT' ) ) {
+		if ( ! $screen || 'post' !== $screen->base || ! $post || ! function_exists( 'LMATP' ) ) {
 			return;
 		}
 
-		$model = LMAT()->model ?? null;
+		$model = LMATP()->model ?? null;
 		if ( ! $model || ! $model->has_languages() || ! in_array( $screen->post_type, (array) $model->get_translated_post_types(), true ) ) {
 			return;
 		}
@@ -252,16 +252,16 @@ class Editor_Panel {
 		wp_enqueue_style( 'revisions' );
 		wp_enqueue_style(
 			'lmat-scan-editor-panel',
-			plugins_url( 'admin/assets/css/scan-editor-panel.css', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/css/scan-editor-panel.css', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'revisions' ),
-			LINGUATOR_VERSION
+			LINGUATOR_PRO_VERSION
 		);
 
 		wp_enqueue_script(
 			'lmat-scan-editor-panel',
-			plugins_url( 'admin/assets/js/scan-editor-panel.js', LINGUATOR_ROOT_FILE ),
+			plugins_url( 'admin/assets/js/scan-editor-panel.js', LINGUATOR_PRO_ROOT_FILE ),
 			array( 'wp-plugins', 'wp-edit-post', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-i18n', 'wp-a11y', 'wp-api-fetch' ),
-			LINGUATOR_VERSION,
+			LINGUATOR_PRO_VERSION,
 			true
 		);
 

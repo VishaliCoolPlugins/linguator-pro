@@ -3,7 +3,7 @@
  * @package Linguator
  */
 
-namespace Linguator\Modules\Editors;
+namespace LinguatorPro\Modules\Editors;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WP_Post;
-use Linguator\Includes\Base\Linguator_Base;
-use Linguator\Includes\Other\Linguator_Model;
-use Linguator\Includes\Other\Linguator_Language;
-use Linguator\Admin\Controllers\Linguator_Admin_Block_Editor;
+use LinguatorPro\Includes\Base\Linguator_Base;
+use LinguatorPro\Includes\Other\Linguator_Model;
+use LinguatorPro\Includes\Other\Linguator_Language;
+use LinguatorPro\Admin\Controllers\Linguator_Admin_Block_Editor;
 use WP_Block_Editor_Context;
 
 /**

@@ -3,9 +3,9 @@
  * @package Linguator
  */
 
-namespace Linguator\Includes\Models;
+namespace LinguatorPro\Includes\Models;
 
-use Linguator\Includes\Other\Linguator_Language;
+use LinguatorPro\Includes\Other\Linguator_Language;
 
 // Prevent direct access to this file for security.
 defined( 'ABSPATH' ) || exit;

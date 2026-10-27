@@ -2,17 +2,17 @@
 /**
  * @package Linguator
  */
-namespace Linguator\Frontend\Controllers;
+namespace LinguatorPro\Frontend\Controllers;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-use Linguator\Includes\Controllers\Linguator_Nav_Menu;
-use Linguator\Includes\Switcher\Switcher;
-use Linguator\Includes\Switcher\Element\Nav;
-use Linguator\Includes\Switcher\Fields\Menu as Fields;
-use Linguator\Includes\Switcher\Settings\Menu as Settings;
+use LinguatorPro\Includes\Controllers\Linguator_Nav_Menu;
+use LinguatorPro\Includes\Switcher\Switcher;
+use LinguatorPro\Includes\Switcher\Element\Nav;
+use LinguatorPro\Includes\Switcher\Fields\Menu as Fields;
+use LinguatorPro\Includes\Switcher\Settings\Menu as Settings;
 
 
 
@@ -80,7 +80,7 @@ class Linguator_Frontend_Nav_Menu extends Linguator_Nav_Menu {
 	 * @return stdClass[] Modified menu items.
 	 */
 	public function wp_get_nav_menu_items( $items ) {
-		if ( empty( $this->curlang ) || empty( LMAT()->links ) ) {
+		if ( empty( $this->curlang ) || empty( LMATP()->links ) ) {
 			return $items;
 		}
 
@@ -91,7 +91,7 @@ class Linguator_Frontend_Nav_Menu extends Linguator_Nav_Menu {
 		// The customizer menus does not sort the items and they must be sorted before splitting the language switcher.
 		usort( $items, array( $this, 'linguator_usort_menu_items' ) );
 
-		$links     = LMAT()->links;
+		$links     = LMATP()->links;
 		$new_items = array();
 		$offset    = 0;
 

@@ -49,7 +49,7 @@ require_once dirname( __DIR__ ) . '/includes/switcher/element/abstract-element.p
 require_once dirname( __DIR__ ) . '/modules/blocks/language-switcher/abstract-language-switcher-block.php';
 require_once dirname( __DIR__ ) . '/modules/blocks/language-switcher/navigation-language-switcher-block.php';
 
-class Test_Switcher_Element extends \Linguator\Includes\Switcher\Element\Abstract_Element {
+class Test_Switcher_Element extends \LinguatorPro\Includes\Switcher\Element\Abstract_Element {
 	public function __construct() {}
 	public function get(): string { return ''; }
 	public function get_label(): string { return esc_html( $this->label ); }
@@ -62,7 +62,7 @@ $element->label        = 'French';
 $element->item_classes = array();
 
 $linguator = (object) array( 'model' => new stdClass(), 'links' => new stdClass() );
-$switcher  = new \Linguator\Modules\Blocks\Linguator_Navigation_Language_Switcher_Block( $linguator );
+$switcher  = new \LinguatorPro\Modules\Blocks\Linguator_Navigation_Language_Switcher_Block( $linguator );
 
 $create = new ReflectionMethod( $switcher, 'create_inner_block' );
 $created = $create->invoke(
