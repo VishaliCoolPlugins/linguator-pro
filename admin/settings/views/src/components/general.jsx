@@ -346,12 +346,12 @@ const General = ({ data, setData }) => {
                 for (const domain of domains) {
                     // Check if domain is empty
                     if (!domain.value || domain.value.trim() === '') {
-                        throw new Error(__("Domain URL is required for all languages", "translate-words"));
+                        throw new Error(__("Domain URL is required for all languages", "linguator-pro"));
                     }
                     
                     // Check if domain has proper protocol
                     if (!domain.value.includes("http://") && !domain.value.includes("https://")) {
-                        throw new Error(__("Please enter valid URLs with http:// or https://", "translate-words"));
+                        throw new Error(__("Please enter valid URLs with http:// or https://", "linguator-pro"));
                     }
                     final_domain[domain.code] = domain.value;
                     
@@ -433,12 +433,12 @@ const General = ({ data, setData }) => {
                     if (error?.message) {
                         throw new Error(error.message);
                     }
-                    throw new Error(__("Something went wrong", 'translate-words'));
+                    throw new Error(__("Something went wrong", 'linguator-pro'));
                 });
 
             toast.promise(response, {
-                loading: __('Saving Settings', 'translate-words'),
-                success: __('Settings Saved', 'translate-words'),
+                loading: __('Saving Settings', 'linguator-pro'),
+                success: __('Settings Saved', 'linguator-pro'),
                 error: (error) => error.message
             })
             await response
@@ -453,17 +453,17 @@ const General = ({ data, setData }) => {
         } catch (error) {
             setIsSaving(false)
             // Handle domain validation errors
-            if (error.message.includes(__("Please enter valid URLs", "translate-words")) ||
-                error.message.includes(__("Domain URL is required", "translate-words")) ||
-                error.message.includes(__("Invalid URL format", "translate-words")) ||
-                error.message.includes(__("Invalid domain format", "translate-words")) ||
-                error.message.includes(__("Duplicate domain host", "translate-words")) ||
+            if (error.message.includes(__("Please enter valid URLs", "linguator-pro")) ||
+                error.message.includes(__("Domain URL is required", "linguator-pro")) ||
+                error.message.includes(__("Invalid URL format", "linguator-pro")) ||
+                error.message.includes(__("Invalid domain format", "linguator-pro")) ||
+                error.message.includes(__("Duplicate domain host", "linguator-pro")) ||
                 error.message.includes("domain") || error.message.includes("Domain")) {
                 toast.error(error.message);
-            } else if (error.message.includes(__("Linguator was unable to access", "translate-words"))) {
+            } else if (error.message.includes(__("Linguator was unable to access", "linguator-pro"))) {
                 toast.error(error.message);
             } else {
-                toast.error(error.message || __("Something went wrong", "translate-words"));
+                toast.error(error.message || __("Something went wrong", "linguator-pro"));
             }
         }
     }
@@ -471,30 +471,30 @@ const General = ({ data, setData }) => {
 
     //label and descriptions of URL modifications
     const urlCheckboxes = [{
-        description: sprintf(__('Example1: %s/en/my-post', 'translate-words'), currentDomain),
-        description2: sprintf(__('Example2: %s/hi/my-post', 'translate-words'), currentDomain),
-        heading: __("Different languages in directories", 'translate-words'),
+        description: sprintf(__('Example1: %s/en/my-post', 'linguator-pro'), currentDomain),
+        description2: sprintf(__('Example2: %s/hi/my-post', 'linguator-pro'), currentDomain),
+        heading: __("Different languages in directories", 'linguator-pro'),
         value: 1
     }, {
         
-        description: sprintf(__('Example1: %sen.%s/my-post', 'translate-words'), currentDomain.match(/^https?:\/\//)[0], currentDomain.replace(/^https?:\/\//, '')),
-        description2: sprintf(__('Example2: %shi.%s/my-post', 'translate-words'), currentDomain.match(/^https?:\/\//)[0], currentDomain.replace(/^https?:\/\//, '')),
-        heading: __("The language is set from the subdomain name ", 'translate-words'),
+        description: sprintf(__('Example1: %sen.%s/my-post', 'linguator-pro'), currentDomain.match(/^https?:\/\//)[0], currentDomain.replace(/^https?:\/\//, '')),
+        description2: sprintf(__('Example2: %shi.%s/my-post', 'linguator-pro'), currentDomain.match(/^https?:\/\//)[0], currentDomain.replace(/^https?:\/\//, '')),
+        heading: __("The language is set from the subdomain name ", 'linguator-pro'),
         value: 2
     }, {
         description: '',
         description2: '',
-        heading: __("A different domain per language", 'translate-words'),
+        heading: __("A different domain per language", 'linguator-pro'),
         value: 3
     }]
 
     const directoryNamesLinks = [{
-        description: sprintf(__('Example: %s/en/', 'translate-words'), currentDomain),
-        heading: __("Remove /language/ in pretty permalinks", 'translate-words'),
+        description: sprintf(__('Example: %s/en/', 'linguator-pro'), currentDomain),
+        heading: __("Remove /language/ in pretty permalinks", 'linguator-pro'),
         value: true
     }, {
-        description: sprintf(__('Example: %s/language/en', 'translate-words'), currentDomain),
-        heading: __("Keep /language/ in pretty permalinks", 'translate-words'),
+        description: sprintf(__('Example: %s/language/en', 'linguator-pro'), currentDomain),
+        heading: __("Keep /language/ in pretty permalinks", 'linguator-pro'),
         value: false
     },]
     return (
@@ -513,7 +513,7 @@ const General = ({ data, setData }) => {
                             onClick={SaveSettings}
                             variant="primary"
                         >
-                            {__('Save Settings', 'translate-words')}
+                            {__('Save Settings', 'linguator-pro')}
                         </Button>
                     </Container.Item>
                 </Container>
@@ -523,9 +523,9 @@ const General = ({ data, setData }) => {
                     <Container.Item>
                         <Label size='md' className='font-bold flex items-center gap-2'>
                             <Link className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Language URL format', 'translate-words')}
+                            {__('Language URL format', 'linguator-pro')}
                         </Label>
-                        <Label variant='help'>{__('Decide how your website’s URLs will display different languages for visitors.', 'translate-words')}</Label>
+                        <Label variant='help'>{__('Decide how your website’s URLs will display different languages for visitors.', 'linguator-pro')}</Label>
                     </Container.Item>
                     <Container containerType='grid' className='grid-cols-1 xl:grid-cols-2 gap-4'>
                         <Container.Item >
@@ -598,7 +598,7 @@ const General = ({ data, setData }) => {
                                 forceLang !== 3 &&
                                 <Checkbox
                                     label={{
-                                        heading: __('Hide URL language information for default language', 'translate-words')
+                                        heading: __('Hide URL language information for default language', 'linguator-pro')
                                     }}
                                     size="sm"
                                     className='cursor-pointer'
@@ -640,8 +640,8 @@ const General = ({ data, setData }) => {
                                 forceLang < 2 && redirectLangExample.home &&
                                 <Checkbox
                                     label={{
-                                        heading: __('The front page URL contains the language code instead of the page name or page id', 'translate-words'),
-                                        description: sprintf(__('Example: %1$s instead of %2$s', 'translate-words'), redirectLangExample.home, redirectLangExample.page)
+                                        heading: __('The front page URL contains the language code instead of the page name or page id', 'linguator-pro'),
+                                        description: sprintf(__('Example: %1$s instead of %2$s', 'linguator-pro'), redirectLangExample.home, redirectLangExample.page)
                                     }}
                                     size="sm"
                                     className='cursor-pointer'
@@ -663,14 +663,14 @@ const General = ({ data, setData }) => {
                        <div>
                          <Label size='md' className='font-bold flex items-center gap-2'>
                             <Milestone className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Custom Post Types', 'translate-words')}
+                            {__('Custom Post Types', 'linguator-pro')}
                         </Label>
-                        <p>{__("Choose the custom post types you want to enable for translation. For example, if you have a 'Portfolio' post type, check the box to enable it for translation.", 'translate-words')}</p>
+                        <p>{__("Choose the custom post types you want to enable for translation. For example, if you have a 'Portfolio' post type, check the box to enable it for translation.", 'linguator-pro')}</p>
                        </div>
                         {AvailablePostTypes.length > 0 && (
                             <div className='flex justify-end gap-2 pr-0 lg:pr-[30%]'>
                                 <Label size='sm' className='cursor-pointer items-start' htmlFor="select-all-post-types">
-                                    {__('Select All', 'translate-words')}
+                                    {__('Select All', 'linguator-pro')}
                                 </Label>
                                 <Switch
                                     aria-label="Select All Post Types"
@@ -686,7 +686,7 @@ const General = ({ data, setData }) => {
                         {
                             AvailablePostTypes.length == 0 ?
                                 <div style={{ color: "red" }}>
-                                    {__('No Custom Post Types Available', 'translate-words')}
+                                    {__('No Custom Post Types Available', 'linguator-pro')}
                                 </div> :
                                 <div className='flex gap-4 flex-wrap'>
                                     {
@@ -724,14 +724,14 @@ const General = ({ data, setData }) => {
                         <div>
                             <Label size='md' className='font-bold flex items-center gap-2'>
                             <Milestone className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Custom Taxonomies', 'translate-words')}
+                            {__('Custom Taxonomies', 'linguator-pro')}
                         </Label>
-                        <p>{__('Choose the Custom Taxonomies you want to enable for translation', 'translate-words')}</p>
+                        <p>{__('Choose the Custom Taxonomies you want to enable for translation', 'linguator-pro')}</p>
                         </div>
                         {AvailableTaxonomies.length > 0 && (
                             <div className='flex justify-end gap-2' style={{paddingRight: '30%'}}>
                                 <Label size='sm' className='cursor-pointer items-start' htmlFor="select-all-taxonomies">
-                                    {__('Select All', 'translate-words')}
+                                    {__('Select All', 'linguator-pro')}
                                 </Label>
                                 <Switch
                                     aria-label="Select All Taxonomies"
@@ -747,7 +747,7 @@ const General = ({ data, setData }) => {
                         {
                             AvailableTaxonomies.length == 0 ?
                                 <div style={{ color: "red" }}>
-                                    {__('No Custom Taxonomies Available', 'translate-words')}
+                                    {__('No Custom Taxonomies Available', 'linguator-pro')}
                                 </div> :
                                 <div className='flex gap-4 flex-wrap'>
                                     {
@@ -777,13 +777,13 @@ const General = ({ data, setData }) => {
                         <div>
                         <Label size='md' className='font-bold flex items-center gap-2'>
                             <RefreshCcw className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Synchronization', 'translate-words')}
+                            {__('Synchronization', 'linguator-pro')}
                         </Label>
-                        <p>{__('Choose synchronization options for translated content.', 'translate-words')}</p>
+                        <p>{__('Choose synchronization options for translated content.', 'linguator-pro')}</p>
                         </div>
                         <div className='flex  justify-end  gap-2' style={{paddingRight: '30%'}}>
                             <Label size='sm' className='cursor-pointer items-start' htmlFor="select-all-sync">
-                                {__('Select All', 'translate-words')}
+                                {__('Select All', 'linguator-pro')}
                             </Label>
 
                             <Switch
@@ -821,10 +821,10 @@ const General = ({ data, setData }) => {
                     <Container.Item >
                         <h3 className='flex items-center gap-2'>
                             <Globe className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Detect Browser Language', 'translate-words')}
+                            {__('Detect Browser Language', 'linguator-pro')}
                         </h3>
                         <p>
-                            {__('When visitors open your homepage, Linguator displays it in their preferred language. To avoid issues, homepage caching is turned off for supported cache plugins.', 'translate-words')}
+                            {__('When visitors open your homepage, Linguator displays it in their preferred language. To avoid issues, homepage caching is turned off for supported cache plugins.', 'linguator-pro')}
                         </p>
                     </Container.Item>
                     <Container.Item className='flex items-center justify-end' style={{paddingRight: '30%'}}>
@@ -860,10 +860,10 @@ const General = ({ data, setData }) => {
                     <Container.Item>
                         <h3 className='flex items-center gap-2'>
                             <Focus className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Media', 'translate-words')}
+                            {__('Media', 'linguator-pro')}
                         </h3>
                         <p>
-                            {__('Turn on media translation only if you need to translate titles, alt text, captions, or descriptions. The original file stays the same.', 'translate-words')}
+                            {__('Turn on media translation only if you need to translate titles, alt text, captions, or descriptions. The original file stays the same.', 'linguator-pro')}
                         </p>
                     </Container.Item>
                     <Container.Item className='flex items-center justify-end' style={{paddingRight: '30%'}}>
@@ -885,10 +885,10 @@ const General = ({ data, setData }) => {
                     <Container.Item>
                         <h3 className='flex items-center gap-2'>
                             <Menu className="flex-shrink-0 size-5 text-icon-secondary" />
-                            {__('Menu Sync', 'translate-words')}
+                            {__('Menu Sync', 'linguator-pro')}
                         </h3>
                         <p>
-                            {__('Enable or disable the Menu Sync feature. This feature allows you to synchronize menu structures across different language versions of your site.', 'translate-words')}
+                            {__('Enable or disable the Menu Sync feature. This feature allows you to synchronize menu structures across different language versions of your site.', 'linguator-pro')}
                         </p>
                     </Container.Item>
                     <Container.Item className='flex items-center justify-end' style={{paddingRight: '30%'}}>
@@ -912,16 +912,16 @@ const General = ({ data, setData }) => {
                             <Container.Item>
                                 <h3 className='flex items-center gap-2'>
                                     <Share2 className="flex-shrink-0 size-5 text-icon-secondary" />
-                                    {__('Usage Data Sharing', 'translate-words')}
+                                    {__('Usage Data Sharing', 'linguator-pro')}
                                 </h3>
                                 <div>
-                                    <span>{__('Help us make this plugin more compatible with your site by sharing non-sensitive site data. ', 'translate-words')}</span>
+                                    <span>{__('Help us make this plugin more compatible with your site by sharing non-sensitive site data. ', 'linguator-pro')}</span>
                                     <a href="#" className="lmat-see-terms" onClick={handleTermsToggle}>[{showTerms ? 'Hide terms' : 'See terms'}]</a>
                                     <div id="termsBox" className="lmat-terms-box" style={{display: showTerms ? 'block' : 'none', paddingLeft: '20px', marginTop: '10px', fontSize: '12px', color: '#999'}}>
-                                        <p>{__("Opt in to receive email updates about security improvements, new features, helpful tutorials, and occasional special offers. We'll collect:", 'translate-words')} <a href='https://my.coolplugins.net/terms/usage-tracking/' target='_blank' rel="noopener noreferrer">Click Here</a></p>
+                                        <p>{__("Opt in to receive email updates about security improvements, new features, helpful tutorials, and occasional special offers. We'll collect:", 'linguator-pro')} <a href='https://my.coolplugins.net/terms/usage-tracking/' target='_blank' rel="noopener noreferrer">Click Here</a></p>
                                         <ul style={{listStyleType: 'auto', paddingLeft: '20px'}}>
-                                            <li>{__("Your website home URL and WordPress admin email.", 'translate-words')}</li>
-                                            <li>{__("To check plugin compatibility, we will collect the following: list of active plugins and themes, server type, MySQL version, WordPress version, memory limit, site language and database prefix.", 'translate-words')}</li>
+                                            <li>{__("Your website home URL and WordPress admin email.", 'linguator-pro')}</li>
+                                            <li>{__("To check plugin compatibility, we will collect the following: list of active plugins and themes, server type, MySQL version, WordPress version, memory limit, site language and database prefix.", 'linguator-pro')}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -954,7 +954,7 @@ const General = ({ data, setData }) => {
                             onClick={SaveSettings}
                             variant="primary"
                         >
-                            {__('Save Settings', 'translate-words')}
+                            {__('Save Settings', 'linguator-pro')}
                         </Button>
 
                     </Container.Item>

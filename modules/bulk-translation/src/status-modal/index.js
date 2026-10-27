@@ -27,7 +27,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
         sprintf(
             __(
                 'Translations already exist for all selected %s in the chosen languages. There are no new %s to translate.',
-                'translate-words'
+                'linguator-pro'
             ),
             lmatBulkTranslationGlobal.post_label,
             lmatBulkTranslationGlobal.post_label
@@ -90,7 +90,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                 }
                 setIsLoading(false);
                 setEmptyPostMessage(
-                    __('Could not load posts to translate. Check your connection and try again.', 'translate-words')
+                    __('Could not load posts to translate. Check your connection and try again.', 'linguator-pro')
                 );
             }
         }
@@ -259,15 +259,15 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
     const getBulkStatus=()=>{
         switch(bulkStatus){
             case 'running':
-                return __('In Progress', 'translate-words');
+                return __('In Progress', 'linguator-pro');
             case 'pending':
-                return __('Pending', 'translate-words');
+                return __('Pending', 'linguator-pro');
             case 'error':
-                return __('Includes errors', 'translate-words');
+                return __('Includes errors', 'linguator-pro');
             case 'completed':
-                return __('Completed', 'translate-words');
+                return __('Completed', 'linguator-pro');
             default:
-                return __('Status', 'translate-words');
+                return __('Status', 'linguator-pro');
         }
     }
 
@@ -360,11 +360,11 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
     }
 
     return (
-        errorModal && errorModalData ? <ErrorModalBox message={errorModalData.errorHtml || errorModalData.errorMessage || __('An unexpected error occurred.', 'translate-words')} onClose={closeErrorModal} Title={__('Bulk Translation Error', 'translate-words')} prefix={prefix} beforeClose={errorModalData.allowTranslate ? <button type="button" className={`${prefix}-ai-error-button button`} data-status="translateAgain" onClick={retryFailedTranslation}>{__('Translate', 'translate-words')}</button> : null} >
+        errorModal && errorModalData ? <ErrorModalBox message={errorModalData.errorHtml || errorModalData.errorMessage || __('An unexpected error occurred.', 'linguator-pro')} onClose={closeErrorModal} Title={__('Bulk Translation Error', 'linguator-pro')} prefix={prefix} beforeClose={errorModalData.allowTranslate ? <button type="button" className={`${prefix}-ai-error-button button`} data-status="translateAgain" onClick={retryFailedTranslation}>{__('Translate', 'linguator-pro')}</button> : null} >
             {errorModalData.aiError && serviceProvider === 'gemini' && (
                 <div className={`${prefix}-ai-error-buttons`}>
-                    <button type="button" className={`${prefix}-ai-error-button button`} data-status="translateAgain" onClick={AIErrorBtnHandler}>{__('Translate', 'translate-words')}</button>
-                    <button type="button" className={`${prefix}-ai-error-button button`} data-status="continue" onClick={AIErrorBtnHandler}>{__('Continue', 'translate-words')}</button>
+                    <button type="button" className={`${prefix}-ai-error-button button`} data-status="translateAgain" onClick={AIErrorBtnHandler}>{__('Translate', 'linguator-pro')}</button>
+                    <button type="button" className={`${prefix}-ai-error-button button`} data-status="continue" onClick={AIErrorBtnHandler}>{__('Continue', 'linguator-pro')}</button>
                 </div>
             )}
         </ErrorModalBox> :
@@ -372,25 +372,25 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
             <div className={`${prefix}-header`}>
                 <div className={`${prefix}-modal-header-inner`}>
                     <span className={`${prefix}-step-label`}>
-                        {__('STEP 2 OF 2', 'translate-words')}
+                        {__('STEP 2 OF 2', 'linguator-pro')}
                     </span>
                     <h2 className={`${prefix}-bulk-status-heading ${bulkStatus}`}>
-                        {sprintf(__('AI Translation %s', 'translate-words'), getBulkStatus())}
+                        {sprintf(__('AI Translation %s', 'linguator-pro'), getBulkStatus())}
                         {bulkStatus === 'running' && <span className={`${prefix}-bulk-status-running`}></span>}
                     </h2>
                     {bulkStatus === 'running' && (
                         <p className={`${prefix}-modal-desc`}>
-                            {__('Please keep this window open while your content is being translated.', 'translate-words')}
+                            {__('Please keep this window open while your content is being translated.', 'linguator-pro')}
                         </p>
                     )}
                     {bulkStatus === 'completed' &&
                         countInfo.errorPosts < 1 &&
                         !(translatePostInfo && Object.values(translatePostInfo).some((info) => info?.status === 'error')) &&
                         countInfo.stringsTranslated > 0 && (
-                            <p className={`${prefix}-modal-desc`}>{__('Your content has been translated successfully.', 'translate-words')}</p>
+                            <p className={`${prefix}-modal-desc`}>{__('Your content has been translated successfully.', 'linguator-pro')}</p>
                         )}
                 </div>
-                <button type="button" aria-label={__('Close', 'translate-words')} className={`${prefix}-modal-close ${prefix}-status-modal-close`} onClick={onModalClose}>&times;</button>
+                <button type="button" aria-label={__('Close', 'linguator-pro')} className={`${prefix}-modal-close ${prefix}-status-modal-close`} onClick={onModalClose}>&times;</button>
             </div>
             {(countInfo.totalPosts < 1 && countInfo.errorPosts < 1) && !isLoading ?
                     <p>{emptyPostMessage}</p> :
@@ -405,23 +405,23 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                             </div>
                             {charactersCountVisibility &&
                                 <div className={`${prefix}-translator-strings-count`}>
-                                    {__('Wahooo! You have saved your valuable time via auto translating', 'translate-words')}
-                                    <strong className="totalChars"> {countInfo.charactersTranslated} </strong>{__('characters using', 'translate-words')}
+                                    {__('Wahooo! You have saved your valuable time via auto translating', 'linguator-pro')}
+                                    <strong className="totalChars"> {countInfo.charactersTranslated} </strong>{__('characters using', 'linguator-pro')}
                                 <strong> {getServiceProviderLabel()}</strong>
                                 </div>
                             }
                         </> : (countInfo.postsTranslated > 0 &&
                             <div className={`${prefix}-count-container`}>
                                 <div className={`${prefix}-post-count`}>
-                                    <span className={`${prefix}-count-text-heading`}>{__('Posts', 'translate-words')} </span><br />
+                                    <span className={`${prefix}-count-text-heading`}>{__('Posts', 'linguator-pro')} </span><br />
                                     <span className={`${prefix}-post-translated-post`}>{countInfo.postsTranslated}/{countInfo.totalPosts}</span>
                                 </div>
                                 <div className={`${prefix}-string-count`}>
-                                    <span className={`${prefix}-count-text-heading`}>{__('Strings', 'translate-words')} </span><br />
+                                    <span className={`${prefix}-count-text-heading`}>{__('Strings', 'linguator-pro')} </span><br />
                                     <span className={`${prefix}-string-number`}>{countInfo.stringsTranslated}</span>
                                 </div>
                                 <div className={`${prefix}-char-count`}>
-                                    <span className={`${prefix}-count-text-heading`}>{__('Characters', 'translate-words')} </span><br />
+                                    <span className={`${prefix}-count-text-heading`}>{__('Characters', 'linguator-pro')} </span><br />
                                     <span className={`${prefix}-char-number`}>{countInfo.charactersTranslated}</span>
                                 </div>
                             </div>
@@ -470,16 +470,16 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                     !isLoading && Object.keys(translatePostInfo).length > 0 &&
                                     <div className={`${prefix}-status-header-container`}>
                                         <div className={`${prefix}-status-flag-th`}>
-                                            <span className={`${prefix}-status-header-label`}>{__('Language', 'translate-words')}</span>
+                                            <span className={`${prefix}-status-header-label`}>{__('Language', 'linguator-pro')}</span>
                                         </div>
                                         <div className={`${prefix}-status-status-th`}>
-                                            <span className={`${prefix}-status-header-label`}>{__('Status', 'translate-words')}</span>
+                                            <span className={`${prefix}-status-header-label`}>{__('Status', 'linguator-pro')}</span>
                                         </div>
                                         <div className={`${prefix}-status-title-th`}>
-                                            <span className={`${prefix}-status-header-label`}>{__('Title', 'translate-words')}</span>
+                                            <span className={`${prefix}-status-header-label`}>{__('Title', 'linguator-pro')}</span>
                                         </div>
                                         <div className={`${prefix}-status-actions-th`}>
-                                            <span className={`${prefix}-status-header-label`}>{__('Actions', 'translate-words')}</span>
+                                            <span className={`${prefix}-status-header-label`}>{__('Actions', 'linguator-pro')}</span>
                                         </div>
                                     </div>
                                 }
@@ -488,7 +488,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                         return (
                                             <div className={`${prefix}-status-inner-item`} key={key}>
                                                 <div className={`${prefix}-group-title`}>
-                                                    {errorPostsInfo[key]?.title || __('Untitled', 'translate-words')}
+                                                    {errorPostsInfo[key]?.title || __('Untitled', 'linguator-pro')}
                                                 </div>
                                                 <div className={`${prefix}-status-inner-item ${prefix}-error-message`}>
                                                     <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(errorPostsInfo[key].errorMessage, PURIFY_ERROR_HTML) }}></div>
@@ -508,7 +508,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                     return (
                                         <div className={`${prefix}-status-inner-item ${prefix}-td-${info.status}`} key={`group-title-${info.parentPostId || key}-${key}`}>
                                             {info.firstPostLanguage &&
-                                                <div className={`${prefix}-status-parent-post-title`}>{info.parentPostTitle || __('Untitled', 'translate-words')}</div>
+                                                <div className={`${prefix}-status-parent-post-title`}>{info.parentPostTitle || __('Untitled', 'linguator-pro')}</div>
                                             }
                                             <div className={`${prefix}-status-target-post`}>
                                                 <div className={`${prefix}-status-target-post-flag`}>
@@ -524,7 +524,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                                                     className={`${prefix}-status-error-button`}
                                                                     onClick={() => { handleErrorModal(info); }}
                                                                 >
-                                                                    {__('Error Details', 'translate-words')}
+                                                                    {__('Error Details', 'linguator-pro')}
                                                                 </button>
                                                             </div> :
                                                             <div className={`${prefix}-status-target-post-error ${prefix}-error-message`} style={{ gridColumn: 'span 4' }}>
@@ -545,15 +545,15 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                                             onClick={() => { handleInstallLanguagePack(info); }}
                                                         >
                                                             {isInstallingPack
-                                                                ? __('Loading…', 'translate-words')
-                                                                : __('Install language pack', 'translate-words')}
+                                                                ? __('Loading…', 'linguator-pro')
+                                                                : __('Install language pack', 'linguator-pro')}
                                                         </button>
                                                     </div> :
                                                     <>
                                                         <div className={`${prefix}-status-target-post-status`}>
                                                             <span className={`${prefix}-status ${info.messageClass} ${info.status}`}>
-                                                                {info.status === 'pending' && __('Pending', 'translate-words')}
-                                                                {info.status === 'completed' && __('Completed', 'translate-words')}
+                                                                {info.status === 'pending' && __('Pending', 'linguator-pro')}
+                                                                {info.status === 'completed' && __('Completed', 'linguator-pro')}
                                                                 {workingStatus && info.errorMessage && (
                                                                     <span className={`${prefix}-language-loading`}>{info.errorMessage}</span>
                                                                 )}
@@ -576,7 +576,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                                             {info.status === 'completed' ?
                                                                 <a href={info.postLink} target="_blank" rel="noopener noreferrer">{info.targetPostTitle}</a> :
                                                                 (info.status === 'in-progress' ?
-                                                                    <div className={`${prefix}-${info.messageClass}-text`}>{__('In Progress', 'translate-words')}<span></span></div> :
+                                                                    <div className={`${prefix}-${info.messageClass}-text`}>{__('In Progress', 'linguator-pro')}<span></span></div> :
                                                                     <div className={`${prefix}-progress-skeleton short`} style={{ marginInline: 'auto' }}></div>)
                                                             }
                                                         </div>
@@ -589,23 +589,23 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
                                                                             className={`${prefix}-review-btn button button-primary`}
-                                                                            title={sprintf(__('Open the translated %s for review', 'translate-words'), lmatBulkTranslationGlobal.post_label_singular || lmatBulkTranslationGlobal.post_label)}
+                                                                            title={sprintf(__('Open the translated %s for review', 'linguator-pro'), lmatBulkTranslationGlobal.post_label_singular || lmatBulkTranslationGlobal.post_label)}
                                                                         >
-                                                                            {__('Review', 'translate-words')}
+                                                                            {__('Review', 'linguator-pro')}
                                                                         </a>
                                                                     ) : (
                                                                         <button
                                                                             className={`${prefix}-review-btn button disabled`}
                                                                             disabled
-                                                                            title={sprintf(__('Please wait until all translations for this %s are complete before reviewing.', 'translate-words'), lmatBulkTranslationGlobal.post_label_singular || lmatBulkTranslationGlobal.post_label)}
+                                                                            title={sprintf(__('Please wait until all translations for this %s are complete before reviewing.', 'linguator-pro'), lmatBulkTranslationGlobal.post_label_singular || lmatBulkTranslationGlobal.post_label)}
                                                                         >
-                                                                            {__('Review', 'translate-words')}
+                                                                            {__('Review', 'linguator-pro')}
                                                                         </button>
                                                                     )}
                                                                 </span>
                                                                 :
                                                                 (info.status === 'in-progress' ?
-                                                                    <div className={`${prefix}-${info.messageClass}-text`}>{__('In Progress', 'translate-words')}<span></span></div> :
+                                                                    <div className={`${prefix}-${info.messageClass}-text`}>{__('In Progress', 'linguator-pro')}<span></span></div> :
                                                                     <div className={`${prefix}-progress-skeleton short`}></div>)
                                                             }
                                                         </div>
@@ -618,7 +618,7 @@ const StatusModal = ({ postIds, selectedLanguages, prefix, onDestory }) => {
                         </div>
                         {(countInfo.postsTranslated > 0 && !pendingPosts.length && !progressBarVisibility) &&
                             <div className={`${prefix}-progress-footer`}>
-                                <a className={`${prefix}-progress-button button button-primary`} href={getTranslatedPostLink()}>{sprintf(__('Check Translated %s', 'translate-words'), lmatBulkTranslationGlobal.post_label)}</a>
+                                <a className={`${prefix}-progress-button button button-primary`} href={getTranslatedPostLink()}>{sprintf(__('Check Translated %s', 'linguator-pro'), lmatBulkTranslationGlobal.post_label)}</a>
                             </div>
                         }
                     </>

@@ -453,7 +453,7 @@ class Linguator {
 	 */
 	public function register_cpfm_optin_notice() {
 		$notice = array(
-			'title'          => __( 'Linguator AI by Cool Plugins', 'linguator-pro' ),
+			'title'          => __( 'Linguator Pro by Cool Plugins', 'linguator-pro' ),
 			'message'        => __( 'Help us make this plugin more compatible with your site by sharing non-sensitive site data.', 'linguator-pro' ),
 			'pages'          => array( 'lmat', 'lmat_settings' ),
 			'always_show_on' => array( 'lmat', 'lmat_settings' ),
@@ -476,7 +476,7 @@ class Linguator {
 		\CPFM_Usage_Cron::cpfm_register(
 			array(
 				'id'                     => 'lmat',
-				'plugin_name'            => 'Linguator AI – Auto Translate & Create Multilingual Sites',
+				'plugin_name'            => 'Linguator Pro - AI Auto Translate & Create Multilingual Sites',
 				'version'                => LINGUATOR_PRO_VERSION,
 				'api'                    => LINGUATOR_PRO_FEEDBACK_API,
 				'cron_hook'              => 'lmat_extra_data_update',

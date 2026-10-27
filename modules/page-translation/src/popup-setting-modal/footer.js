@@ -11,7 +11,7 @@ const SettingModalFooter = (props) => {
                     className="lmat-page-translation-setting-close button button-primary"
                     onClick={() => setSettingVisibility(false)}
                 >
-                    {__("Back", 'translate-words')}
+                    {__("Back", 'linguator-pro')}
                 </button>
             </div>
         );
@@ -23,14 +23,14 @@ const SettingModalFooter = (props) => {
                 type="button"
                 className="setting-start-translation button button-primary"
                 disabled={!selectedProvider}
-                title={selectedProvider ? '' : __('Please select a translation provider.', 'translate-words')}
+                title={selectedProvider ? '' : __('Please select a translation provider.', 'linguator-pro')}
                 onClick={() => {
                     if (selectedProvider && onStartTranslation) {
                         onStartTranslation();
                     }
                 }}
             >
-                {__("Start Translation", 'translate-words')} <span className="next-arrow">&#8594;</span>
+                {__("Start Translation", 'linguator-pro')} <span className="next-arrow">&#8594;</span>
             </button>
         </div>
     );

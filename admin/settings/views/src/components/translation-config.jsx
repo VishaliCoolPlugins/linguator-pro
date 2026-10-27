@@ -106,7 +106,7 @@ const TranslationConfig = ({ data, setData }) => {
                 const pendingGeminiKey = (apiKeyPayload?.keys?.gemini || '').toString().trim()
                 const hasConfiguredGeminiKey = Boolean(geminiApiKeyRef.current?.hasConfiguredKey?.('gemini'))
                 if (!hasConfiguredGeminiKey && pendingGeminiKey === '') {
-                    throw new Error(__('Please add a Gemini API key to continue.', 'translate-words'))
+                    throw new Error(__('Please add a Gemini API key to continue.', 'linguator-pro'))
                 }
             }
 
@@ -173,12 +173,12 @@ const TranslationConfig = ({ data, setData }) => {
                     if (error?.message) {
                         throw new Error(error.message);
                     }
-                    throw new Error(__("Something went wrong", 'translate-words'));
+                    throw new Error(__("Something went wrong", 'linguator-pro'));
                 });
 
             toast.promise(response, {
-                loading: __('Saving Settings', 'translate-words'),
-                success: __('Settings Saved', 'translate-words'),
+                loading: __('Saving Settings', 'linguator-pro'),
+                success: __('Settings Saved', 'linguator-pro'),
                 error: (error) => error.message
             })
             await response
@@ -194,36 +194,36 @@ const TranslationConfig = ({ data, setData }) => {
         } catch (error) {
             setIsSaving(false)
             // Handle domain validation errors
-            if (error.message.includes(__("Linguator was unable to access", "translate-words"))) {
+            if (error.message.includes(__("Linguator was unable to access", "linguator-pro"))) {
                 toast.error(error.message);
             } else {
-                toast.error(error.message || __("Something went wrong", "translate-words"));
+                toast.error(error.message || __("Something went wrong", "linguator-pro"));
             }
         }
     }
 
     const postStatusOptions = [
         {
-            heading: __('Published', 'translate-words'),
+            heading: __('Published', 'linguator-pro'),
             value: 'publish'
         },
         {
-            heading: __('Draft', 'translate-words'),
+            heading: __('Draft', 'linguator-pro'),
             value: 'draft'
         }
     ]
 
     const slugTranslationOptions = [
         {
-            heading: __('Use Translated Title', 'translate-words'),
+            heading: __('Use Translated Title', 'linguator-pro'),
             value: 'title_translate'
         },
         {
-            heading: __('Translate Original Slug', 'translate-words'),
+            heading: __('Translate Original Slug', 'linguator-pro'),
             value: 'slug_translate'
         },
         {
-            heading: __('Keep Original Slug', 'translate-words'),
+            heading: __('Keep Original Slug', 'linguator-pro'),
             value: 'slug_keep'
         }
     ]
@@ -232,7 +232,7 @@ const TranslationConfig = ({ data, setData }) => {
         <Container className='bg-white p-10 rounded-lg' cols="1" containerType='grid'>
             <Container className='flex items-center'>
                 <Container.Item className='flex flex-wrap items-center w-full justify-between px-4 gap-6'>
-                    <h1 className='font-bold'>{__('Translation Settings', 'translate-words')}</h1>
+                    <h1 className='font-bold'>{__('Translation Settings', 'linguator-pro')}</h1>
                     <Button
                         disabled={handleButtonDisabled || isSaving}
                         className=""
@@ -243,7 +243,7 @@ const TranslationConfig = ({ data, setData }) => {
                         onClick={SaveSettings}
                         variant="primary"
                     >
-                        {__('Save Settings', 'translate-words')}
+                        {__('Save Settings', 'linguator-pro')}
                     </Button>
                 </Container.Item>
             </Container>
@@ -251,10 +251,10 @@ const TranslationConfig = ({ data, setData }) => {
             <Container.Item className='p-6 rounded-lg' style={{ border: "1px solid #e5e7eb" }}>
                 <Label size='md' className='font-bold flex items-center gap-2'>
                     <Languages className="flex-shrink-0 size-5 text-icon-secondary" />
-                    {__('Service Provider', 'translate-words')}
+                    {__('Service Provider', 'linguator-pro')}
                 </Label>
                 <Label variant='help'>
-                    {__('Select at least one translation service provider below. You can enable multiple providers and choose the one that best fits your needs.', 'translate-words')}
+                    {__('Select at least one translation service provider below. You can enable multiple providers and choose the one that best fits your needs.', 'linguator-pro')}
                 </Label>
                 <ProviderList
                     browserType={browserType}
@@ -285,10 +285,10 @@ const TranslationConfig = ({ data, setData }) => {
             <Container.Item>
                 <Label size='md' className='font-bold flex items-center gap-2'>
                     <RiDraftLine className="flex-shrink-0 size-5 text-icon-secondary" />
-                    {__('Bulk Translation – Default Post and Page Status', 'translate-words')}
+                    {__('Bulk Translation – Default Post and Page Status', 'linguator-pro')}
                 </Label>
                 <Label variant='help'>
-                    {__('This is the default post and page status for bulk translation.', 'translate-words')}
+                    {__('This is the default post and page status for bulk translation.', 'linguator-pro')}
                 </Label>
                 <div style={{ marginTop: "20px" }}>
                     <RadioButton.Group className="flex flex-col sm:flex-row gap-4 flex-wrap">
@@ -315,9 +315,9 @@ const TranslationConfig = ({ data, setData }) => {
             <Container.Item>
                 <Label size='md' className='font-bold flex items-center gap-2'>
                     <Link className="flex-shrink-0 size-5 text-icon-secondary" />
-                    {__('Slug Translation Settings', 'translate-words')}
+                    {__('Slug Translation Settings', 'linguator-pro')}
                 </Label>
-                <Label variant='help'>{__('Choose how post slugs (URLs) are generated when content is translated.', 'translate-words')}</Label>
+                <Label variant='help'>{__('Choose how post slugs (URLs) are generated when content is translated.', 'linguator-pro')}</Label>
                 <div style={{ marginTop: "20px" }}>
                     <RadioButton.Group className="flex flex-col sm:flex-row gap-4 flex-wrap">
                         {slugTranslationOptions.map((slugOption, index) => (
@@ -352,7 +352,7 @@ const TranslationConfig = ({ data, setData }) => {
                         onClick={SaveSettings}
                         variant="primary"
                     >
-                        {__('Save Settings', 'translate-words')}
+                        {__('Save Settings', 'linguator-pro')}
                     </Button>
 
                 </Container.Item>

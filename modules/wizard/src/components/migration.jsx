@@ -83,16 +83,16 @@ const Migration = ({ onComplete, onSkip }) => {
       if (response && response[hasKey] === true) {
         setMigrationData(response)
         setDetectionCompleted(true)
-        toast.success(sprintf(__('%s data detected successfully.', 'translate-words'), pluginName))
+        toast.success(sprintf(__('%s data detected successfully.', 'linguator-pro'), pluginName))
       } else {
         setMigrationData(null)
         setDetectionCompleted(true)
-        toast.error(response?.message || sprintf(__('No %s data found.', 'translate-words'), pluginName))
+        toast.error(response?.message || sprintf(__('No %s data found.', 'linguator-pro'), pluginName))
       }
     } catch (error) {
       console.error(`Error checking ${plugin}:`, error)
       const pluginName = plugin === 'polylang' ? 'Polylang' : 'WPML'
-      toast.error(error?.message || sprintf(__('Failed to detect %s data.', 'translate-words'), pluginName))
+      toast.error(error?.message || sprintf(__('Failed to detect %s data.', 'linguator-pro'), pluginName))
       setMigrationData(null)
       setDetectionCompleted(true)
     } finally {
@@ -102,7 +102,7 @@ const Migration = ({ onComplete, onSkip }) => {
 
   const handleMigrate = async () => {
     if (!selectedPlugin) {
-      toast.error(__('Please select a plugin to migrate from.', 'translate-words'))
+      toast.error(__('Please select a plugin to migrate from.', 'linguator-pro'))
       return
     }
 
@@ -169,13 +169,13 @@ const Migration = ({ onComplete, onSkip }) => {
           console.error('Failed to mark setup as complete:', error)
         }
         
-        toast.success(response.message || __('Migration completed successfully!', 'translate-words'))
+        toast.success(response.message || __('Migration completed successfully!', 'linguator-pro'))
       } else {
-        throw new Error(response.message || __('Migration failed', 'translate-words'))
+        throw new Error(response.message || __('Migration failed', 'linguator-pro'))
       }
     } catch (error) {
       console.error('Migration error:', error)
-      toast.error(error.message || __('Migration failed. Please try again.', 'translate-words'))
+      toast.error(error.message || __('Migration failed. Please try again.', 'linguator-pro'))
     } finally {
       setIsMigrating(false)
     }
@@ -217,9 +217,9 @@ const Migration = ({ onComplete, onSkip }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold mb-2">{__('Migration Completed Successfully', 'translate-words')}</h2>
+          <h2 className="text-2xl font-bold mb-2">{__('Migration Completed Successfully', 'linguator-pro')}</h2>
           <p className="text-gray-600 text-center max-w-md mb-6">
-            {__('Your multilingual plugin data has been successfully migrated to Linguator. You can now continue with the setup.', 'translate-words')}
+            {__('Your multilingual plugin data has been successfully migrated to Linguator. You can now continue with the setup.', 'linguator-pro')}
           </p>
           <Button
             onClick={() => {
@@ -229,7 +229,7 @@ const Migration = ({ onComplete, onSkip }) => {
             variant="primary"
             size="md"
           >
-            {__('Continue Setup', 'translate-words')}
+            {__('Continue Setup', 'linguator-pro')}
           </Button>
         </div>
       </div>
@@ -240,9 +240,9 @@ const Migration = ({ onComplete, onSkip }) => {
     <div className='mx-auto max-w-[600px] p-10 min-h-[40vh] bg-white shadow-sm flex flex-col'>
       <Container cols="1" containerType='grid'>
       <Container.Item>
-        <h1 className='font-bold mb-4'>{__('Migration to Linguator', 'translate-words')}</h1>
+        <h1 className='font-bold mb-4'>{__('Migration to Linguator', 'linguator-pro')}</h1>
         <p className="mb-6 text-gray-600">
-          {__('Migrate your multilingual plugin data (languages, translations, settings, and strings) to Linguator. This process will preserve all your existing multilingual content.', 'translate-words')}
+          {__('Migrate your multilingual plugin data (languages, translations, settings, and strings) to Linguator. This process will preserve all your existing multilingual content.', 'linguator-pro')}
         </p>
       </Container.Item>
 
@@ -251,10 +251,10 @@ const Migration = ({ onComplete, onSkip }) => {
       <Container.Item>
         <div className="mb-6">
           <Label size='md' className='font-bold mb-2 text-green-600'>
-            {__('Step 1: Select Plugin and Detect Data', 'translate-words')}
+            {__('Step 1: Select Plugin and Detect Data', 'linguator-pro')}
           </Label>
           <p className="text-sm text-gray-600 mb-4">
-            {__('First, select the plugin you want to migrate from and check if data exists on your site.', 'translate-words')}
+            {__('First, select the plugin you want to migrate from and check if data exists on your site.', 'linguator-pro')}
           </p>
           <div className="flex gap-3 mb-4">
             <Button
@@ -264,7 +264,7 @@ const Migration = ({ onComplete, onSkip }) => {
               size="md"
               icon={isDetecting && selectedPlugin === 'polylang' ? <LoaderPinwheel className="animate-spin" /> : null}
             >
-              {isDetecting && selectedPlugin === 'polylang' ? __('Detecting...', 'translate-words') : __('Detect Polylang', 'translate-words')}
+              {isDetecting && selectedPlugin === 'polylang' ? __('Detecting...', 'linguator-pro') : __('Detect Polylang', 'linguator-pro')}
             </Button>
             <Button
               onClick={() => checkMigration('wpml')}
@@ -273,7 +273,7 @@ const Migration = ({ onComplete, onSkip }) => {
               size="md"
               icon={isDetecting && selectedPlugin === 'wpml' ? <LoaderPinwheel className="animate-spin" /> : null}
             >
-              {isDetecting && selectedPlugin === 'wpml' ? __('Detecting...', 'translate-words') : __('Detect WPML', 'translate-words')}
+              {isDetecting && selectedPlugin === 'wpml' ? __('Detecting...', 'linguator-pro') : __('Detect WPML', 'linguator-pro')}
             </Button>
             <Button
               onClick={handleSkip}
@@ -281,7 +281,7 @@ const Migration = ({ onComplete, onSkip }) => {
               variant="outline"
               size="md"
             >
-              {__('Skip Migration', 'translate-words')}
+              {__('Skip Migration', 'linguator-pro')}
             </Button>
           </div>
         </div>
@@ -289,20 +289,20 @@ const Migration = ({ onComplete, onSkip }) => {
         {migrationData && (
           <div className="mb-6 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold mb-2">
-              {selectedPlugin === 'polylang' ? __('Polylang Data Detected:', 'translate-words') : __('WPML Data Detected:', 'translate-words')}
+              {selectedPlugin === 'polylang' ? __('Polylang Data Detected:', 'linguator-pro') : __('WPML Data Detected:', 'linguator-pro')}
             </h3>
             <ul className="list-disc list-inside space-y-1 text-sm">
               {migrationData.languages_count > 0 && (
-                <li>{sprintf(__('%d language(s) found', 'translate-words'), migrationData.languages_count)}</li>
+                <li>{sprintf(__('%d language(s) found', 'linguator-pro'), migrationData.languages_count)}</li>
               )}
               {migrationData.posts_count > 0 && (
-                <li>{sprintf(__('%d post(s) with language assignments', 'translate-words'), migrationData.posts_count)}</li>
+                <li>{sprintf(__('%d post(s) with language assignments', 'linguator-pro'), migrationData.posts_count)}</li>
               )}
               {(migrationData.post_translations > 0 || migrationData.translations_count > 0) && (
-                <li>{sprintf(__('%d translation group(s) found', 'translate-words'), migrationData.post_translations || migrationData.translations_count || 0)}</li>
+                <li>{sprintf(__('%d translation group(s) found', 'linguator-pro'), migrationData.post_translations || migrationData.translations_count || 0)}</li>
               )}
               {migrationData.strings_count > 0 && (
-                <li>{sprintf(__('%d string translation(s) found', 'translate-words'), migrationData.strings_count)}</li>
+                <li>{sprintf(__('%d string translation(s) found', 'linguator-pro'), migrationData.strings_count)}</li>
               )}
             </ul>
           </div>
@@ -316,23 +316,23 @@ const Migration = ({ onComplete, onSkip }) => {
           <Container.Item>
             <div className="mb-6">
               <Label size='md' className='font-bold mb-2 text-green-600'>
-                {__('Step 2: Select Migration Options', 'translate-words')}
+                {__('Step 2: Select Migration Options', 'linguator-pro')}
               </Label>
               <p className="text-sm text-gray-600 mb-4">
-                {sprintf(__('Choose what data you want to migrate from %s. Unchecked items will not be migrated.', 'translate-words'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')}
+                {sprintf(__('Choose what data you want to migrate from %s. Unchecked items will not be migrated.', 'linguator-pro'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')}
               </p>
               {!migrationOptions.migrate_languages && (
                 <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <p className="text-sm text-yellow-800">
-                    <strong>{__('Note:', 'translate-words')}</strong> {__('If languages are not migrated, language assignments and translations will also be skipped, as they require languages to exist first.', 'translate-words')}
+                    <strong>{__('Note:', 'linguator-pro')}</strong> {__('If languages are not migrated, language assignments and translations will also be skipped, as they require languages to exist first.', 'linguator-pro')}
                   </p>
                 </div>
               )}
               <div className="space-y-3">
                 <Checkbox
                   label={{
-                    heading: __('Migrate Languages', 'translate-words'),
-                    description: sprintf(__('Import all languages configured in %s.', 'translate-words'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
+                    heading: __('Migrate Languages', 'linguator-pro'),
+                    description: sprintf(__('Import all languages configured in %s.', 'linguator-pro'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
                   }}
                   checked={migrationOptions.migrate_languages}
                   onChange={() => setMigrationOptions(prev => ({ ...prev, migrate_languages: !prev.migrate_languages }))}
@@ -340,8 +340,8 @@ const Migration = ({ onComplete, onSkip }) => {
                 />
                 <Checkbox
                   label={{
-                    heading: __('Migrate Translations', 'translate-words'),
-                    description: __('Import translation relationships between posts, pages, and terms.', 'translate-words')
+                    heading: __('Migrate Translations', 'linguator-pro'),
+                    description: __('Import translation relationships between posts, pages, and terms.', 'linguator-pro')
                   }}
                   checked={migrationOptions.migrate_translations}
                   onChange={() => setMigrationOptions(prev => ({ ...prev, migrate_translations: !prev.migrate_translations }))}
@@ -350,8 +350,8 @@ const Migration = ({ onComplete, onSkip }) => {
                 />
                 <Checkbox
                   label={{
-                    heading: __('Migrate Settings', 'translate-words'),
-                    description: sprintf(__('Import %s settings (URL structure, post types, taxonomies, etc.).', 'translate-words'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
+                    heading: __('Migrate Settings', 'linguator-pro'),
+                    description: sprintf(__('Import %s settings (URL structure, post types, taxonomies, etc.).', 'linguator-pro'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
                   }}
                   checked={migrationOptions.migrate_settings}
                   onChange={() => setMigrationOptions(prev => ({ ...prev, migrate_settings: !prev.migrate_settings }))}
@@ -359,8 +359,8 @@ const Migration = ({ onComplete, onSkip }) => {
                 />
                 <Checkbox
                   label={{
-                    heading: __('Migrate Static Strings', 'translate-words'),
-                    description: sprintf(__('Import translated static strings from %s String Translation.', 'translate-words'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
+                    heading: __('Migrate Static Strings', 'linguator-pro'),
+                    description: sprintf(__('Import translated static strings from %s String Translation.', 'linguator-pro'), selectedPlugin === 'polylang' ? 'Polylang' : 'WPML')
                   }}
                   checked={migrationOptions.migrate_strings}
                   onChange={() => setMigrationOptions(prev => ({ ...prev, migrate_strings: !prev.migrate_strings }))}
@@ -375,10 +375,10 @@ const Migration = ({ onComplete, onSkip }) => {
           <Container.Item>
             <div className="mb-6">
               <Label size='md' className='font-bold mb-2 text-green-600'>
-                {__('Step 3: Start Migration', 'translate-words')}
+                {__('Step 3: Start Migration', 'linguator-pro')}
               </Label>
               <p className="text-sm text-gray-600 mb-4">
-                {__('Click the button below to start the migration process. This may take a few minutes depending on the amount of data.', 'translate-words')}
+                {__('Click the button below to start the migration process. This may take a few minutes depending on the amount of data.', 'linguator-pro')}
               </p>
               <div className="flex gap-3">
                 <Button
@@ -387,7 +387,7 @@ const Migration = ({ onComplete, onSkip }) => {
                   variant="outline"
                   size="md"
                 >
-                  {__('Skip Migration', 'translate-words')}
+                  {__('Skip Migration', 'linguator-pro')}
                 </Button>
                 <Button
                   onClick={handleMigrate}
@@ -396,7 +396,7 @@ const Migration = ({ onComplete, onSkip }) => {
                   size="md"
                   icon={isMigrating ? <LoaderPinwheel className="animate-spin" /> : null}
                 >
-                  {isMigrating ? __('Migrating...', 'translate-words') : __('Start Migration', 'translate-words')}
+                  {isMigrating ? __('Migrating...', 'linguator-pro') : __('Start Migration', 'linguator-pro')}
                 </Button>
               </div>
             </div>

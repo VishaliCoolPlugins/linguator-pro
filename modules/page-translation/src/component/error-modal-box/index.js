@@ -54,13 +54,13 @@ const ErrorModalBox = ({ message, onClose, Title }) => {
             <div className="lmat-page-translation-error-modal-box">
                 <div className="lmat-page-translation-error-modal-box-header">
                     {Title && <h3>{Title}</h3>}
-                    <button type="button" aria-label={__('Close', 'translate-words')} className="lmat-page-translation-error-modal-box-close" onClick={onClose}>&times;</button>
+                    <button type="button" aria-label={__('Close', 'linguator-pro')} className="lmat-page-translation-error-modal-box-close" onClick={onClose}>&times;</button>
                 </div>
                 <div className="lmat-page-translation-error-modal-box-body">
                     <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(stringifiedMessage) }} />
                 </div>
                 <div className="lmat-page-translation-error-modal-box-footer">
-                    <button type="button" className="lmat-page-translation-error-modal-box-close button button-primary" onClick={onClose}>&#8592; {__('Back', 'translate-words')}</button>
+                    <button type="button" className="lmat-page-translation-error-modal-box-close button button-primary" onClick={onClose}>&#8592; {__('Back', 'linguator-pro')}</button>
                 </div>
             </div>
         </div>

@@ -171,13 +171,13 @@ const ProviderRow = ({
                     onChange={onDefault}
                 />
                 <span className="lmat-engine-default-mark" aria-hidden="true"></span>
-                <span className="lmat-engine-default-text">{__('Set as default', 'translate-words')}</span>
-                <span className="lmat-engine-default-active">{__('Default provider', 'translate-words')}</span>
+                <span className="lmat-engine-default-text">{__('Set as default', 'linguator-pro')}</span>
+                <span className="lmat-engine-default-active">{__('Default provider', 'linguator-pro')}</span>
             </label>
 
             <div className="lmat-engine-actions">
                 <a className="lmat-engine-docs" href={docsUrl} target="_blank" rel="noopener noreferrer">
-                    {__('Docs', 'translate-words')}
+                    {__('Docs', 'linguator-pro')}
                 </a>
                 <span className="lmat-engine-action-slot">
                     {actionLabel && (
@@ -193,10 +193,10 @@ const ProviderRow = ({
                         checked={enabled}
                         disabled={isDefault}
                         onChange={onToggle}
-                        title={isDefault ? __('The default provider stays enabled. Pick another default to turn this off.', 'translate-words') : ''}
+                        title={isDefault ? __('The default provider stays enabled. Pick another default to turn this off.', 'linguator-pro') : ''}
                     />
                     <span className="lmat-switch-slider"></span>
-                    <span className="screen-reader-text">{sprintf(__('Enable %s', 'translate-words'), name)}</span>
+                    <span className="screen-reader-text">{sprintf(__('Enable %s', 'linguator-pro'), name)}</span>
                 </label>
             </div>
 
@@ -245,15 +245,15 @@ const ProviderList = ({
     };
 
     const builtInLabels = {
-        ready: __('Ready', 'translate-words'),
-        setup: __('Not Configured', 'translate-words'),
-        checking: __('Checking...', 'translate-words'),
-        unsupported: __('Not supported', 'translate-words'),
+        ready: __('Ready', 'linguator-pro'),
+        setup: __('Not Configured', 'linguator-pro'),
+        checking: __('Checking...', 'linguator-pro'),
+        unsupported: __('Not supported', 'linguator-pro'),
     };
 
     const unsupportedMessage = (providerName, browserName) => sprintf(
         /* translators: 1: translation provider name, 2: required browser name */
-        __('%1$s Translation provider is not supported in your current browser. Please use %2$s browser to use this translation provider.', 'translate-words'),
+        __('%1$s Translation provider is not supported in your current browser. Please use %2$s browser to use this translation provider.', 'linguator-pro'),
         providerName,
         browserName
     );
@@ -263,7 +263,7 @@ const ProviderList = ({
             return '';
         }
 
-        return __('Configure this provider before setting it as default.', 'translate-words');
+        return __('Configure this provider before setting it as default.', 'linguator-pro');
     };
 
     const toggle = (key) => () => providers[key].setEnabled(!providers[key].enabled);
@@ -282,13 +282,13 @@ const ProviderList = ({
                         <circle cx="12" cy="7.8" r="1.2" fill="#fff" />
                     </svg>
                 </span>
-                <p>{__('Select your default translation provider. It is pre-selected when the translation popup opens, and you can switch providers anytime from the popup.', 'translate-words')}</p>
+                <p>{__('Select your default translation provider. It is pre-selected when the translation popup opens, and you can switch providers anytime from the popup.', 'linguator-pro')}</p>
             </div>
 
             <ul className="lmat-engine-list">
                 <ProviderRow
                     icon={<GoogleIcon className="icon-size" />}
-                    name={__('Google Translate', 'translate-words')}
+                    name={__('Google Translate', 'linguator-pro')}
                     docsUrl={`https://linguator.com/docs/automatic-translation-via-google-translate-widget/${DOCS_UTM}_google`}
                     enabled={Boolean(providers.google.enabled)}
                     onToggle={toggle('google')}
@@ -301,7 +301,7 @@ const ProviderList = ({
                 {showChromeRow && (
                     <ProviderRow
                         icon={<ChromeIcon className="icon-size" />}
-                        name={__('Chrome Built-in AI', 'translate-words')}
+                        name={__('Chrome Built-in AI', 'linguator-pro')}
                         docsUrl={`https://linguator.com/docs/automatic-translation-via-chrome-ai/${DOCS_UTM}_chrome`}
                         enabled={chromeEnabled}
                         onToggle={toggle('chrome_local_ai')}
@@ -309,9 +309,9 @@ const ProviderList = ({
                         onDefault={() => onDefaultChange('chrome_local_ai')}
                         status={chromeStatus}
                         statusLabel={builtInLabels[chromeStatus]}
-                        unsupportedMessage={unsupportedMessage(__('Chrome Built-in AI', 'translate-words'), 'Chrome')}
+                        unsupportedMessage={unsupportedMessage(__('Chrome Built-in AI', 'linguator-pro'), 'Chrome')}
                         defaultDisabledReason={builtInDefaultReason(chromeStatus)}
-                        actionLabel={'setup' === chromeStatus && chromeEnabled ? __('Configure', 'translate-words') : ''}
+                        actionLabel={'setup' === chromeStatus && chromeEnabled ? __('Configure', 'linguator-pro') : ''}
                         onAction={scrollToSetupCard}
                     />
                 )}
@@ -319,7 +319,7 @@ const ProviderList = ({
                 {showEdgeRow && (
                     <ProviderRow
                         icon={<EdgeIcon className="icon-size" />}
-                        name={__('Edge Built-in AI', 'translate-words')}
+                        name={__('Edge Built-in AI', 'linguator-pro')}
                         docsUrl="https://microsoftedge.github.io/Demos/built-in-ai/playgrounds/translator-api/"
                         enabled={edgeEnabled}
                         onToggle={toggle('edge_local_ai')}
@@ -327,9 +327,9 @@ const ProviderList = ({
                         onDefault={() => onDefaultChange('edge_local_ai')}
                         status={edgeStatus}
                         statusLabel={builtInLabels[edgeStatus]}
-                        unsupportedMessage={unsupportedMessage(__('Edge Built-in AI', 'translate-words'), 'Edge')}
+                        unsupportedMessage={unsupportedMessage(__('Edge Built-in AI', 'linguator-pro'), 'Edge')}
                         defaultDisabledReason={builtInDefaultReason(edgeStatus)}
-                        actionLabel={'setup' === edgeStatus && edgeEnabled ? __('Configure', 'translate-words') : ''}
+                        actionLabel={'setup' === edgeStatus && edgeEnabled ? __('Configure', 'linguator-pro') : ''}
                         onAction={scrollToSetupCard}
                     />
                 )}
@@ -337,16 +337,16 @@ const ProviderList = ({
                 {geminiAvailable && (
                     <ProviderRow
                         icon={<GeminiIcon className="icon-size" />}
-                        name={__('Google Gemini', 'translate-words')}
+                        name={__('Google Gemini', 'linguator-pro')}
                         docsUrl={`https://linguator.com/docs/automatic-translation-via-googe-gemini/${DOCS_UTM}_gemini`}
                         enabled={Boolean(providers.gemini.enabled)}
                         onToggle={toggle('gemini')}
                         isDefault={'gemini' === defaultProvider}
                         onDefault={() => onDefaultChange('gemini')}
                         status={geminiConfigured ? 'ready' : 'missing-key'}
-                        statusLabel={geminiConfigured ? __('Ready', 'translate-words') : __('Missing API Key', 'translate-words')}
-                        defaultDisabledReason={geminiConfigured ? '' : __('Add the API key before setting this provider as default.', 'translate-words')}
-                        actionLabel={geminiConfigured ? '' : __('Add API Key', 'translate-words')}
+                        statusLabel={geminiConfigured ? __('Ready', 'linguator-pro') : __('Missing API Key', 'linguator-pro')}
+                        defaultDisabledReason={geminiConfigured ? '' : __('Add the API key before setting this provider as default.', 'linguator-pro')}
+                        actionLabel={geminiConfigured ? '' : __('Add API Key', 'linguator-pro')}
                         onAction={() => {
                             if (!providers.gemini.enabled) {
                                 providers.gemini.setEnabled(true);

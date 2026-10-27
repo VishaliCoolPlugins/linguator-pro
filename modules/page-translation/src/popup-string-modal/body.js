@@ -690,7 +690,7 @@ const StringPopUpBody = (props) => {
                 return (
                     <img
                         src={imgFolder + 'plus.png'}
-                        alt={__("Add translation", "translate-words")}
+                        alt={__("Add translation", "linguator-pro")}
                         className="lmat-page-translation-add-translation-icon"
                     />
                 );
@@ -710,16 +710,16 @@ const StringPopUpBody = (props) => {
                             role="status"
                             aria-live="polite"
                         >
-                            {__("Automatic translation is in progress", 'translate-words')}
+                            {__("Automatic translation is in progress", 'linguator-pro')}
                             <span className="lmat_page_translation_translate_progress__dots" aria-hidden="true">
                                 <span>.</span>
                                 <span>.</span>
                                 <span>.</span>
                             </span>
                             <br />
-                            {__("It will take few minutes, enjoy ☕ coffee in this time!", 'translate-words')}
+                            {__("It will take few minutes, enjoy ☕ coffee in this time!", 'linguator-pro')}
                             <br /><br />
-                            {__("Please do not leave this window or browser tab while translation is in progress", 'translate-words')}
+                            {__("Please do not leave this window or browser tab while translation is in progress", 'linguator-pro')}
                             <span className="lmat_page_translation_translate_progress__dots" aria-hidden="true">
                                 <span>.</span>
                                 <span>.</span>
@@ -766,7 +766,7 @@ const StringPopUpBody = (props) => {
                                                 }
                                             }}
                                         >
-                                            {__("Translate", "translate-words")}
+                                            {__("Translate", "linguator-pro")}
                                         </button>
                                         <button
                                             type="button"
@@ -777,7 +777,7 @@ const StringPopUpBody = (props) => {
                                                 }
                                             }}
                                         >
-                                            {__("Continue", "translate-words")}
+                                            {__("Continue", "linguator-pro")}
                                         </button>
                                     </div>
                                 )}
@@ -797,9 +797,9 @@ const StringPopUpBody = (props) => {
                             <table className="scrolldown" id="stringTemplate" ref={tableRef}>
                                 <thead>
                                     <tr>
-                                        <th className="notranslate">{__("S.No", 'translate-words')}</th>
-                                        <th className="notranslate">{__("Source Text", 'translate-words')}</th>
-                                        <th className="notranslate">{__("Translation", 'translate-words')}</th>
+                                        <th className="notranslate">{__("S.No", 'linguator-pro')}</th>
+                                        <th className="notranslate">{__("Source Text", 'linguator-pro')}</th>
+                                        <th className="notranslate">{__("Translation", 'linguator-pro')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -875,7 +875,7 @@ const StringPopUpBody = (props) => {
                     </div>
                 </> :
                 props.postDataFetchStatus ?
-                    <p>{__('No strings are available for translation', 'translate-words')}</p> :
+                    <p>{__('No strings are available for translation', 'linguator-pro')}</p> :
 
                     <div className="lmat-page-translation-skeleton-loader-wrapper">
                         <div className="translate-widget">
@@ -885,9 +885,9 @@ const StringPopUpBody = (props) => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="notranslate">{__("S.No", 'translate-words')}</th>
-                                    <th className="notranslate">{__("Source Text", 'translate-words')}</th>
-                                    <th className="notranslate">{__("Translation", 'translate-words')}</th>
+                                    <th className="notranslate">{__("S.No", 'linguator-pro')}</th>
+                                    <th className="notranslate">{__("Source Text", 'linguator-pro')}</th>
+                                    <th className="notranslate">{__("Translation", 'linguator-pro')}</th>
                                 </tr>
                             </thead>
                             <tbody>

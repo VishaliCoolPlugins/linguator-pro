@@ -32,27 +32,27 @@ const Ready = () => {
 
   //content for page
   let nextSteps = [ {
-    button: __('Settings', 'translate-words'),
+    button: __('Settings', 'linguator-pro'),
     href: `${currentDomain}admin.php?page=lmat_settings`,
     variant: 'outline'
   },{
-    button: __('Video Tutorial', 'translate-words'),
+    button: __('Video Tutorial', 'linguator-pro'),
     href: "https://linguator.com/docs/video-tutorials/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=video&utm_content=setup",
     variant: 'outline'
   },{
-    button: __('Docs', 'translate-words'),
+    button: __('Docs', 'linguator-pro'),
     href: "https://linguator.com/docs/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=docs&utm_content=setup",
     variant: 'outline'
   },{
-    button: __('View Pages', 'translate-words'),
+    button: __('View Pages', 'linguator-pro'),
     href: `${currentDomain}edit.php?post_type=page`,
     variant: 'outline'
   },{
-    button: __('View Posts', 'translate-words'),
+    button: __('View Posts', 'linguator-pro'),
     href: `${currentDomain}edit.php`,
     variant: 'outline'
   },{
-    button: __('FAQs', 'translate-words'),
+    button: __('FAQs', 'linguator-pro'),
     href: "https://linguator.com/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=faqs&utm_content=setup#support",
     variant: 'outline'
   }]
@@ -60,9 +60,9 @@ const Ready = () => {
  
   return (
     <div className='mx-auto max-w-[600px] min-h-[40vh] bg-white shadow-lg p-10 flex flex-col gap-6'>
-      <h2 className='m-0'>{__("You're ready to translate your Site!", 'translate-words')}</h2>
+      <h2 className='m-0'>{__("You're ready to translate your Site!", 'linguator-pro')}</h2>
       <div>
-                  <p className='m-0 text-sm/6' style={{ color: "#6b7280" }}>{__("You're now able to translate your content such as posts, pages, categories and tags. You can learn how to use Linguator by watching the video tutorial.", 'translate-words')}</p>
+                  <p className='m-0 text-sm/6' style={{ color: "#6b7280" }}>{__("You're now able to translate your content such as posts, pages, categories and tags. You can learn how to use Linguator by watching the video tutorial.", 'linguator-pro')}</p>
       </div>
       <table className='ready-table'>
         <tbody>

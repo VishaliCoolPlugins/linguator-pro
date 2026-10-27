@@ -22,11 +22,11 @@ const SettingModalBody = (props) => {
             ) : (
                 <div className="lmat-page-translation-no-provider-message">
                     <p className="lmat-page-translation-no-provider-text">
-                        {__('You have not enabled any translation provider. Please enable at least one service provider to use automatic translation. Go to the', 'translate-words')}{' '}
+                        {__('You have not enabled any translation provider. Please enable at least one service provider to use automatic translation. Go to the', 'linguator-pro')}{' '}
                         <a href={settingsUrl} target="_blank" rel="noopener noreferrer">
-                            {__('Translation Settings', 'translate-words')}
+                            {__('Translation Settings', 'linguator-pro')}
                         </a>
-                        {' '}{__('to configure a translation provider.', 'translate-words')}
+                        {' '}{__('to configure a translation provider.', 'linguator-pro')}
                     </p>
                 </div>
             )}

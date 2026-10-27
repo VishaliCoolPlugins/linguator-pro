@@ -17,9 +17,9 @@ const providerMeta = [
   {
     key: 'gemini',
     modelKey: 'gemini_model',
-    heading: __('Add Gemini API key', 'translate-words'),
-    modelHeading: __('Select Gemini Model', 'translate-words'),
-    placeholder: __('Enter your API key', 'translate-words'),
+    heading: __('Add Gemini API key', 'linguator-pro'),
+    modelHeading: __('Select Gemini Model', 'linguator-pro'),
+    placeholder: __('Enter your API key', 'linguator-pro'),
   },
 ]
 
@@ -285,25 +285,25 @@ const ApiKey = forwardRef(function ApiKey({ data, setData, embedded = false, onP
         if (error?.message) {
           throw new Error(error.message)
         }
-        throw new Error(__("Something went wrong", 'translate-words'))
+        throw new Error(__("Something went wrong", 'linguator-pro'))
       })
 
       const showToast = !embedded || resetProvider
       if (showToast) {
         toast.promise(run, {
           loading: resetProvider
-            ? __('API key resetting…', 'translate-words')
-            : __('Saving Settings', 'translate-words'),
+            ? __('API key resetting…', 'linguator-pro')
+            : __('Saving Settings', 'linguator-pro'),
           success: resetProvider
-            ? __('API key reset', 'translate-words')
-            : __('Settings Saved', 'translate-words'),
+            ? __('API key reset', 'linguator-pro')
+            : __('Settings Saved', 'linguator-pro'),
           error: (error) => error.message,
         })
       } else {
         await run
       }
     } catch (error) {
-      toast.error(error?.message || __("Something went wrong", "translate-words"))
+      toast.error(error?.message || __("Something went wrong", "linguator-pro"))
     }
   }
 
@@ -378,9 +378,9 @@ const ApiKey = forwardRef(function ApiKey({ data, setData, embedded = false, onP
                   />
                   {providerKeyLinks[p.key] ? (
                     <div className="mt-2 text-sm text-gray-600">
-                      {sprintf(__('Get your %s API key from ', 'translate-words'), providerKeyLabels[p.key] || p.key)}{' '}
+                      {sprintf(__('Get your %s API key from ', 'linguator-pro'), providerKeyLabels[p.key] || p.key)}{' '}
                       <a href={providerKeyLinks[p.key]} target="_blank" rel="noopener noreferrer">
-                        {__('here', 'translate-words')}
+                        {__('here', 'linguator-pro')}
                       </a>
                     </div>
                   ) : null}
@@ -398,7 +398,7 @@ const ApiKey = forwardRef(function ApiKey({ data, setData, embedded = false, onP
                     onClick={() => SaveSettings({ resetProvider: p.key })}
                     disabled={!isConfigured}
                   >
-                    {__('Reset', 'translate-words')}
+                    {__('Reset', 'linguator-pro')}
                   </Button>
                 </div>
               </div>

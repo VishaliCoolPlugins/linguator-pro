@@ -172,33 +172,33 @@ class AiLlmBulkTranslator {
         if (limitExceeded) {
             errorMessage =
                 `<p class="${this.prefix}-ai-pending-request-heading">` +
-                __("You’ve exceeded your current plan limit.", "translate-words") +
+                __("You’ve exceeded your current plan limit.", "linguator-pro") +
                 "</p> " +
-                __("To continue, please check your plan details and update your API key.", "translate-words");
+                __("To continue, please check your plan details and update your API key.", "linguator-pro");
             translateBtnMessage = __(
                 'Click "Translate" after updating your API key to re-translate the remaining strings.',
-                "translate-words"
+                "linguator-pro"
             );
         } else {
             errorMessage =
-                `<p class="${this.prefix}-ai-pending-request-heading">` + __("Oops! Something went wrong during translation", "translate-words") + "</p>";
-            translateBtnMessage = __('Click "Translate" to re-translate the remaining strings.', "translate-words");
+                `<p class="${this.prefix}-ai-pending-request-heading">` + __("Oops! Something went wrong during translation", "linguator-pro") + "</p>";
+            translateBtnMessage = __('Click "Translate" to re-translate the remaining strings.', "linguator-pro");
         }
 
         return `<div class="${this.prefix}-ai-pending-request">
                     <div>${errorMessage}</div>
-                    <p>${__("To see more details, open your browser’s developer console.", "translate-words")}</p>
-                <p>✅ ${sprintf(__("You’ve translated %s of the strings.", "translate-words"), completedPercent + "%")}</p>
-                <p>❌ ${sprintf(__("%s of the strings are still not translated.", "translate-words"), notCompletedPercent + "%")}</p>
-                <p><strong>${__("Next Steps:", "translate-words")}</strong></p>
+                    <p>${__("To see more details, open your browser’s developer console.", "linguator-pro")}</p>
+                <p>✅ ${sprintf(__("You’ve translated %s of the strings.", "linguator-pro"), completedPercent + "%")}</p>
+                <p>❌ ${sprintf(__("%s of the strings are still not translated.", "linguator-pro"), notCompletedPercent + "%")}</p>
+                <p><strong>${__("Next Steps:", "linguator-pro")}</strong></p>
                 <p>${translateBtnMessage}</p>
-                <p><strong>${__("OR", "translate-words")}</strong></p>
-                <p>${__('Click "Continue" to proceed without translating the rest of the strings.', "translate-words")}</p>
+                <p><strong>${__("OR", "linguator-pro")}</strong></p>
+                <p>${__('Click "Continue" to proceed without translating the rest of the strings.', "linguator-pro")}</p>
                 </div>`;
     }
 
     dispatchRecoverableError(targetLang, mergedDone, message, limitExceeded = false) {
-        logAiTranslationError(message || __("Translation failed.", "translate-words"));
+        logAiTranslationError(message || __("Translation failed.", "linguator-pro"));
         const infoKey = `${this.postId}_${targetLang}`;
         const existing = store.getState().translatePostInfo[infoKey] || {};
         const pendingHtml = this.buildRecoverableErrorHtml(mergedDone, this.totalSourceKeys, limitExceeded);
@@ -210,7 +210,7 @@ class AiLlmBulkTranslator {
                     targetLanguage: targetLang,
                     status: "error",
                     messageClass: "error",
-                    errorMessage: limitExceeded ? "" : __("Translation failed.", "translate-words"),
+                    errorMessage: limitExceeded ? "" : __("Translation failed.", "linguator-pro"),
                     errorHtml: pendingHtml,
                     errorAllowHtml: false,
                     aiError: true,
@@ -246,7 +246,7 @@ class AiLlmBulkTranslator {
                     [`${this.postId}_${targetLang}`]: {
                         status: "error",
                         messageClass: "error",
-                        errorMessage: __("No content to translate", "translate-words"),
+                        errorMessage: __("No content to translate", "linguator-pro"),
                         errorHtml: false,
                         aiError: false,
                     },
@@ -302,7 +302,7 @@ class AiLlmBulkTranslator {
                     signal: this.abortSignal,
                 });
                 if (Object.keys(translations).length === 0 && Object.keys(chunk).length > 0) {
-                    const emptyMsg = __("The AI returned an empty translation response. Please try again.", "translate-words");
+                    const emptyMsg = __("The AI returned an empty translation response. Please try again.", "linguator-pro");
                     logAiTranslationError(emptyMsg, { emptyResponse: true });
                     const emptyErr = new Error(emptyMsg);
                     emptyErr.failedChunk = chunk;
@@ -333,7 +333,7 @@ class AiLlmBulkTranslator {
             if (err && err.name === "AbortError") {
                 return false;
             }
-            const msg = err && err.message ? err.message : __("Translation failed.", "translate-words");
+            const msg = err && err.message ? err.message : __("Translation failed.", "linguator-pro");
             const isQuotaError = err?.code === "LLM_QUOTA_EXCEEDED";
             const isGeminiQuotaByMessage =
                 this.serviceProvider === "gemini" &&
@@ -387,7 +387,7 @@ class AiLlmBulkTranslator {
                         [`${this.postId}_${lang}`]: {
                             status: "error",
                             messageClass: "error",
-                            errorMessage: __("No content to translate", "translate-words"),
+                            errorMessage: __("No content to translate", "linguator-pro"),
                             errorHtml: false,
                             aiError: false,
                         },

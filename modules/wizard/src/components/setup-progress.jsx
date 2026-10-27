@@ -36,14 +36,14 @@ const SetupProgress = ({lmat_setup_data}) => {
         let temp_setupSetups = []
         
         temp_setupSetups.push({
-            label: __("Default","translate-words"),
+            label: __("Default","linguator-pro"),
             value: "default",
             visible: true,
             step:step++
         })
 
         temp_setupSetups.push({
-            label: __("Languages","translate-words"),
+            label: __("Languages","linguator-pro"),
             value: "languages",
             visible: true,
             step: step++
@@ -51,14 +51,14 @@ const SetupProgress = ({lmat_setup_data}) => {
 
         
         temp_setupSetups.push({
-            label: __("URL","translate-words"),
+            label: __("URL","linguator-pro"),
             value: "url",
             visible: true,
             step:step++
         })
         if(window.lmat_setup.media == "1"){
             temp_setupSetups.push({
-                label: __("Media","translate-words"),
+                label: __("Media","linguator-pro"),
                 value: "media",
                 visible: true,
                 step: step++
@@ -67,7 +67,7 @@ const SetupProgress = ({lmat_setup_data}) => {
         }
         // if(lmat_setup_data.untranslated_contents == "1"){
         //     temp_setupSetups.push({
-        //         label: __("Content","translate-words"),
+        //         label: __("Content","linguator-pro"),
         //         value: "content",
         //         visible: true,
         //         step: step++
@@ -75,20 +75,20 @@ const SetupProgress = ({lmat_setup_data}) => {
         // }
         
         temp_setupSetups.push({
-            label: __("AI Translation","translate-words"),
+            label: __("AI Translation","linguator-pro"),
             value: "translation_configuration",
             visible: true,
             step: step++
         })
 
         temp_setupSetups.push({
-            label: __("Language Switcher","translate-words"),
+            label: __("Language Switcher","linguator-pro"),
             value: "language_switcher",
             visible: true,
             step: step++
         })
         temp_setupSetups.push({
-            label: __("Ready","translate-words"),
+            label: __("Ready","linguator-pro"),
             value: "ready",
             visible: true,
             step:step++
@@ -152,7 +152,7 @@ const SetupProgress = ({lmat_setup_data}) => {
                             }
                         }}
                     >
-                        {__("Skip","translate-words")}
+                        {__("Skip","linguator-pro")}
                     </a>
                 </div>
             }

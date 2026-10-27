@@ -54,7 +54,7 @@ const MainComponent = ({ currentPage }) => {
                   icon={<LoaderPinwheel className="animate-spin" />}
                   size="md"
                   variant="primary"
-                /></h1> <h1 className='m-0'>{__("Loading", "translate-words")}</h1>
+                /></h1> <h1 className='m-0'>{__("Loading", "linguator-pro")}</h1>
             </div> :
             <>
               <ComponentSelector currentPage={currentPage} data={data} setData={setData} />

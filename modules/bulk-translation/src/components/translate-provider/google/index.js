@@ -63,7 +63,7 @@ class GoogleTranslater {
 
         if (!GoogleLanguage().includes(this.filterLanguage(targetLang))) {
             this.storeDispatch(unsetPendingPost(this.postId + '_' + targetLang));
-            this.storeDispatch(updateTranslatePostInfo({ [this.postId + '_' + targetLang]: { status: 'error', messageClass: 'error', errorMessage: sprintf(__('Language %s(%s) is not supported by Google Translate', 'translate-words'), languageObject[targetLang].name, targetLang), errorHtml: false } }));
+            this.storeDispatch(updateTranslatePostInfo({ [this.postId + '_' + targetLang]: { status: 'error', messageClass: 'error', errorMessage: sprintf(__('Language %s(%s) is not supported by Google Translate', 'linguator-pro'), languageObject[targetLang].name, targetLang), errorHtml: false } }));
             if (!this.stopTranslation) {
                 this.advanceProgress();
             }
@@ -91,7 +91,7 @@ class GoogleTranslater {
                         [`${this.postId}_${targetLang}`]: {
                             status: 'error',
                             messageClass: 'error',
-                            errorMessage: __('Google Translate failed for this batch. Try again.', 'translate-words'),
+                            errorMessage: __('Google Translate failed for this batch. Try again.', 'linguator-pro'),
                             errorHtml: false,
                         },
                     })
@@ -112,7 +112,7 @@ class GoogleTranslater {
                                 [`${this.postId}_${targetLang}`]: {
                                     status: 'error',
                                     messageClass: 'error',
-                                    errorMessage: __('Google Translate failed for this batch. Try again.', 'translate-words'),
+                                    errorMessage: __('Google Translate failed for this batch. Try again.', 'linguator-pro'),
                                     errorHtml: false,
                                 },
                             })
@@ -216,7 +216,7 @@ class GoogleTranslater {
                         messageClass: 'error',
                         errorMessage: __(
                             'Google Translate did not load. Check your internet connection, disable ad blockers for this site, and try again.',
-                            'translate-words'
+                            'linguator-pro'
                         ),
                         errorHtml: false,
                     },
@@ -232,7 +232,7 @@ class GoogleTranslater {
                 [`${this.postId}_${this.activeTargetLang}`]: {
                     status: 'error',
                     messageClass: 'error',
-                    errorMessage: sprintf(__('Language %s(%s) is not supported by Google Translate', 'translate-words'), languageObject[this.activeTargetLang]?.name, this.activeTargetLang),
+                    errorMessage: sprintf(__('Language %s(%s) is not supported by Google Translate', 'linguator-pro'), languageObject[this.activeTargetLang]?.name, this.activeTargetLang),
                     errorHtml: false
                 }
             }));
@@ -255,7 +255,7 @@ class GoogleTranslater {
                     [`${this.postId}_${this.activeTargetLang}`]: {
                         status: 'error',
                         messageClass: 'error',
-                        errorMessage: __('Translation UI is missing. Reload the page and try again.', 'translate-words'),
+                        errorMessage: __('Translation UI is missing. Reload the page and try again.', 'linguator-pro'),
                         errorHtml: false,
                     },
                 })
@@ -354,7 +354,7 @@ class GoogleTranslater {
                                 messageClass: 'error',
                                 errorMessage: __(
                                     'Google Translate could not be loaded. Check your internet connection and try again.',
-                                    'translate-words'
+                                    'linguator-pro'
                                 ),
                                 errorHtml: false,
                             },
@@ -371,7 +371,7 @@ class GoogleTranslater {
                     return;
                 }
                 this.storeDispatch(unsetPendingPost(this.postId + '_' + lang));
-                this.storeDispatch(updateTranslatePostInfo({ [this.postId + '_' + lang]: { status: 'error', messageClass: 'error', errorMessage: __('No content to translate', 'translate-words'), errorHtml: false } }));
+                this.storeDispatch(updateTranslatePostInfo({ [this.postId + '_' + lang]: { status: 'error', messageClass: 'error', errorMessage: __('No content to translate', 'linguator-pro'), errorHtml: false } }));
                 this.advanceProgress();
             });
         }

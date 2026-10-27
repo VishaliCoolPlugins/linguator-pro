@@ -1,4 +1,4 @@
-=== Linguator AI – Auto Translate & Create Multilingual Sites  ===
+=== Linguator Pro - AI Auto Translate & Create Multilingual Sites ===
 
 Contributors: narinder-singh,satindersingh,coolplugins
 Tags: automatic translation, google translate,elementor translation, multilingual, ai translator
@@ -13,7 +13,7 @@ AI-powered translation for your WordPress site, fully compatible with Elementor,
 
 == Description ==
 
-**Linguator AI – Auto Translate & Create Multilingual Sites** is an AI-powered translation plugin that works seamlessly with **Elementor**, **Gutenberg**, the **Classic Editor**, **WooCommerce**, **ACF**, **Rank Math**, **Yoast SEO**, helping you create multilingual websites in just a few clicks without any complex setup.
+**Linguator Pro - AI Auto Translate & Create Multilingual Sites** is an AI-powered translation plugin that works seamlessly with **Elementor**, **Gutenberg**, the **Classic Editor**, **WooCommerce**, **ACF**, **Rank Math**, **Yoast SEO**, helping you create multilingual websites in just a few clicks without any complex setup.
 
 https://youtu.be/TNSWCCmHQPg?si=LQXRkszBIFPMG9vg
 
@@ -25,7 +25,7 @@ Linguator is fully compatible with popular WordPress editors and plugins, includ
 
 https://youtu.be/20MbjUb6AnM?si=-1qipV1fFH89KtgT
 
-[Check Live Demo](https://wordpress.org/plugins/translate-words/?preview=1) | [Learn more](https://linguator.com/?utm_source=twlmat_plugin&utm_medium=readme&utm_campaign=view_plugin&utm_content=learn_more) 
+[Learn more](https://linguator.com/?utm_source=twlmat_plugin&utm_medium=readme&utm_campaign=view_plugin&utm_content=learn_more) 
 
 ### AI Translation Made Easy for WordPress 
 * **Easy to install and use:** Linguator is quick to install and beginner-friendly, allowing you to get started in minutes. Simply install the plugin, run the setup wizard, select your languages, and start translating. No coding required.
@@ -83,11 +83,10 @@ This plugin offers AI translation services via Chrome's built-in AI APIs. Learn 
 * [Google Gemini get API key](https://aistudio.google.com/app/api-keys)
 * [Google Gemini Terms of Service](https://ai.google.dev/gemini-api/terms)
 
-[Linguator AI on GitHub.](https://github.com/CoolPluginsTeam/translate-words)
 
 == Credits ==
 
-While the core of this plugin is a fork of the free version, it incorporates the Abstract_Screen class structure originally found in the WP_Syntex\Polylang_Pro\Editors\Screens namespace of Polylang Pro. This architecture has been refactored into the Linguator\Modules\Editors\Screens namespace to ensure a unique environment, maintain compatibility, and prevent naming collisions with the original plugin.
+While the core of this plugin is a fork of the free version, it incorporates the Abstract_Screen class structure originally found in the WP_Syntex\Polylang_Pro\Editors\Screens namespace of Polylang Pro. This architecture has been refactored into the LinguatorPro\Modules\Editors\Screens namespace to ensure a unique environment, maintain compatibility, and prevent naming collisions with the original plugin.
 
 This plugin is distributed under the terms of the GNU General Public License, version 3 (GPLv3). We are grateful to the original authors, Frédéric Demarle and the WP SYNTEX team, for their foundational work in the WordPress multilingual space.
 
@@ -194,7 +193,6 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * **SEO-Optimized for Multilingual Sites** – Generate search-friendly URLs for every language to improve visibility in Google.
 * **Lightweight & Optimized for Speed** – Linguator is built with performance in mind and doesn’t slow down your pages or website loading time.
 
-**Legacy Version:** If you need the previous implementation of Translate Words, you can download the legacy code that was removed in version 2.1.10 from our [GitHub repository](https://github.com/CoolPluginsTeam/translate-words/tree/translate-words-legacy).
 
 == Changelog ==
 

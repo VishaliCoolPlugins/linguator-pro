@@ -78,7 +78,7 @@ const localAiTranslator = async (props) => {
         mainWrapperSelector: "#lmat_page_translation_strings_model",
         btnSelector: `#${props.ID}`,
         btnClass: "local_ai_translator_btn",
-        btnText: __("Translate To", 'translate-words') + ' ' + targetLangName,
+        btnText: __("Translate To", 'linguator-pro') + ' ' + targetLangName,
         stringSelector: ".lmat_page_translation_string_container tbody tr td.translate:not([data-translate-status='translated'])",
         progressBarSelector: "#lmat_page_translation_strings_model .lmat_page_translation_translate_progress",
         sourceLanguage: props.sourceLang,
@@ -96,8 +96,8 @@ const localAiTranslator = async (props) => {
             document.dispatchEvent(
                 new CustomEvent("lmat-page-translation:translation-error", {
                     detail: {
-                        message: __("Translation Error", "translate-words"),
-                        messagePlain: __("Translation Error", "translate-words"),
+                        message: __("Translation Error", "linguator-pro"),
+                        messagePlain: __("Translation Error", "linguator-pro"),
                         recoverable: true,
                         html: errorHtml,
                         onTranslateAgain: () => { window.location.reload(); },

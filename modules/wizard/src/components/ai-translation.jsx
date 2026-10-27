@@ -157,18 +157,18 @@ const AiTranslation = () => {
 			setSetupProgress('language_switcher');
 			localStorage.setItem('setupProgress', 'language_switcher');
 		} catch (error) {
-			toast.error(error?.message || __('Please try again later', 'translate-words'));
+			toast.error(error?.message || __('Please try again later', 'linguator-pro'));
 		}
 	};
 
 	return (
 		<div className="mx-auto p-10 max-w-[600px] min-h-[40vh] bg-white shadow-sm flex flex-col">
 			<div className="flex-grow">
-				<h2>{__('Translation Configuration', 'translate-words')}</h2>
+				<h2>{__('Translation Configuration', 'linguator-pro')}</h2>
 				<p className="text-justify text-sm/6">
 					{__(
 						'Turn on AI translation if you need to translate the content of your website using AI. If not, you can leave it off.',
-						'translate-words'
+						'linguator-pro'
 					)}
 				</p>
 
@@ -178,10 +178,10 @@ const AiTranslation = () => {
 				>
 					<div className="flex items-center gap-2">
 						<GoogleIcon className="w-4 h-4" />
-						<p className="text-sm/6">{__('Google Machine Translation', 'translate-words')}</p>
+						<p className="text-sm/6">{__('Google Machine Translation', 'linguator-pro')}</p>
 					</div>
 					<Switch
-						aria-label={__('Google Machine Translation', 'translate-words')}
+						aria-label={__('Google Machine Translation', 'linguator-pro')}
 						id="google-machine-translation"
 						onChange={() => setGoogleMachineTranslation((prev) => !prev)}
 						size="sm"
@@ -194,10 +194,10 @@ const AiTranslation = () => {
 						<div className="flex justify-between items-center">
 							<div className="flex items-center gap-2">
 								<ChromeIcon className="w-4 h-4" />
-								<p className="text-sm/6">{__('Chrome Local AI Translation', 'translate-words')}</p>
+								<p className="text-sm/6">{__('Chrome Local AI Translation', 'linguator-pro')}</p>
 							</div>
 							<Switch
-								aria-label={__('Chrome Local AI Translation', 'translate-words')}
+								aria-label={__('Chrome Local AI Translation', 'linguator-pro')}
 								id="chrome-local-ai-translation"
 								onChange={() => setChromeLocalAITranslation((prev) => !prev)}
 								size="sm"
@@ -213,10 +213,10 @@ const AiTranslation = () => {
 						<div className="flex justify-between items-center">
 							<div className="flex items-center gap-2">
 								<EdgeIcon className="w-4 h-4" />
-								<p className="text-sm/6">{__('Edge Local AI Translation', 'translate-words')}</p>
+								<p className="text-sm/6">{__('Edge Local AI Translation', 'linguator-pro')}</p>
 							</div>
 							<Switch
-								aria-label={__('Edge Local AI Translation', 'translate-words')}
+								aria-label={__('Edge Local AI Translation', 'linguator-pro')}
 								id="edge-local-ai-translation"
 								onChange={() => setEdgeLocalAITranslation((prev) => !prev)}
 								size="sm"
@@ -233,10 +233,10 @@ const AiTranslation = () => {
 							<div className="flex justify-between items-center">
 								<div className="flex items-center gap-2">
 									<GeminiIcon className="w-4 h-4" />
-									<p className="text-sm/6">{__('Google Gemini AI', 'translate-words')}</p>
+									<p className="text-sm/6">{__('Google Gemini AI', 'linguator-pro')}</p>
 								</div>
 								<Switch
-									aria-label={__('Google Gemini AI', 'translate-words')}
+									aria-label={__('Google Gemini AI', 'linguator-pro')}
 									id="gemini-translation"
 									onChange={() => setGeminiTranslation((prev) => !prev)}
 									size="sm"
@@ -248,7 +248,7 @@ const AiTranslation = () => {
 								<div className="mt-4 flex flex-col gap-4">
 									{hasGeminiSavedKey ? (
 										<p className="text-base font-semibold m-0">
-											{__('Gemini API key', 'translate-words')}
+											{__('Gemini API key', 'linguator-pro')}
 										</p>
 									) : (
 										<div
@@ -259,12 +259,12 @@ const AiTranslation = () => {
 											}}
 										>
 											<p className="text-base font-semibold m-0">
-												{__('Gemini API key (optional)', 'translate-words')}
+												{__('Gemini API key (optional)', 'linguator-pro')}
 											</p>
 											<p className="text-sm/6 m-0 mt-2" style={{ color: '#92400e' }}>
 												{__(
 													'You can skip adding an API key for now and continue with the setup. To use Gemini translation features, you\'ll need to add a valid API key later from the ',
-													'translate-words'
+													'linguator-pro'
 												)}
 												<a
 													className="underline"
@@ -272,7 +272,7 @@ const AiTranslation = () => {
 													target="_blank"
 													rel="noreferrer noopener"
 												>
-													{__('Settings panel.', 'translate-words')}
+													{__('Settings panel.', 'linguator-pro')}
 												</a>
 											</p>
 										</div>
@@ -281,11 +281,11 @@ const AiTranslation = () => {
 									<div className="flex flex-col gap-2 w-full" style={{ width: '100%' }}>
 										<div style={{ width: '100%' }}>
 											<Input
-												aria-label={__('Gemini API key', 'translate-words')}
+												aria-label={__('Gemini API key', 'linguator-pro')}
 												id="gemini-api-key"
 												size="md"
 												type="text"
-												placeholder={__('Enter your API key', 'translate-words')}
+												placeholder={__('Enter your API key', 'linguator-pro')}
 												disabled={geminiApiKeyInputDisabled}
 												value={geminiApiKeyDisplayValue}
 												onChange={(v) => {
@@ -299,14 +299,14 @@ const AiTranslation = () => {
 
 										{hasGeminiSavedKey ? (
 											<p className="text-xs/5 text-gray-600 m-0" style={{ wordBreak: 'break-word' }}>
-												{__('Manage your Gemini API key in the ', 'translate-words')}
+												{__('Manage your Gemini API key in the ', 'linguator-pro')}
 												<a
 													className="underline"
 													href={`${window?.lmat_setup?.admin_url || ''}admin.php?page=lmat_settings&tab=translation`}
 													target="_blank"
 													rel="noreferrer noopener"
 												>
-													{__('Settings panel.', 'translate-words')}
+													{__('Settings panel.', 'linguator-pro')}
 												</a>
 											</p>
 										) : (
@@ -317,7 +317,7 @@ const AiTranslation = () => {
 													target="_blank"
 													rel="noreferrer noopener"
 												>
-													{__('Get Gemini API key', 'translate-words')}
+													{__('Get Gemini API key', 'linguator-pro')}
 												</a>
 											</p>
 										)}

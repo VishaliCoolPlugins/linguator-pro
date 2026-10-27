@@ -26,7 +26,7 @@ export async function installLanguagePackFromStatus(postId, targetLang, storeDis
         [key]: {
             status: 'running',
             messageClass: '',
-            errorMessage: __('Loading language…', 'translate-words'),
+            errorMessage: __('Loading language…', 'linguator-pro'),
             errorHtml: false,
             needsLanguagePack: false,
         }
@@ -198,7 +198,7 @@ class LocalAiTranslate {
 
     onLanguageError = (data) => {
         let html = false;
-        const message = (data && data.message) ? data.message : __('Language error', 'translate-words');
+        const message = (data && data.message) ? data.message : __('Language error', 'linguator-pro');
 
         if (data && data.html) {
             // jQuery object or DOM node
@@ -235,7 +235,7 @@ class LocalAiTranslate {
             [this.postId+'_'+this.activeTargetLangs]: {
                 status: 'running',
                 messageClass: '',
-                errorMessage: isLoading ? __('Loading language…', 'translate-words') : '',
+                errorMessage: isLoading ? __('Loading language…', 'linguator-pro') : '',
                 errorHtml: false,
                 needsLanguagePack: false,
             }
@@ -322,7 +322,7 @@ class LocalAiTranslate {
             this.targetLangs.forEach(lang=>{
                 this.storeDispatch(unsetPendingPost(this.postId+'_'+lang));
                 this.storeDispatch(updateProgressStatus(100 / this.totalPosts));
-                this.storeDispatch(updateTranslatePostInfo({[this.postId+'_'+lang]: { status: 'error', messageClass: 'error', errorMessage: __('No content to translate', 'translate-words'), errorHtml: false}}));
+                this.storeDispatch(updateTranslatePostInfo({[this.postId+'_'+lang]: { status: 'error', messageClass: 'error', errorMessage: __('No content to translate', 'linguator-pro'), errorHtml: false}}));
             });
         }
     }

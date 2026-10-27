@@ -10,9 +10,9 @@ const SettingModalFooter = ({
 
     let startTitle = '';
     if (selectedLanguages.length === 0) {
-        startTitle = __('Please select at least one language.', 'translate-words');
+        startTitle = __('Please select at least one language.', 'linguator-pro');
     } else if (!selectedProvider) {
-        startTitle = __('Please select a translation provider.', 'translate-words');
+        startTitle = __('Please select a translation provider.', 'linguator-pro');
     }
 
     return (
@@ -28,7 +28,7 @@ const SettingModalFooter = ({
                     }
                 }}
             >
-                {__('Start Translation', 'translate-words')} <span className={`${prefix}-next-arrow`}>&#8594;</span>
+                {__('Start Translation', 'linguator-pro')} <span className={`${prefix}-next-arrow`}>&#8594;</span>
             </button>
         </div>
     );

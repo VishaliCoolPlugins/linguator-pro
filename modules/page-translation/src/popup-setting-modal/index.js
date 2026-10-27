@@ -135,7 +135,7 @@ const SettingModal = (props) => {
                 } else {
                     setChromeAiBtnDisabled(true);
                     setChromeAiDownload(null);
-                    errors.localAiTranslator = { message: localAiTranslatorSupport, Title: __("Chrome AI Translator", 'translate-words') };
+                    errors.localAiTranslator = { message: localAiTranslatorSupport, Title: __("Chrome AI Translator", 'linguator-pro') };
                     setServiceModalErrors(prev => ({ ...prev, localAiTranslator: errors.localAiTranslator }));
                 }
             } else {
@@ -168,7 +168,7 @@ const SettingModal = (props) => {
                 } else {
                     setEdgeAiBtnDisabled(true);
                     setEdgeAiDownload(null);
-                    errors.edgeLocalAiTranslator = { message: edgeLocalAiTranslatorSupport, Title: __("Edge AI Translator", 'translate-words') };
+                    errors.edgeLocalAiTranslator = { message: edgeLocalAiTranslatorSupport, Title: __("Edge AI Translator", 'linguator-pro') };
                     setServiceModalErrors(prev => ({ ...prev, edgeLocalAiTranslator: errors.edgeLocalAiTranslator }));
                 }
             } else {
@@ -188,10 +188,10 @@ const SettingModal = (props) => {
 
 
                     message: "<p style={{ fontSize: '1rem', color: '#ff4646' }}>" + sprintf(
-                        __("Google Translate does not support the target language: %s.", 'translate-words'),
+                        __("Google Translate does not support the target language: %s.", 'linguator-pro'),
                         "<strong>" + targetLangName + "</strong>"
                     ) + "</p>",
-                    Title: __("Google Translate", 'translate-words')
+                    Title: __("Google Translate", 'linguator-pro')
                 };
 
                 setServiceModalErrors(prev => ({
@@ -222,13 +222,13 @@ const SettingModal = (props) => {
         if (providers.length < 1) {
             let providerConfigMsg = sprintf(__(
                 '%sYou have not enabled any translation provider. Please enable at least one service provider to use automatic translation. Go to the %sTranslation Settings%s to configure a translation provider.%s',
-                'translate-words'
+                'linguator-pro'
             ),
                 '<p>',
                 `<strong><a href='${lmatPageTranslationGlobal.admin_url}admin.php?page=lmat_settings&tab=translation' target='_blank' rel='noopener noreferrer'>`,
                 '</a></strong>',
                 '</p>');
-            setServiceModalErrors((prev) => ({ ...prev, providerNotConfigured: { message: providerConfigMsg, Title: __("Translation Provider Not Configured", 'translate-words') } }));
+            setServiceModalErrors((prev) => ({ ...prev, providerNotConfigured: { message: providerConfigMsg, Title: __("Translation Provider Not Configured", 'linguator-pro') } }));
             return;
         }
         if (settingVisibility) {
@@ -319,7 +319,7 @@ const SettingModal = (props) => {
                     });
                 } else {
                     setErrorModalVisibility('localAiTranslator');
-                    setServiceModalErrors(prev => ({ ...prev, localAiTranslator: { message: localAiTranslatorSupport[0]?.outerHTML || localAiTranslatorSupport, Title: __("Chrome AI Translator", 'translate-words') } }));
+                    setServiceModalErrors(prev => ({ ...prev, localAiTranslator: { message: localAiTranslatorSupport[0]?.outerHTML || localAiTranslatorSupport, Title: __("Chrome AI Translator", 'linguator-pro') } }));
                 }
                 return;
             }
@@ -341,7 +341,7 @@ const SettingModal = (props) => {
                     });
                 } else {
                     setErrorModalVisibility('edgeLocalAiTranslator');
-                    setServiceModalErrors(prev => ({ ...prev, edgeLocalAiTranslator: { message: edgeLocalAiTranslatorSupport[0]?.outerHTML || edgeLocalAiTranslatorSupport, Title: __("Edge AI Translator", 'translate-words') } }));
+                    setServiceModalErrors(prev => ({ ...prev, edgeLocalAiTranslator: { message: edgeLocalAiTranslatorSupport[0]?.outerHTML || edgeLocalAiTranslatorSupport, Title: __("Edge AI Translator", 'linguator-pro') } }));
                 }
                 return;
             }

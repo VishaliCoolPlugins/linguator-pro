@@ -88,7 +88,7 @@ const initBulkTranslate=async (postKeys=[], nonce, storeDispatch, prefix, update
                 for(const lang of languages){   
                     storeDispatch(unsetPendingPost(postId+'_'+lang));
                     storeDispatch(updateProgressStatus(100 / pendingPosts.length));
-                    storeDispatch(updateTranslatePostInfo({[postId+'_'+lang]: {status: 'error', messageClass: 'error', errorMessage: __('This post editor type is not supported for translation', 'translate-words')}}));
+                    storeDispatch(updateTranslatePostInfo({[postId+'_'+lang]: {status: 'error', messageClass: 'error', errorMessage: __('This post editor type is not supported for translation', 'linguator-pro')}}));
                 }
             }
 
@@ -228,7 +228,7 @@ export const updateContent=async ({source, postId, sourceLang, lang, editorType,
 
             updateTranslateData({provider: service, sourceLang, targetLang: lang, currentPostId: successPayload.post_id, parentPostId: postId, editorType, updateTranslateDataNonce: successPayload.update_translate_data_nonce, extraData, signal});
 
-            successPayload.post_title = '' === successPayload.post_title ? __('N/A', 'translate-words') : successPayload.post_title;
+            successPayload.post_title = '' === successPayload.post_title ? __('N/A', 'linguator-pro') : successPayload.post_title;
             updateData={targetPostId: successPayload.post_id, targetPostTitle: successPayload.post_title, targetLanguage: lang, postLink: successPayload.post_link, postEditLink: successPayload.post_edit_link, elementorEditLink: successPayload.elementor_edit_link || false, status: 'completed', messageClass: 'success'};
             storeDispatch(updateCountInfo({postsTranslated: store.getState().countInfo.postsTranslated+1}));
         }else{
@@ -243,17 +243,17 @@ export const updateContent=async ({source, postId, sourceLang, lang, editorType,
                     errorHtml+='<br>Error Message:' + JSON.stringify(data.data.error);
                 }
 
-                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'translate-words'), errorHtml: '<div class="lmat-error-html">'+errorHtml+'</div>'};
+                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'linguator-pro'), errorHtml: '<div class="lmat-error-html">'+errorHtml+'</div>'};
             }else if(data.code && data.message){
-                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'translate-words'), errorHtml: '<div class="lmat-error-html">'+data.message+'</div>'};
+                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'linguator-pro'), errorHtml: '<div class="lmat-error-html">'+data.message+'</div>'};
             }else if(!data.success || data.data){
-                const errorMessage = __('Something went wrong. Please try again.', 'translate-words');
+                const errorMessage = __('Something went wrong. Please try again.', 'linguator-pro');
                 const detail = data.data == null ? errorMessage : data.data;
                 updateData={status: 'error', messageClass: 'error', errorMessage, errorHtml: '<div class="lmat-error-html">'+detail+'</div>', allowTranslate: data.data == null};
             }else if(!data.data.post_id){
-                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'translate-words'), errorHtml: '<div class="lmat-error-html">'+data.data+'</div>'};
+                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'linguator-pro'), errorHtml: '<div class="lmat-error-html">'+data.data+'</div>'};
             }else if(typeof data === 'string'){
-                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'translate-words'), errorHtml: '<div class="lmat-error-html">'+data+'</div>'};
+                updateData={status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'linguator-pro'), errorHtml: '<div class="lmat-error-html">'+data+'</div>'};
             }
         }
         
@@ -286,7 +286,7 @@ export const updateContent=async ({source, postId, sourceLang, lang, editorType,
             }
         }
 
-        storeDispatch(updateTranslatePostInfo({[postId+'_'+lang]: { status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'translate-words'), errorHtml: '<div class="lmat-error-html">'+errorHtml+'</div>'}}));
+        storeDispatch(updateTranslatePostInfo({[postId+'_'+lang]: { status: 'error', messageClass: 'error', errorMessage: __('Post not created. Please try again.', 'linguator-pro'), errorHtml: '<div class="lmat-error-html">'+errorHtml+'</div>'}}));
     })
 }
 
@@ -334,7 +334,7 @@ const bulkTranslateEntries = async ({ids, langs, storeDispatch, signal}) => {
         }
         return {
             success: false,
-            message: __('Could not load posts to translate. Check your connection and try again.', 'translate-words'),
+            message: __('Could not load posts to translate. Check your connection and try again.', 'linguator-pro'),
         };
     }
 
@@ -357,7 +357,7 @@ const bulkTranslateEntries = async ({ids, langs, storeDispatch, signal}) => {
     }
 
     if(!untranslatedPostsData){
-        return {success: false, message: __('No posts to translate data undefined', 'translate-words')};
+        return {success: false, message: __('No posts to translate data undefined', 'linguator-pro')};
     }
 
     if(!untranslatedPostsData.success){
@@ -365,15 +365,15 @@ const bulkTranslateEntries = async ({ids, langs, storeDispatch, signal}) => {
     }
 
     if(!untranslatedPostsData.data){
-        return {success: false, message: __('No posts to translate untranslated data not found', 'translate-words')};
+        return {success: false, message: __('No posts to translate untranslated data not found', 'linguator-pro')};
     }
 
     if(!untranslatedPostsData.data.posts){
-        return {success: false, message: __('No posts to translate untranslated posts data not found', 'translate-words')};
+        return {success: false, message: __('No posts to translate untranslated posts data not found', 'linguator-pro')};
     }
 
     if(!untranslatedPostsData.data.CreateTranslatePostNonce){
-        return {success: false, message: __('No create translate post nonce', 'translate-words')};
+        return {success: false, message: __('No create translate post nonce', 'linguator-pro')};
     }
 
     const posts=untranslatedPostsData.data.posts;
@@ -514,7 +514,7 @@ const bulkTranslateEntries = async ({ids, langs, storeDispatch, signal}) => {
                     editorType: editor_type,
                     sourceLanguage,
                     errorMessage: sprintf(
-                        __('Set source language for this %s %s before translating.', 'translate-words'),
+                        __('Set source language for this %s %s before translating.', 'linguator-pro'),
                         titleLink ? '<a href="'+titleLink+'" target="_blank" rel="noopener noreferrer">'+postTitle+'</a>' : postTitle,
                         window?.lmatBulkTranslationGlobal?.taxonomy_page || window?.lmatBulkTranslationGlobal?.post_label
                     )

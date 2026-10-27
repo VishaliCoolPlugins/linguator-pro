@@ -70,10 +70,10 @@ const Providers = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${prefix}-provider-card-docs`}
-                    title={sprintf(__("View %s Documentation", "translate-words"), ActiveService.serviceLabel)}
+                    title={sprintf(__("View %s Documentation", "linguator-pro"), ActiveService.serviceLabel)}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {__('Docs', 'translate-words')}
+                    {__('Docs', 'linguator-pro')}
                 </a>
                 {isDisabled && (
                     <div className={`${prefix}-provider-card-error`}>{ActiveService.ErrorMessage}</div>

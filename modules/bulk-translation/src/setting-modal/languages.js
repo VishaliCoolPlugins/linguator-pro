@@ -18,10 +18,10 @@ const SettingModalLanguages = ({
         <section className={`${prefix}-setup-column ${prefix}-setup-languages`}>
             <div className={`${prefix}-setup-column-head`}>
                 <span className={`${prefix}-setup-step-badge`} aria-hidden="true">1</span>
-                <h3>{__('Select Languages', 'translate-words')}</h3>
+                <h3>{__('Select Languages', 'linguator-pro')}</h3>
             </div>
             <p className={`${prefix}-setup-column-desc`}>
-                {__('Choose the languages you want to translate your content into.', 'translate-words')}
+                {__('Choose the languages you want to translate your content into.', 'linguator-pro')}
             </p>
 
             {notice}
@@ -40,8 +40,8 @@ const SettingModalLanguages = ({
                         <span className={`${prefix}-select-all-languages-check-visual`} aria-hidden="true"></span>
                         <span className={`${prefix}-language-label`}>
                             {allSelected
-                                ? __('Unselect All', 'translate-words')
-                                : __('Select All', 'translate-words')}
+                                ? __('Unselect All', 'linguator-pro')
+                                : __('Select All', 'linguator-pro')}
                         </span>
                     </div>
                 </label>

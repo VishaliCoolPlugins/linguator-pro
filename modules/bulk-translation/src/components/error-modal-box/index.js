@@ -16,7 +16,7 @@ const ErrorModalBox = ({ message, onClose, Title, prefix, children, beforeClose 
     }
 
     if (!stringifiedMessage || !String(stringifiedMessage).replace(/<[^>]*>/g, '').trim()) {
-        stringifiedMessage = __('An unexpected error occurred during bulk translation.', 'translate-words');
+        stringifiedMessage = __('An unexpected error occurred during bulk translation.', 'linguator-pro');
     }
 
     useEffect(() => {
@@ -86,8 +86,8 @@ const ErrorModalBox = ({ message, onClose, Title, prefix, children, beforeClose 
                         type="button"
                         className={`${prefix}-modal-close`}
                         onClick={onClose}
-                        title={__('Close', 'translate-words')}
-                        aria-label={__('Close', 'translate-words')}
+                        title={__('Close', 'linguator-pro')}
+                        aria-label={__('Close', 'linguator-pro')}
                     >
                         &times;
                     </button>
@@ -103,7 +103,7 @@ const ErrorModalBox = ({ message, onClose, Title, prefix, children, beforeClose 
                         className={`${prefix}-footer-button button button-primary`}
                         onClick={onClose}
                     >
-                        {__('Back', 'translate-words')}
+                        {__('Back', 'linguator-pro')}
                     </button>
                 </div>
             </div>

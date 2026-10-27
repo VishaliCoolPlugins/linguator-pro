@@ -51,7 +51,7 @@ function CopyableCode({ text }) {
 				style={{ cursor: 'pointer', transition: 'opacity 0.2s', padding: '2px 6px', background: '#e5e7eb', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
 				onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
 				onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-				title={__('Click to copy', 'translate-words')}
+				title={__('Click to copy', 'linguator-pro')}
 			>
 				<span>{text}</span>
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, opacity: 0.8 }}>
@@ -74,7 +74,7 @@ function CopyableCode({ text }) {
 					zIndex: 9999,
 					boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
 				}}>
-					{__('Copied to clipboard', 'translate-words')}
+					{__('Copied to clipboard', 'linguator-pro')}
 					<span style={{
 						position: 'absolute',
 						top: '100%',
@@ -167,31 +167,31 @@ export function ChromeLocalAINotice({ className = '', style: extraStyle = {}, is
 		>
 			<div className="text-red-600 text-sm leading-6">
 				<h3 className="font-semibold">
-					{noticeType === 'browser' && __('Important Notice: Browser Compatibility', 'translate-words')}
-					{noticeType === 'secure' && __('Important Notice: Secure Connection Required', 'translate-words')}
-					{noticeType === 'api' && __('Important Notice: API Availability', 'translate-words')}
+					{noticeType === 'browser' && __('Important Notice: Browser Compatibility', 'linguator-pro')}
+					{noticeType === 'secure' && __('Important Notice: Secure Connection Required', 'linguator-pro')}
+					{noticeType === 'api' && __('Important Notice: API Availability', 'linguator-pro')}
 				</h3>
 
 				{noticeType === 'browser' && (
 					<ul className="list-disc ml-5 mt-2">
 						<li>
-							{__('The ', 'translate-words')}<strong>{__('Translator API', 'translate-words')}</strong>{__(', which uses ', 'translate-words')}{browserName}{__(' Local AI Models, is designed exclusively for use with the ', 'translate-words')}<strong>{browserName}{__(' browser', 'translate-words')}</strong>.
+							{__('The ', 'linguator-pro')}<strong>{__('Translator API', 'linguator-pro')}</strong>{__(', which uses ', 'linguator-pro')}{browserName}{__(' Local AI Models, is designed exclusively for use with the ', 'linguator-pro')}<strong>{browserName}{__(' browser', 'linguator-pro')}</strong>.
 						</li>
 						<li>
 							{__(
 								'If you are using a different browser (such as Firefox, or Safari), the API may not function correctly.',
-								'translate-words'
+								'linguator-pro'
 							)}
 						</li>
 						<li>
-							{__('Learn more in the ', 'translate-words')}
+							{__('Learn more in the ', 'linguator-pro')}
 							<a
 								className="underline text-blue-600"
 								href={docUrl}
 								rel="noreferrer noopener"
 								target="_blank"
 							>
-								{__('official documentation', 'translate-words')}
+								{__('official documentation', 'linguator-pro')}
 							</a>.
 						</li>
 					</ul>
@@ -201,18 +201,18 @@ export function ChromeLocalAINotice({ className = '', style: extraStyle = {}, is
 					<>
 						<ul className="list-disc ml-5 mt-2">
 							<li>
-								{__('The Translator API requires a secure (HTTPS) connection to function properly.', 'translate-words')}
+								{__('The Translator API requires a secure (HTTPS) connection to function properly.', 'linguator-pro')}
 							</li>
-							<li>{__('If you are on an insecure connection (HTTP), the API will not work.', 'translate-words')}</li>
+							<li>{__('If you are on an insecure connection (HTTP), the API will not work.', 'linguator-pro')}</li>
 						</ul>
 
-						<p className="mt-2">{__('How to fix this:', 'translate-words')}</p>
+						<p className="mt-2">{__('How to fix this:', 'linguator-pro')}</p>
 						<ol className="list-decimal ml-5 mt-2">
 							<li>
-								{__('Use a secure connection (https://).', 'translate-words')}
+								{__('Use a secure connection (https://).', 'linguator-pro')}
 							</li>
 							<li>
-								{sprintf(__('Or add your site to %s’s “insecure origins treated as secure”.', 'translate-words'), browserName)}{' '}
+								{sprintf(__('Or add your site to %s’s “insecure origins treated as secure”.', 'linguator-pro'), browserName)}{' '}
 								<CopyableCode text={`${scheme}://flags/#unsafely-treat-insecure-origin-as-secure`} />
 							</li>
 						</ol>
@@ -224,31 +224,31 @@ export function ChromeLocalAINotice({ className = '', style: extraStyle = {}, is
 						<ol className="list-decimal ml-5 mt-2">
 							<li>
 								{isEdge 
-                                    ? __('Ensure your Edge browser is updated to version 140 or newer.', 'translate-words') 
-                                    : __('Ensure your Chrome browser is updated to version 131 or newer.', 'translate-words')}
+                                    ? __('Ensure your Edge browser is updated to version 140 or newer.', 'linguator-pro') 
+                                    : __('Ensure your Chrome browser is updated to version 131 or newer.', 'linguator-pro')}
 							</li>
 							<li>
-								{sprintf(__('Open this URL in a new %s tab:', 'translate-words'), browserName)}{' '}
+								{sprintf(__('Open this URL in a new %s tab:', 'linguator-pro'), browserName)}{' '}
 								<CopyableCode text={`${scheme}://flags/#translation-api`} />
 							</li>
 							<li>
-								{__('Set “Experimental translation API” to Enabled.', 'translate-words')}
+								{__('Set “Experimental translation API” to Enabled.', 'linguator-pro')}
 							</li>
 							<li>
-								{__('Click Relaunch to apply changes.', 'translate-words')}
+								{__('Click Relaunch to apply changes.', 'linguator-pro')}
 							</li>
                             <li>
                                 {isEdge
-                                    ? __('Visit the Edge settings to install the required language packs.', 'translate-words')
+                                    ? __('Visit the Edge settings to install the required language packs.', 'linguator-pro')
                                     : (
                                         <>
-                                            {__('To install the language pack, open a new tab and paste this URL:', 'translate-words')}{' '}
+                                            {__('To install the language pack, open a new tab and paste this URL:', 'linguator-pro')}{' '}
                                             <CopyableCode text={`${scheme}://on-device-translation-internals`} />
                                         </>
                                     )}
                             </li>
 							<li>
-								{__('The Translator AI option should now be enabled.', 'translate-words')}
+								{__('The Translator AI option should now be enabled.', 'linguator-pro')}
 							</li>
 						</ol>
 						<p className="mt-2">
@@ -258,11 +258,11 @@ export function ChromeLocalAINotice({ className = '', style: extraStyle = {}, is
 								rel="noreferrer noopener"
 								target="_blank"
 							>
-								{__('Documentation', 'translate-words')}
+								{__('Documentation', 'linguator-pro')}
 							</a>
 						</p>
 						<p>
-							{sprintf(__('If the issue persists, please ensure %s is up to date and restart the browser.', 'translate-words'), browserName)}
+							{sprintf(__('If the issue persists, please ensure %s is up to date and restart the browser.', 'linguator-pro'), browserName)}
 						</p>
 						<p>
 							<a
@@ -271,7 +271,7 @@ export function ChromeLocalAINotice({ className = '', style: extraStyle = {}, is
 								rel="noreferrer noopener"
 								target="_blank"
 							>
-								{__('Open a support ticket', 'translate-words')}
+								{__('Open a support ticket', 'linguator-pro')}
 							</a>
 						</p>
 					</>

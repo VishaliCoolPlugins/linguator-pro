@@ -19,7 +19,7 @@ const App = ({ onDestory, prefix, postIds }) => {
         delete targetLanguages[lmatBulkTranslationGlobal.default_language_slug];
     }
     const postLabelSingular = lmatBulkTranslationGlobal.post_label_singular || lmatBulkTranslationGlobal.post_label;
-    const emptyPostIdsErrorMessage = sprintf(__('Please select at least one %s for translation.', 'translate-words'), postLabelSingular);
+    const emptyPostIdsErrorMessage = sprintf(__('Please select at least one %s for translation.', 'linguator-pro'), postLabelSingular);
     const hasPosts = postIds.length > 0;
     const [selectedLanguages, setSelectedLanguages] = useState(Object.keys(targetLanguages));
     const [statusModalVisibility, setStatusModalVisibility] = useState(false);
@@ -137,15 +137,15 @@ const App = ({ onDestory, prefix, postIds }) => {
           if (postMetaSync) {
             notices.push({
               className: `${prefix}-notice ${prefix}-notice-error`, message: <p>
-                {__('For accurate custom field translations, please disable the Custom Fields synchronization in ', 'translate-words')}
+                {__('For accurate custom field translations, please disable the Custom Fields synchronization in ', 'linguator-pro')}
                 <a
                   href={`${lmatBulkTranslationGlobal.admin_url}admin.php?page=lmat_settings`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {__('Linguator settings', 'translate-words')}
+                  {__('Linguator settings', 'linguator-pro')}
                 </a>
-                {sprintf(__('. This may affect linked %s.', 'translate-words'), lmatBulkTranslationGlobal.post_label)}
+                {sprintf(__('. This may affect linked %s.', 'linguator-pro'), lmatBulkTranslationGlobal.post_label)}
               </p>
             });
           }
@@ -171,8 +171,8 @@ const App = ({ onDestory, prefix, postIds }) => {
                         type="button"
                         className={`${prefix}-modal-close`}
                         onClick={destroyApp}
-                        title={__('Close', 'translate-words')}
-                        aria-label={__('Close', 'translate-words')}
+                        title={__('Close', 'linguator-pro')}
+                        aria-label={__('Close', 'linguator-pro')}
                     >
                         &times;
                     </button>
@@ -206,24 +206,24 @@ const App = ({ onDestory, prefix, postIds }) => {
         className={containerCls(screen)}>
         {'no-provider' === screen && (
             <EmptyScreen
-                heading={__('AI Translation', 'translate-words')}
-                description={__('Nothing is ready to translate yet.', 'translate-words')}
-                artTitle={__('No Translation Provider', 'translate-words')}
+                heading={__('AI Translation', 'linguator-pro')}
+                description={__('Nothing is ready to translate yet.', 'linguator-pro')}
+                artTitle={__('No Translation Provider', 'linguator-pro')}
                 message={<>
-                    {__('You have not enabled any translation provider. Please enable at least one service provider to use bulk translation. Go to the', 'translate-words')}{' '}
+                    {__('You have not enabled any translation provider. Please enable at least one service provider to use bulk translation. Go to the', 'linguator-pro')}{' '}
                     <a href={settingsUrl} target="_blank" rel="noopener noreferrer">
-                        {__('Translation Settings', 'translate-words')}
+                        {__('Translation Settings', 'linguator-pro')}
                     </a>
-                    {' '}{__('to configure a translation provider.', 'translate-words')}
+                    {' '}{__('to configure a translation provider.', 'linguator-pro')}
                 </>}
             />
         )}
 
         {'error' === screen && (
             <EmptyScreen
-                heading={__('AI Translation', 'translate-words')}
-                description={__('Nothing is ready to translate yet.', 'translate-words')}
-                artTitle={__('No Items Selected', 'translate-words')}
+                heading={__('AI Translation', 'linguator-pro')}
+                description={__('Nothing is ready to translate yet.', 'linguator-pro')}
+                artTitle={__('No Items Selected', 'linguator-pro')}
                 message={emptyPostIdsErrorMessage}
             />
         )}

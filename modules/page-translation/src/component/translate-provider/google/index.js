@@ -24,7 +24,7 @@ const GoogleTranslater = (data) => {
                 detail: {
                     message: __(
                         "Google Translate could not be loaded. Check your internet connection, disable ad blockers for this site, and try again.",
-                        "translate-words"
+                        "linguator-pro"
                     ),
                 },
             })

@@ -18,10 +18,10 @@ const SettingModalEngines = ({
         <section className={`${prefix}-setup-column ${prefix}-setup-engines`}>
             <div className={`${prefix}-setup-column-head`}>
                 <span className={`${prefix}-setup-step-badge`} aria-hidden="true">2</span>
-                <h3>{__('Select Translation Provider', 'translate-words')}</h3>
+                <h3>{__('Select Translation Provider', 'linguator-pro')}</h3>
             </div>
             <p className={`${prefix}-setup-column-desc`}>
-                {__('Select an AI provider to automatically translate your content.', 'translate-words')}
+                {__('Select an AI provider to automatically translate your content.', 'linguator-pro')}
             </p>
 
             <div className={`${prefix}-provider-cards`}>
@@ -40,14 +40,14 @@ const SettingModalEngines = ({
                     />
                 )) : (
                     <div className={`${prefix}-bulk-translate-empty ${prefix}-provider-empty`}>
-                        <strong>{__('No AI providers available', 'translate-words')}</strong>
+                        <strong>{__('No AI providers available', 'linguator-pro')}</strong>
                         <br />
                         <span className={`${prefix}-provider-empty-actions`}>
-                            {__('Go to the', 'translate-words')}{' '}
+                            {__('Go to the', 'linguator-pro')}{' '}
                             <a href={settingsUrl} target="_blank" rel="noopener noreferrer">
-                                {__('Translation Settings', 'translate-words')}
+                                {__('Translation Settings', 'linguator-pro')}
                             </a>{' '}
-                            {__('to enable a provider.', 'translate-words')}
+                            {__('to enable a provider.', 'linguator-pro')}
                         </span>
                     </div>
                 )}

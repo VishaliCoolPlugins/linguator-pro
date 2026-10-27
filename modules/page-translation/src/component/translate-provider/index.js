@@ -74,10 +74,10 @@ const TranslateService = (props) => {
             SettingBtnText: "Translate",
             serviceLabel: "Google Translate",
             Docs: "https://linguator.com/docs/automatic-translation-via-google-translate-widget/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=docs&utm_content=popup_google_pro",
-            heading: __("Choose Language", "translate-words"),
+            heading: __("Choose Language", "linguator-pro"),
             BetaEnabled: false,
             ButtonDisabled: props.googleButtonDisabled,
-            ErrorMessage: props.googleButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("google")}>{__('View Error', 'translate-words')}</div> : <></>,
+            ErrorMessage: props.googleButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("google")}>{__('View Error', 'linguator-pro')}</div> : <></>,
             Logo: <GoogleIcon className="icon-size"/>
         },
         localAiTranslator: {
@@ -85,11 +85,11 @@ const TranslateService = (props) => {
             title: "Chrome Built-in AI",
             SettingBtnText: "Translate",
             serviceLabel: "Chrome AI Translator",
-            heading: sprintf(__("Translate Using %s", "translate-words"), "Chrome built-in API"),
+            heading: sprintf(__("Translate Using %s", "linguator-pro"), "Chrome built-in API"),
             Docs: "https://linguator.com/docs/automatic-translation-via-chrome-ai/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=docs&utm_content=popup_chrome_pro",
             BetaEnabled: true,
             ButtonDisabled: props.localAiTranslatorButtonDisabled,
-            ErrorMessage: props.localAiTranslatorButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("localAiTranslator")}>{__('View Error', 'translate-words')}</div> : <></>,
+            ErrorMessage: props.localAiTranslatorButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("localAiTranslator")}>{__('View Error', 'linguator-pro')}</div> : <></>,
             Logo: <ChromeIcon className="icon-size"/>
         },
         edgeLocalAiTranslator: {
@@ -97,11 +97,11 @@ const TranslateService = (props) => {
             title: "Edge Built-in AI",
             SettingBtnText: "Translate",
             serviceLabel: "Edge AI Translator",
-            heading: sprintf(__("Translate Using %s", "translate-words"), "Edge built-in API"),
+            heading: sprintf(__("Translate Using %s", "linguator-pro"), "Edge built-in API"),
             Docs: "https://microsoftedge.github.io/Demos/built-in-ai/playgrounds/translator-api/",
             BetaEnabled: true,
             ButtonDisabled: props.edgeLocalAiTranslatorButtonDisabled,
-            ErrorMessage: props.edgeLocalAiTranslatorButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("edgeLocalAiTranslator")}>{__('View Error', 'translate-words')}</div> : <></>,
+            ErrorMessage: props.edgeLocalAiTranslatorButtonDisabled ? <div className="lmat-page-translation-provider-error" onClick={() => openErrorModalHandler("edgeLocalAiTranslator")}>{__('View Error', 'linguator-pro')}</div> : <></>,
             Logo: <EdgeIcon className="icon-size"/>
         },
         gemini: {
@@ -109,11 +109,11 @@ const TranslateService = (props) => {
             title: "Google Gemini",
             SettingBtnText: window.lmatPageTranslationGlobal.api_keys_status?.gemini ? "Translate" : "Add API Key",
             serviceLabel: "Gemini",
-            heading: __("Translate Using Gemini", "translate-words"),
+            heading: __("Translate Using Gemini", "linguator-pro"),
             Docs: "https://linguator.com/docs/automatic-translation-via-googe-gemini/?utm_source=twlmat_plugin&utm_medium=inside&utm_campaign=docs",
             BetaEnabled: false,
             ButtonDisabled: !window.lmatPageTranslationGlobal.api_keys_status?.gemini,
-            ErrorMessage: !window.lmatPageTranslationGlobal.api_keys_status?.gemini ? <a href={`${window.lmatPageTranslationGlobal.admin_url}admin.php?page=lmat_settings&tab=translation`} target="_blank" rel="noopener noreferrer" className="lmat-page-translation-provider-error">{__('Add API Key', 'translate-words')}</a> : <></>,
+            ErrorMessage: !window.lmatPageTranslationGlobal.api_keys_status?.gemini ? <a href={`${window.lmatPageTranslationGlobal.admin_url}admin.php?page=lmat_settings&tab=translation`} target="_blank" rel="noopener noreferrer" className="lmat-page-translation-provider-error">{__('Add API Key', 'linguator-pro')}</a> : <></>,
             Logo: <GeminiIcon className="icon-size" />
         }
     };

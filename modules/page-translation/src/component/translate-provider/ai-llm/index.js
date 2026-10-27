@@ -51,7 +51,7 @@ export default function createAiLlmPageTranslator(providerId) {
         }
 
         const buttonTextMap = {
-            gemini: __("Translate with Gemini", "translate-words"),
+            gemini: __("Translate with Gemini", "linguator-pro"),
         };
 
         // Render button (and avoid duplicating on re-renders)
@@ -60,7 +60,7 @@ export default function createAiLlmPageTranslator(providerId) {
         btn.type = "button";
         // Reuse Chrome AI button classes for identical styling
         btn.className = "local_ai_translator_btn button button-primary";
-        btn.textContent = buttonTextMap[providerId] || sprintf(__("Translate with %s", "translate-words"), providerId);
+        btn.textContent = buttonTextMap[providerId] || sprintf(__("Translate with %s", "linguator-pro"), providerId);
         if (translateStatus) {
             btn.disabled = true;
         }
@@ -76,46 +76,46 @@ export default function createAiLlmPageTranslator(providerId) {
         const buildRecoverableHtml = (done, total, limitExceeded = false) => {
             const totalSafe = Math.max(1, total);
             const translateAgainLabel = limitExceeded
-                ? __('Click "Translate" after updating your API key to try again.', "translate-words")
-                : __('Click "Translate" to try again.', "translate-words");
+                ? __('Click "Translate" after updating your API key to try again.', "linguator-pro")
+                : __('Click "Translate" to try again.', "linguator-pro");
             const translateAgainPartialLabel = limitExceeded
-                ? __('Click "Translate" after updating your API key to re-translate the remaining strings.', "translate-words")
-                : __('Click "Translate" to re-translate the remaining strings.', "translate-words");
+                ? __('Click "Translate" after updating your API key to re-translate the remaining strings.', "linguator-pro")
+                : __('Click "Translate" to re-translate the remaining strings.', "linguator-pro");
 
             if (done <= 0) {
                 const heading = limitExceeded
-                    ? __("You’ve exceeded your current plan limit.", "translate-words")
-                    : __("Oops! Something went wrong during translation", "translate-words");
+                    ? __("You’ve exceeded your current plan limit.", "linguator-pro")
+                    : __("Oops! Something went wrong during translation", "linguator-pro");
                 const intro = limitExceeded
-                    ? __("To continue, please check your plan details and update your API key.", "translate-words")
-                    : __("No strings were saved yet. You can retry the same step or stop here.", "translate-words");
+                    ? __("To continue, please check your plan details and update your API key.", "linguator-pro")
+                    : __("No strings were saved yet. You can retry the same step or stop here.", "linguator-pro");
                 return `<div class="lmat_page_translation_ai_pending">
                 <p class="lmat_page_translation_ai_pending_heading">${escapeHtml(heading)}</p>
-                ${limitExceeded ? "" : `<p>${escapeHtml(__("To see more details, open your browser’s developer console.", "translate-words"))}</p>`}
+                ${limitExceeded ? "" : `<p>${escapeHtml(__("To see more details, open your browser’s developer console.", "linguator-pro"))}</p>`}
                 <p>${escapeHtml(intro)}</p>
-                <p><strong>${escapeHtml(__("Next Steps:", "translate-words"))}</strong></p>
+                <p><strong>${escapeHtml(__("Next Steps:", "linguator-pro"))}</strong></p>
                 <p>${escapeHtml(translateAgainLabel)}</p>
-                <p><strong>${escapeHtml(__("OR", "translate-words"))}</strong></p>
-                <p>${escapeHtml(__('Click "Continue" to close this message and keep the editor as it is.', "translate-words"))}</p>
+                <p><strong>${escapeHtml(__("OR", "linguator-pro"))}</strong></p>
+                <p>${escapeHtml(__('Click "Continue" to close this message and keep the editor as it is.', "linguator-pro"))}</p>
             </div>`;
             }
             const completedPercent = Math.min(100, Math.round(((done / totalSafe) * 100) * 10) / 10).toFixed(1);
             const notCompletedPercent = Math.min(100, Math.round((100 - (done / total) * 100) * 10) / 10).toFixed(1);
             const heading = limitExceeded
-                ? __("You’ve exceeded your current plan limit.", "translate-words")
-                : __("Oops! Something went wrong during translation", "translate-words");
+                ? __("You’ve exceeded your current plan limit.", "linguator-pro")
+                : __("Oops! Something went wrong during translation", "linguator-pro");
             const intro = limitExceeded
-                ? __("To continue, please check your plan details and update your API key.", "translate-words")
+                ? __("To continue, please check your plan details and update your API key.", "linguator-pro")
                 : "";
             return `<div class="lmat_page_translation_ai_pending">
                 <p class="lmat_page_translation_ai_pending_heading">${escapeHtml(heading)}</p>
-                ${intro ? `<p>${escapeHtml(intro)}</p>` : `<p>${escapeHtml(__("To see more details, open your browser’s developer console.", "translate-words"))}</p>`}
-                <p>✅ ${escapeHtml(sprintf(__("You’ve translated %s of the strings.", "translate-words"), completedPercent + "%"))}</p>
-                <p>❌ ${escapeHtml(sprintf(__("%s of the strings are still not translated.", "translate-words"), notCompletedPercent + "%"))}</p>
-                <p><strong>${escapeHtml(__("Next Steps:", "translate-words"))}</strong></p>
+                ${intro ? `<p>${escapeHtml(intro)}</p>` : `<p>${escapeHtml(__("To see more details, open your browser’s developer console.", "linguator-pro"))}</p>`}
+                <p>✅ ${escapeHtml(sprintf(__("You’ve translated %s of the strings.", "linguator-pro"), completedPercent + "%"))}</p>
+                <p>❌ ${escapeHtml(sprintf(__("%s of the strings are still not translated.", "linguator-pro"), notCompletedPercent + "%"))}</p>
+                <p><strong>${escapeHtml(__("Next Steps:", "linguator-pro"))}</strong></p>
                 <p>${escapeHtml(translateAgainPartialLabel)}</p>
-                <p><strong>${escapeHtml(__("OR", "translate-words"))}</strong></p>
-                <p>${escapeHtml(__('Click "Continue" to proceed without translating the rest of the strings.', "translate-words"))}</p>
+                <p><strong>${escapeHtml(__("OR", "linguator-pro"))}</strong></p>
+                <p>${escapeHtml(__('Click "Continue" to proceed without translating the rest of the strings.', "linguator-pro"))}</p>
             </div>`;
         };
 
@@ -235,7 +235,7 @@ export default function createAiLlmPageTranslator(providerId) {
                     });
 
                     if (Object.keys(translations).length === 0 && Object.keys(chunk).length > 0) {
-                        const emptyMsg = __("The AI returned an empty translation response. Please try again.", "translate-words");
+                        const emptyMsg = __("The AI returned an empty translation response. Please try again.", "linguator-pro");
                         logAiTranslationError(emptyMsg, { emptyResponse: true });
                         throw new Error(emptyMsg);
                     }
@@ -265,8 +265,8 @@ export default function createAiLlmPageTranslator(providerId) {
                     showErrorNotice({
                         recoverable: true,
                         messagePlain: limitExceeded
-                            ? __("You’ve exceeded your current plan limit.", "translate-words")
-                            : __("Translation failed.", "translate-words"),
+                            ? __("You’ve exceeded your current plan limit.", "linguator-pro")
+                            : __("Translation failed.", "linguator-pro"),
                         html: buildRecoverableHtml(doneKeys, totalKeys, limitExceeded),
                         onTranslateAgain: () => {
                             clearErrorNotice();
@@ -368,7 +368,7 @@ export default function createAiLlmPageTranslator(providerId) {
                             if (err && err.name === "AbortError") {
                                 return "aborted";
                             }
-                            const errorMessage = err?.message || __("Translation failed. Please try again.", "translate-words");
+                            const errorMessage = err?.message || __("Translation failed. Please try again.", "linguator-pro");
                             const lower = String(errorMessage || "").toLowerCase();
                             const isQuota =
                                 err?.code === "LLM_QUOTA_EXCEEDED" ||
@@ -429,7 +429,7 @@ export default function createAiLlmPageTranslator(providerId) {
                     return;
                 }
                 StoreTimeTaken({ prefix: providerId, start: startTime, end: new Date().getTime(), translateStatus: false });
-                const errorMessage = e?.message || __("Translation failed. Please try again.", "translate-words");
+                const errorMessage = e?.message || __("Translation failed. Please try again.", "linguator-pro");
                 const lower = String(errorMessage || "").toLowerCase();
                 const isQuota =
                     e?.code === "LLM_QUOTA_EXCEEDED" ||

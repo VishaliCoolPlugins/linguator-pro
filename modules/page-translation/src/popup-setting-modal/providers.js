@@ -100,14 +100,14 @@ const Providers = (props) => {
             return (
                 <div className={`${prefix}-provider-card-loading`}>
                     <span className={`${prefix}-provider-loading-spinner`}></span>
-                    <p>{__('Loading…', 'translate-words')}</p>
+                    <p>{__('Loading…', 'linguator-pro')}</p>
                 </div>
             );
         }
 
         const btnText = downloadState.status === 'failed'
-            ? __('Retry Download', 'translate-words')
-            : `${__('Download', 'translate-words')} ${props.targetLangName}`;
+            ? __('Retry Download', 'linguator-pro')
+            : `${__('Download', 'linguator-pro')} ${props.targetLangName}`;
 
         return (
             <button type="button" className={`${prefix}-provider-card-download`} onClick={handleDownload}>
@@ -140,10 +140,10 @@ const Providers = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${prefix}-provider-card-docs`}
-                    title={sprintf(__("View %s Documentation", "translate-words"), ActiveService.serviceLabel)}
+                    title={sprintf(__("View %s Documentation", "linguator-pro"), ActiveService.serviceLabel)}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {__('Docs', 'translate-words')}
+                    {__('Docs', 'linguator-pro')}
                 </a>
                 {isBusy && renderDownloadAction()}
                 {!isBusy && isDisabled && (

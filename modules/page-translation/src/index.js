@@ -51,18 +51,18 @@ const StringModalBodyNotice = () => {
         <p>
           {__(
             "For accurate custom field translations, please disable the Custom Fields synchronization in ",
-            "translate-words"
+            "linguator-pro"
           )}
           <a
             href={`${lmatPageTranslationGlobal.admin_url}admin.php?page=lmat_settings`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {__("Linguator settings", "translate-words")}
+            {__("Linguator settings", "linguator-pro")}
           </a>
           {__(
             ". This may affect linked posts or pages.",
-            "translate-words"
+            "linguator-pro"
           )}
         </p>
       ),
@@ -85,7 +85,7 @@ const StringModalBodyNotice = () => {
           <p>
             {__(
               "No block rules were found. The block translation rules could not be loaded, possibly because the request was blocked by your server settings. Please check your server configuration to resolve this issue.",
-              "translate-words"
+              "linguator-pro"
             )}
           </p>
         ),
@@ -105,7 +105,7 @@ const StringModalBodyNotice = () => {
           <p>
             {__(
               "This page may contain Gutenberg block content. After the translation, please review the updated content before finalizing the page update.",
-              "translate-words"
+              "linguator-pro"
             )}
           </p>
         ),
@@ -121,7 +121,7 @@ const StringModalBodyNotice = () => {
         <p>
           {__(
             "WPBakery Page Builder content will be translated. Please save the page after translation to apply changes.",
-            "translate-words"
+            "linguator-pro"
           )}
         </p>
       ),
@@ -230,7 +230,7 @@ const App = () => {
         metaFieldBtn.disabled = true;
         metaFieldBtn.value = __(
           "Already Translated",
-          "translate-words"
+          "linguator-pro"
         );
       }
     }
@@ -287,29 +287,29 @@ const createMessagePopup = () => {
         <div class="modal-header">
           <div class="lmat-page-translation-modal-header-left">
             <img src="${magicWandUrl}" style="width: 20px; height: 20px; margin-right: 5px;" alt="" aria-hidden="true">
-            <h3>${wp.i18n.__("AI Translation", "translate-words")}</h3>
+            <h3>${wp.i18n.__("AI Translation", "linguator-pro")}</h3>
           </div>
-          <button type="button" class="lmat-page-translation-modal-close modal-close" data-value="no" title="${wp.i18n.__("Close", "translate-words")}" aria-label="${wp.i18n.__("Close", "translate-words")}">&times;</button>
+          <button type="button" class="lmat-page-translation-modal-close modal-close" data-value="no" title="${wp.i18n.__("Close", "linguator-pro")}" aria-label="${wp.i18n.__("Close", "linguator-pro")}">&times;</button>
         </div>
         <div class="lmat-page-translation-modal-body">
           <p>${wp.i18n.sprintf(
             wp.i18n.__(
               "Would you like to duplicate your original %s content and have it automatically translated into %s?",
-              "translate-words"
+              "linguator-pro"
             ),
             postType,
             targetLangName
           )}</p>
           <button type="button" class="lmat-page-translation-translate-button button" data-value="yes" id="lmat-page-translation-translate-button">
             <img src="${magicWandUrl}" style="width: 20px; height: 20px; margin-right: 5px; filter: brightness(0) invert(1);" alt="" aria-hidden="true">
-            ${wp.i18n.__("Translate Now", "translate-words")}
+            ${wp.i18n.__("Translate Now", "linguator-pro")}
           </button>
         </div>
         <div class="modal-footer-notice">
           <span class="dashicons dashicons-warning"></span>
           <p><em>${wp.i18n.__(
             "Note: close this popup if you do not want AI translation.",
-            "translate-words"
+            "linguator-pro"
           )}</em></p>
         </div>
       </div>

@@ -64,20 +64,20 @@ const Switcher = ({ data, setData }) => {
                     if (error?.message) {
                         throw new Error(error.message)
                     }
-                    throw new Error(__("Something went wrong", 'translate-words'))
+                    throw new Error(__("Something went wrong", 'linguator-pro'))
                 })
                 .finally(() => {
                     setIsSaving(false)
                 })
 
             toast.promise(response, {
-                loading: __('Saving Settings', 'translate-words'),
-                success: __('Settings Saved', 'translate-words'),
+                loading: __('Saving Settings', 'linguator-pro'),
+                success: __('Settings Saved', 'linguator-pro'),
                 error: (error) => error.message,
             })
         } catch (error) {
             setIsSaving(false);
-            toast.error(error.message || __("Something went wrong", "translate-words"));
+            toast.error(error.message || __("Something went wrong", "linguator-pro"));
         }
     }
 
@@ -85,7 +85,7 @@ const Switcher = ({ data, setData }) => {
         <Container className='bg-white p-10 rounded-lg' cols="1" containerType='grid'>
             <Container className='flex items-center'>
                 <Container.Item className='flex flex-wrap items-center w-full justify-between px-4 gap-6'>
-                    <h1 className='font-bold'>{__('Language Switcher Widget Configuration', 'translate-words')}</h1>
+                    <h1 className='font-bold'>{__('Language Switcher Widget Configuration', 'linguator-pro')}</h1>
                     <Button
                         disabled={handleButtonDisabled || isSaving}
                         className=""
@@ -96,7 +96,7 @@ const Switcher = ({ data, setData }) => {
                         onClick={SaveSettings}
                         variant="primary"
                     >
-                        {__('Save Settings', 'translate-words')}
+                        {__('Save Settings', 'linguator-pro')}
                     </Button>
                 </Container.Item>
             </Container>
@@ -104,10 +104,10 @@ const Switcher = ({ data, setData }) => {
             <Container.Item className='p-6 rounded-lg' style={{ border: "1px solid #e5e7eb" }}>
                 <Label size='md' className='font-bold flex items-center gap-2'>
                     <Settings className="flex-shrink-0 size-5 text-icon-secondary" />
-                    {__('Widget Types', 'translate-words')}
+                    {__('Widget Types', 'linguator-pro')}
                 </Label>
                 <Label variant='help'>
-                    {__('Enable or disable different types of language switcher . You can enable multiple  types to provide different options for displaying the language switcher.', 'translate-words')}
+                    {__('Enable or disable different types of language switcher . You can enable multiple  types to provide different options for displaying the language switcher.', 'linguator-pro')}
                 </Label>
                 <div className='flex flex-col gap-2' style={{ marginTop: "20px" }}>
                     {
@@ -116,10 +116,10 @@ const Switcher = ({ data, setData }) => {
                                 <div className='switcher p-6 rounded-lg'>
                                     <Container.Item>
                                         <h3 className='flex items-center gap-2'>
-                                            {__(switcher.label, 'translate-words')}
+                                            {__(switcher.label, 'linguator-pro')}
                                         </h3>
                                         <p>
-                                            {__(switcher.subheading, 'translate-words')}
+                                            {__(switcher.subheading, 'linguator-pro')}
                                         </p>
                                     </Container.Item>
                                     <Container.Item className='flex items-center justify-end' style={{ paddingRight: '30%' }}>
@@ -150,7 +150,7 @@ const Switcher = ({ data, setData }) => {
                         onClick={SaveSettings}
                         variant="primary"
                     >
-                        {__('Save Settings', 'translate-words')}
+                        {__('Save Settings', 'linguator-pro')}
                     </Button>
 
                 </Container.Item>

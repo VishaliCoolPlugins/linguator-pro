@@ -144,7 +144,7 @@ const SetupPage = () => {
       }
 
       setLanguageDialog(false)
-      setSelectedLanguage({ id: 'none', name: __('None', 'translate-words'), flag: null, locale: null })
+      setSelectedLanguage({ id: 'none', name: __('None', 'linguator-pro'), flag: null, locale: null })
       setLanguageLoader(false)
       //Dynamic routing of next button accordingly
       handleNavigate()
@@ -203,7 +203,7 @@ const SetupPage = () => {
         }
 
         setLanguageDialog(false)
-        setSelectedLanguage({ id: 'none', name: __('None', 'translate-words'), flag: null, locale: null })
+        setSelectedLanguage({ id: 'none', name: __('None', 'linguator-pro'), flag: null, locale: null })
         setLanguageLoader(false)
         setShowUntranslatedContent("")
         handleNavigate()
@@ -216,7 +216,7 @@ const SetupPage = () => {
     else if (selectedLanguageData.length > 0) {
       //Dynamic routing of next button accordingly
       setLanguageDialog(false)
-      setSelectedLanguage({ id: 'none', name: __('None', 'translate-words'), flag: null, locale: null })
+      setSelectedLanguage({ id: 'none', name: __('None', 'linguator-pro'), flag: null, locale: null })
       setLanguageLoader(false)
       handleNavigate()
     } else {
@@ -301,7 +301,7 @@ const SetupPage = () => {
               <div className="flex items-center justify-between">
                 <Dialog.Title className='flex gap-2 items-center leading-[0px]'>
                   <IoIosWarning className='size-10 text-yellow-500' />
-                  <h4 className='leading-[0px] text-lg'>{__("A language wasn't added.", "translate-words")}</h4>
+                  <h4 className='leading-[0px] text-lg'>{__("A language wasn't added.", "linguator-pro")}</h4>
                 </Dialog.Title>
                 <Dialog.CloseButton onClick={() => { setLanguageDialog(false); setLanguageLoader(false); setLanguageAddLoader(false) }} />
               </div>
@@ -310,8 +310,8 @@ const SetupPage = () => {
             </Dialog.Header>
             <Dialog.Body>
               <div className="m-0 text-text-secondary">
-                <p className='text-base m-0'> {__("You selected", "translate-words")} {selectedLanguage && <RenderedLanguage languageName={selectedLanguage.name} languageFlag={selectedLanguage.flag} flagUrl={false} languageLocale={selectedLanguage.locale} />}{__(", but you didn't add it to the list before continuing to the next step.", "translate-words")}</p>
-                <p className='text-sm'>{__("Do you want to add this language before continuing to the next step?", "translate-words")}</p>
+                <p className='text-base m-0'> {__("You selected", "linguator-pro")} {selectedLanguage && <RenderedLanguage languageName={selectedLanguage.name} languageFlag={selectedLanguage.flag} flagUrl={false} languageLocale={selectedLanguage.locale} />}{__(", but you didn't add it to the list before continuing to the next step.", "linguator-pro")}</p>
+                <p className='text-sm'>{__("Do you want to add this language before continuing to the next step?", "linguator-pro")}</p>
                 <ul>
                   {selectedLanguageData.length === 0 && currentSelectedLanguage.length === 0 && <li>{__("Note: You cannot continue this page without adding a language")} </li>}
                 </ul>
@@ -327,13 +327,13 @@ const SetupPage = () => {
                     </svg>
                   </Button> :
                   <Button onClick={handleLanguageAdd}>
-                    {__("Add Language & continue", "translate-words")}
+                    {__("Add Language & continue", "linguator-pro")}
                   </Button>
               }
               {
                 (selectedLanguageData.length > 0 || currentSelectedLanguage.length > 0) &&
                 <Button variant='outline' onClick={handleLanguageDontAdd}>
-                  {__("Discard & Continue", "translate-words")}
+                  {__("Discard & Continue", "linguator-pro")}
                 </Button>
               }
             </Dialog.Footer>
@@ -353,12 +353,12 @@ const SetupPage = () => {
               <div className="flex items-center justify-between">
                 <Dialog.Title className='flex gap-2 items-center leading-[0px]'>
                   <GoTrash className='size-8 text-yellow-500' />
-                  <h4 className='leading-[0px] text-lg'>{__("Confirm Language Deletion", "translate-words")}</h4>
+                  <h4 className='leading-[0px] text-lg'>{__("Confirm Language Deletion", "linguator-pro")}</h4>
                 </Dialog.Title>
                 <Dialog.CloseButton onClick={() => { setLanguageDeleteConfirmer(false) }} />
               </div>
               <Dialog.Description>
-                <p className='text-base leading-[0px] m-0'>{__("On Confirmation, ", "translate-words")}<RenderedLanguage languageName={languageToDelete.name} languageFlag={languageToDelete.flag} flagUrl={true} languageLocale={languageToDelete.locale} /> {__(" will be deleted. ", "translate-words")}</p>
+                <p className='text-base leading-[0px] m-0'>{__("On Confirmation, ", "linguator-pro")}<RenderedLanguage languageName={languageToDelete.name} languageFlag={languageToDelete.flag} flagUrl={true} languageLocale={languageToDelete.locale} /> {__(" will be deleted. ", "linguator-pro")}</p>
               </Dialog.Description>
             </Dialog.Header>
             <Dialog.Body className='flex justify-center items-center gap-3'>
@@ -371,13 +371,13 @@ const SetupPage = () => {
                     </svg>
                   </Button>:
                   <Button className='w-[100%]' onClick={handleLanguageDelete}>
-                {__("Yes", "translate-words")}
+                {__("Yes", "linguator-pro")}
               </Button>
               }
               
               {
                 <Button className='w-[100%]' variant='outline' onClick={() => { setLanguageDeleteConfirmer(false); }}>
-                  {__("No", "translate-words")}
+                  {__("No", "linguator-pro")}
                 </Button>
               }
             </Dialog.Body>
@@ -396,10 +396,10 @@ const SetupPage = () => {
                   icon={<LoaderPinwheel className="animate-spin" />}
                   size="md"
                   variant="primary"
-                /></h1> <h1 className='m-0'>{__("Loading", "translate-words")}</h1>
+                /></h1> <h1 className='m-0'>{__("Loading", "linguator-pro")}</h1>
             </div> :
             <>
-            <h1 style={{paddingTop: "30px"}} className='bg-background-secondary text-center m-0'>{__("Linguator AI – Auto Translate & Create Multilingual Sites", "translate-words")}</h1>
+            <h1 style={{paddingTop: "30px"}} className='bg-background-secondary text-center m-0'>{__("Linguator AI – Auto Translate & Create Multilingual Sites", "linguator-pro")}</h1>
               {data.lmat_video_status === false ? (
                 <VideoIntro onGetStarted={handleGetStarted} />
               ) : showMigration ? (

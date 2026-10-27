@@ -37,28 +37,28 @@ export function buildQuotaRecoverableErrorHtml(prefix, mergedDone, totalKeys) {
     const safePrefix = escapeHtml(prefix);
     const errorMessage =
         `<p class="${safePrefix}-ai-pending-request-heading">` +
-        escapeHtml(__("You’ve exceeded your current plan limit.", "translate-words")) +
+        escapeHtml(__("You’ve exceeded your current plan limit.", "linguator-pro")) +
         "</p> " +
-        escapeHtml(__("To continue, please check your plan details and update your API key.", "translate-words"));
+        escapeHtml(__("To continue, please check your plan details and update your API key.", "linguator-pro"));
     const translateBtnMessage = escapeHtml(
-        __('Click "Translate" after updating your API key to re-translate the remaining strings.', "translate-words")
+        __('Click "Translate" after updating your API key to re-translate the remaining strings.', "linguator-pro")
     );
     const translatedLine = escapeHtml(
-        sprintf(__("You’ve translated %s of the strings.", "translate-words"), completedPercent + "%")
+        sprintf(__("You’ve translated %s of the strings.", "linguator-pro"), completedPercent + "%")
     );
     const notTranslatedLine = escapeHtml(
-        sprintf(__("%s of the strings are still not translated.", "translate-words"), notCompletedPercent + "%")
+        sprintf(__("%s of the strings are still not translated.", "linguator-pro"), notCompletedPercent + "%")
     );
 
     return `<div class="${safePrefix}-ai-pending-request">
                     <div>${errorMessage}</div>
-                    <p>${escapeHtml(__("To see more details, open your browser’s developer console.", "translate-words"))}</p>
+                    <p>${escapeHtml(__("To see more details, open your browser’s developer console.", "linguator-pro"))}</p>
                 <p>✅ ${translatedLine}</p>
                 <p>❌ ${notTranslatedLine}</p>
-                <p><strong>${escapeHtml(__("Next Steps:", "translate-words"))}</strong></p>
+                <p><strong>${escapeHtml(__("Next Steps:", "linguator-pro"))}</strong></p>
                 <p>${translateBtnMessage}</p>
-                <p><strong>${escapeHtml(__("OR", "translate-words"))}</strong></p>
-                <p>${escapeHtml(__('Click "Continue" to proceed without translating the rest of the strings.', "translate-words"))}</p>
+                <p><strong>${escapeHtml(__("OR", "linguator-pro"))}</strong></p>
+                <p>${escapeHtml(__('Click "Continue" to proceed without translating the rest of the strings.', "linguator-pro"))}</p>
                 </div>`;
 }
 
