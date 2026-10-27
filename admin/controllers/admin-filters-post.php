@@ -1,0 +1,380 @@
+<?php
+/**
+ * @package Linguator
+ */
+namespace Linguator\Admin\Controllers;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+use Linguator\Admin\Controllers\Linguator_Admin_Filters_Post_Base;
+use Linguator\Admin\Controllers\Linguator_Language;
+use Linguator\Includes\Walkers\Linguator_Walker_Dropdown;
+use Linguator\Includes\Other\Linguator_Query;
+use Linguator\Includes\Capabilities\User;
+
+/**
+ * Manages filters and actions related to posts on admin side
+ *
+ *  
+ */
+class Linguator_Admin_Filters_Post extends Linguator_Admin_Filters_Post_Base {
+	/**
+	 * Current language (used to filter the content).
+	 *
+	 * @var Linguator_Language|null
+	 */
+	public $curlang;
+
+	/**
+	 * Constructor: setups filters and actions
+	 *
+	 *  
+	 *
+	 * @param object $linguator The Linguator object.
+	 */
+	public function __construct( &$linguator ) {
+		parent::__construct( $linguator );
+		$this->curlang = &$linguator->curlang;
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+
+		// Filters posts, pages and media by language
+		add_action( 'parse_query', array( $this, 'parse_query' ) );
+
+		// Adds actions and filters related to languages when creating, saving or deleting posts and pages
+		add_action( 'load-post.php', array( $this, 'edit_post' ) );
+		add_action( 'load-edit.php', array( $this, 'linguator_bulk_edit_posts' ) );
+		add_action( 'wp_ajax_inline-save', array( $this, 'linguator_inline_edit_post' ), 0 ); // Before WordPress
+
+		// Sets the language in Tiny MCE
+		add_filter( 'tiny_mce_before_init', array( $this, 'linguator_tiny_mce_before_init' ) );
+
+		// Filter untranslated items in the posts list table.
+		add_action( 'restrict_manage_posts', array( $this, 'untranslated_dropdown' ) );
+
+		// Add lang parameter to WordPress default edit links
+		add_filter( 'get_edit_post_link', array( $this, 'linguator_add_lang_to_edit_post_link' ), 10, 3 );
+	}
+
+	/**
+	 * Outputs a javascript list of terms ordered by language and hierarchical taxonomies
+	 * to filter the category checklist per post language in quick edit
+	 * Outputs a javascript list of pages ordered by language
+	 * to filter the parent dropdown per post language in quick edit
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function admin_enqueue_scripts() {
+		$screen = get_current_screen();
+
+		if ( empty( $screen ) ) {
+			return;
+		}
+
+		// Hierarchical taxonomies
+		if ( 'edit' == $screen->base && $taxonomies = get_object_taxonomies( $screen->post_type, 'objects' ) ) {
+			// Get translated hierarchical taxonomies
+			$hierarchical_taxonomies = array();
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( $taxonomy->hierarchical && $taxonomy->show_in_quick_edit && $this->model->is_translated_taxonomy( $taxonomy->name ) ) {
+					$hierarchical_taxonomies[] = $taxonomy->name;
+				}
+			}
+
+			if ( ! empty( $hierarchical_taxonomies ) ) {
+				$terms          = get_terms( array( 'taxonomy' => $hierarchical_taxonomies, 'get' => 'all' ) );
+				$term_languages = array();
+
+				if ( is_array( $terms ) ) {
+					foreach ( $terms as $term ) {
+						if ( $lang = $this->model->term->get_language( $term->term_id ) ) {
+							$term_languages[ $lang->slug ][ $term->taxonomy ][] = $term->term_id;
+						}
+					}
+				}
+
+				// Send all these data to javascript
+				if ( ! empty( $term_languages ) ) {
+					wp_localize_script( 'lmat_post', 'lmat_term_languages', $term_languages );
+				}
+			}
+		}
+
+		// Hierarchical post types
+		if ( 'edit' == $screen->base && is_post_type_hierarchical( $screen->post_type ) && post_type_supports( $screen->post_type, 'page-attributes' ) ) {
+			$pages = get_pages(
+				array(
+					'sort_column' => 'menu_order, post_title',
+					'post_type'   => $screen->post_type,
+				)
+			); // Same arguments as the parent pages dropdown to avoid an extra query.
+
+			if ( ! is_array( $pages ) ) {
+				return;
+			}
+
+			update_object_term_cache( wp_list_pluck( $pages, 'ID' ), $screen->post_type );
+
+			$page_languages = array();
+
+			foreach ( $pages as $page ) {
+				if ( $lang = $this->model->post->get_language( $page->ID ) ) {
+					$page_languages[ $lang->slug ][] = $page->ID;
+				}
+			}
+
+			// Send all these data to javascript
+			if ( ! empty( $page_languages ) ) {
+				wp_localize_script( 'lmat_post', 'lmat_page_languages', $page_languages );
+			}
+		}
+	}
+
+	/**
+	 * Filters posts, pages and media by language.
+	 *
+	 *  
+	 *
+	 * @param WP_Query $query WP_Query object.
+	 * @return void
+	 */
+	public function parse_query( $query ) {
+		$linguator_query = new Linguator_Query( $query, $this->model );
+		$linguator_query->filter_query( $this->curlang );
+	}
+
+	/**
+	 * Save language and translation when editing a post (post.php).
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function edit_post() {
+		if ( ! isset( $_POST['post_lang_choice'], $_POST['post_ID'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return;
+		}
+
+			check_admin_referer( 'lmat_language', '_lmat_nonce' );
+
+			$post_id = absint( wp_unslash( $_POST['post_ID'] ) );
+			$post = get_post( $post_id );
+
+			if ( empty( $post ) ) {
+				return;
+			}
+
+			$post_type_object = get_post_type_object( $post->post_type );
+
+			if ( empty( $post_type_object ) ) {
+				return;
+			}
+
+			$user = new User();
+			if ( ! $user->has_cap( $post_type_object->cap->edit_post, $post_id ) ) {
+				return;
+			}
+
+			$language = $this->model->get_language( sanitize_key( wp_unslash( $_POST['post_lang_choice'] ) ) );
+
+			if ( empty( $language ) ) {
+				return;
+			}
+
+			$user->can_translate_or_die( $language );
+
+			$this->model->post->set_language( $post_id, $language );
+
+			if ( ! isset( $_POST['post_tr_lang'] ) ) {
+				return;
+			}
+
+			/**
+			 * Filters whether translation relationships should be left untouched when
+			 * a post is saved from the Classic Editor.
+			 *
+			 * @param bool    $skip    Whether to skip saving translations.
+			 * @param int     $post_id Post ID.
+			 * @param WP_Post $post    Post object.
+			 */
+			if ( apply_filters( 'lmat_skip_save_post_translations', false, $post_id, $post ) ) {
+				return;
+			}
+
+			// Only link posts the current user can edit; keep translations that are already linked.
+			$tr_ids   = array_map( 'absint', wp_unslash( $_POST['post_tr_lang'] ) );
+			$existing = array_map( 'intval', $this->model->post->get_translations( $post_id ) );
+			$tr_ids   = array_filter(
+				$tr_ids,
+				function ( $id ) use ( $post_id, $existing ) {
+					return ! $id || $id === (int) $post_id || in_array( $id, $existing, true ) || current_user_can( 'edit_post', $id );
+				}
+			);
+			$this->save_translations( $post_id, $tr_ids );
+	}
+
+	/**
+	 * Save language when bulk editing a posts.
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_bulk_edit_posts() {
+		if ( ! isset( $_GET['bulk_edit'], $_GET['inline_lang_choice'], $_REQUEST['post'], $_REQUEST['_wpnonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'bulk-posts' ) ) {
+			return;
+		}
+
+		$inline_lang_choice = isset( $_GET['inline_lang_choice'] ) 
+		? absint( wp_unslash( $_GET['inline_lang_choice'] ) ) 
+		: 0;
+
+
+		if ( -1 === $inline_lang_choice ) {
+			return;
+		}
+
+		$language = $this->model->get_language( sanitize_key( wp_unslash( $_GET['inline_lang_choice'] ) ) );
+
+		if ( empty( $language ) ) {
+			return;
+		}
+
+		$user = new User();
+		$user->can_translate_or_die( $language );
+
+		$post_ids = array_map( 'intval', (array) wp_unslash( $_REQUEST['post'] ) );
+		foreach ( $post_ids as $post_id ) {
+			if ( $user->has_cap( 'edit_post', $post_id ) ) {
+				$this->model->post->set_language( $post_id, $language );
+			}
+		}
+	}
+
+	/**
+	 * Save language when inline editing a post.
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_inline_edit_post() {
+		if ( ! isset( $_POST['post_ID'], $_POST['inline_lang_choice'], $_REQUEST['_inline_edit'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_inline_edit'] ) ), 'inlineeditnonce' ) ) {
+			return;
+		}
+
+		$language = $this->model->get_language( sanitize_key( wp_unslash( $_POST['inline_lang_choice'] ) ) );
+
+		if ( empty( $language ) ) {
+			return;
+		}
+
+		$user = new User();
+		$user->can_translate_or_die( $language );
+
+		$post_id = absint( wp_unslash( $_POST['post_ID'] ) );
+
+		if ( ! $post_id || ! $user->has_cap( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		$this->model->post->set_language( $post_id, $language );
+	}
+
+	/**
+	 * Sets the language attribute and text direction for Tiny MCE.
+	 *
+	 *  
+	 *
+	 * @param array $mce_init TinyMCE config.
+	 * @return array
+	 */
+	public function linguator_tiny_mce_before_init( $mce_init ) {
+		if ( ! empty( $this->curlang ) ) {
+			$mce_init['wp_lang_attr'] = $this->curlang->get_locale( 'display' );
+			$mce_init['directionality'] = $this->curlang->is_rtl ? 'rtl' : 'ltr';
+		}
+		return $mce_init;
+	}
+
+	/**
+	 * Displays a dropdown for filtering untranslated items in the posts list table.
+	 *
+	 * @param string $post_type The post type.
+	 * @return void
+	 */
+	public function untranslated_dropdown( $post_type ) {
+		if ( ! $this->model->is_translated_post_type( $post_type ) ) {
+			return;
+		}
+
+		$languages = $this->model->get_languages_list();
+
+		foreach ( $languages as $key => $language ) {
+			$languages[ $key ] = $language->to_std_class(); // Important not to modify the language name everywhere.
+			/* translators: %s is a native language name */
+			$languages[ $key ]->name = sprintf( __( 'Untranslated in %s', 'linguator-pro' ), $language->name );
+		}
+
+		$dropdown = new Linguator_Walker_Dropdown();
+		$selected = isset( $_GET['untranslated_in'] ) && is_string( $_GET['untranslated_in'] )
+			? sanitize_key( wp_unslash( $_GET['untranslated_in'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			: '';
+
+		$dropdown_html = $dropdown->walk(
+			array_merge(
+				array( (object) array( 'slug' => 0, 'name' => __( 'All translation status', 'linguator-pro' ) ) ),
+				$languages
+			),
+			-1,
+			array(
+				'id'       => 'lmat_untranslated_in',
+				'name'     => 'untranslated_in',
+				'class'    => 'postform',
+				'selected' => $selected,
+			)
+		);
+
+		printf(
+			'<label class="screen-reader-text" for="lmat_untranslated_in">%s</label>',
+			esc_html__( 'Filter untranslated items', 'linguator-pro' )
+		);
+
+		echo $dropdown_html; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	/**
+	 * Adds lang parameter to WordPress default edit post links
+	 *
+	 *  
+	 *
+	 * @param string $link    The edit post link.
+	 * @param int    $post_id The post ID.
+	 * @param string $context The link context.
+	 * @return string
+	 */
+	public function linguator_add_lang_to_edit_post_link( $link, $post_id, $context ) {
+		if ( empty( $link ) || ! $this->model->post_types->is_translated( get_post_type( $post_id ) ) ) {
+			return $link;
+		}
+
+		$language = $this->model->post->get_language( $post_id );
+		if ( $language ) {
+			$link = add_query_arg( 'lang', $language->slug, $link );
+		}
+
+		return $link;
+	}
+}

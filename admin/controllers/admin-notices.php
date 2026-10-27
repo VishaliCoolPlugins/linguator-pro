@@ -1,0 +1,322 @@
+<?php
+/**
+ * @package Linguator
+ */
+namespace Linguator\Admin\Controllers;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+use Linguator\Includes\Other\Linguator_Translation_Dashboard;
+use Linguator\Admin\Controllers\Linguator_Admin_Base;
+
+/**
+ * A class to manage admin notices
+ * displayed only to admin, based on 'manage_options' capability
+ * and only on dashboard, plugins and Linguator admin pages
+ *
+ *  
+ *   Dismissed notices are stored in an option instead of a user meta
+ */
+class Linguator_Admin_Notices {
+	/**
+	 * Stores the plugin options.
+	 *
+	 * @var array
+	 */
+	protected $options;
+
+	/**
+	 * Stores custom notices.
+	 *
+	 * @var string[]
+	 */
+	private static $notices = array();
+
+	/**
+	 * Constructor
+	 * Setup actions
+	 *
+	 *  
+	 *
+	 * @param object $linguator The Linguator object.
+	 */
+	public function __construct( $linguator ) {
+		$this->options = &$linguator->options;
+
+		add_action( 'admin_init', array( $this, 'linguator_hide_notice' ) );
+		add_action( 'admin_notices', array( $this, 'linguator_display_notices' ) );
+		
+		// Add inline CSS and JS for notice positioning on ?page=lmat
+		add_action( 'admin_enqueue_scripts', array( $this, 'linguator_add_notice_positioning_inline' ) );
+	}
+
+	/**
+	 * Add a custom notice
+	 *
+	 *  
+	 *
+	 * @param string $name Notice name
+	 * @param string $html Content of the notice
+	 * @return void
+	 */
+	public static function add_notice( $name, $html ) {
+		self::$notices[ $name ] = $html;
+	}
+
+	/**
+	 * Get custom notices.
+	 *
+	 *  
+	 *
+	 * @return string[]
+	 */
+	public static function linguator_get_notices() {
+		return self::$notices;
+	}
+
+	/**
+	 * Has a notice been dismissed?
+	 *
+	 *  
+	 *
+	 * @param string $notice Notice name
+	 * @return bool
+	 */
+	public static function linguator_is_dismissed( $notice ) {
+		$dismissed = get_option( 'lmat_dismissed_notices', array() );
+
+		// Handle legacy user meta
+		$dismissed_meta = get_user_meta( get_current_user_id(), 'lmat_dismissed_notices', true );
+		if ( is_array( $dismissed_meta ) ) {
+			if ( array_diff( $dismissed_meta, $dismissed ) ) {
+				$dismissed = array_merge( $dismissed, $dismissed_meta );
+				update_option( 'lmat_dismissed_notices', $dismissed );
+			}
+			if ( ! is_multisite() ) {
+				// Don't delete on multisite to avoid the notices to appear in other sites.
+				delete_user_meta( get_current_user_id(), 'lmat_dismissed_notices' );
+			}
+		}
+
+		return in_array( $notice, $dismissed );
+	}
+
+	/**
+	 * Should we display notices on this screen?
+	 *
+	 *
+	 * @param string $notice          The notice name.
+	 * @param array  $allowed_screens The screens allowed to display the notice.
+	 *                                If empty, default screens are used, i.e. dashboard, plugins, languages, strings and settings.
+	 *
+	 * @return bool
+	 */
+	protected function can_display_notice( string $notice, array $allowed_screens = array() ) {
+		$screen = get_current_screen();
+
+		if ( empty( $screen ) ) {
+			return false;
+		}
+		
+		if ( empty( $allowed_screens ) ) {
+			$allowed_screens = array(
+				'dashboard',
+				'plugins',
+				Linguator_Admin_Base::get_screen_id( 'lang' ),
+				Linguator_Admin_Base::get_screen_id( 'settings' ),
+			);
+		}
+
+		/**
+		 * Filters admin notices which can be displayed.
+		 *
+		 *  
+		 *
+		 * @param bool   $display Whether the notice should be displayed or not.
+		 * @param string $notice  The notice name.
+		 */
+		return apply_filters( 'lmat_can_display_notice', in_array( $screen->id, $allowed_screens, true ), $notice );
+	}
+
+	/**
+	 * Stores a dismissed notice in the database.
+	 *
+	 *  
+	 *
+	 * @param string $notice Notice name.
+	 * @return void
+	 */
+	public static function dismiss( $notice ) {
+		$dismissed = get_option( 'lmat_dismissed_notices', array() );
+
+		if ( ! in_array( $notice, $dismissed ) ) {
+			$dismissed[] = $notice;
+			update_option( 'lmat_dismissed_notices', array_unique( $dismissed ) );
+		}
+	}
+
+	/**
+	 * Handle a click on the dismiss button
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_hide_notice() {
+		if ( isset( $_GET['lmat-hide-notice'], $_GET['_lmat_notice_nonce'] ) ) {
+			$notice = sanitize_key( wp_unslash( $_GET['lmat-hide-notice'] ) );
+			check_admin_referer( $notice, '_lmat_notice_nonce' );
+			// Handle setup wizard notices
+			if ( 'wizard' === $notice ) {
+				update_option( 'lmat_setup_complete', true );
+				self::dismiss( $notice );
+
+				$cpfm_opt_in_choice = linguator_get_cpfm_opt_in_choice();
+				$options = get_option( 'linguator' );
+				$lmat_feedback_data = is_array( $options ) && isset( $options['lmat_feedback_data'] ) ? (bool) $options['lmat_feedback_data'] : true;
+				if ( 'yes' === $cpfm_opt_in_choice || $lmat_feedback_data ) {
+					if ( class_exists( '\\CPFM_Usage_Cron' ) ) {
+						\CPFM_Usage_Cron::cpfm_schedule_event( 'lmat_extra_data_update' );
+						if ( 'no' !== $cpfm_opt_in_choice ) {
+							do_action( 'lmat_extra_data_update' );
+						}
+					}
+				}
+			} else {
+				self::dismiss( $notice );
+			}
+			wp_safe_redirect( remove_query_arg( array( 'lmat-hide-notice', '_lmat_notice_nonce' ), wp_get_referer() ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Displays notices
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_display_notices() {
+		// Check if we're on the specific ?page=lmat page and should suppress notices
+		if ( current_user_can( 'manage_options' ) ) {
+			
+			// Custom notices
+			foreach ( static::linguator_get_notices() as $notice => $html ) {
+				if ( $this->can_display_notice( $notice ) && ! static::linguator_is_dismissed( $notice ) ) {
+					?>
+					<div class="lmat-notice notice notice-info">
+						<?php
+						$this->linguator_dismiss_button( $notice );
+						echo wp_kses_post( $html );
+						?>
+					</div>
+					<?php
+				}
+			}
+		}
+		if ( $this->linguator_is_lmat_page() ) {
+			// Don't display notices here, they will be captured and displayed later
+			return;
+		}
+	}
+
+	/**
+	 * Displays a dismiss button
+	 *
+	 *  
+	 *
+	 * @param string $name Notice name
+	 * @return void
+	 */
+	public function linguator_dismiss_button( $name ) {
+		printf(
+			'<a class="notice-dismiss" href="%s"><span class="screen-reader-text">%s</span></a>',
+			esc_url( wp_nonce_url( add_query_arg( 'lmat-hide-notice', $name ), $name, '_lmat_notice_nonce' ) ),
+			// translators: accessibility text
+			esc_html__( 'Dismiss this notice.', 'linguator-pro' )
+		);
+	}
+
+	/**
+	 * Check if we're on the specific ?page=lmat page
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	private function linguator_is_lmat_page() {
+		$screen = get_current_screen();
+		if ( empty( $screen ) ) {
+			return false;
+		}
+		
+		// Check if we're specifically on the ?page=lmat page
+		return Linguator_Admin_Base::get_screen_id( 'lang' ) === $screen->id || Linguator_Admin_Base::get_screen_id( 'settings' ) === $screen->id;
+	}
+	/**
+	 * Add inline CSS and JavaScript for notice positioning on ?page=lmat
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function linguator_add_notice_positioning_inline() {
+		if ( ! $this->linguator_is_lmat_page() ) {
+			return;
+		}
+
+		// Add inline CSS
+		$css = "
+		/* Notice positioning for ?page=lmat */
+		body.toplevel_page_lmat .notice,
+		body.toplevel_page_lmat .error,
+		body.toplevel_page_lmat .updated,
+		body.toplevel_page_lmat .notice-error,
+		body.toplevel_page_lmat .notice-warning,
+		body.toplevel_page_lmat .notice-info,
+		body.toplevel_page_lmat .notice-success {
+			display: none !important;
+			margin-left: 2rem;
+		}
+
+		/* Show notices after they are moved */
+		body.toplevel_page_lmat .lmat-moved-notice {
+			display: block !important;
+			margin-left: 2rem;
+			margin-right: 2rem;
+			width: auto;
+		}
+		";
+		wp_add_inline_style( 'linguator_admin', $css );
+
+		// Add inline JavaScript
+		$js = "
+		jQuery(document).ready(function($) {
+			// Wait for the page to load
+			setTimeout(function() {
+				// Find all notices including error, updated, and other notice classes
+				var notices = $('.notice, .error, .updated, .notice-error, .notice-warning, .notice-info, .notice-success');
+				if (notices.length > 0) {
+					// Find the header container
+					var headerContainer = $('#lmat-settings-header');
+					if (headerContainer.length > 0) {
+						// Move notices after the screen options if present, otherwise after header
+						var screenMetaLinks = $('#screen-meta-links');
+						if (screenMetaLinks.length > 0) {
+							notices.detach().insertAfter(screenMetaLinks);
+						} else {
+							notices.detach().insertAfter(headerContainer);
+						}
+						// Add class to make notices visible
+						notices.addClass('lmat-moved-notice');
+					}
+				}
+			}, 100);
+		});
+		";
+		wp_add_inline_script( 'lmat_admin', $js );
+	}
+}

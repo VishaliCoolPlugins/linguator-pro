@@ -1,0 +1,1015 @@
+/* Untranslated Inspector side panel. Scoped to #lmat-fi so theme and Elementor kit styles cannot override it. */
+
+body.lmat-fi-open:not(.lmat-fi-floating) {
+	margin-right: var(--lmat-fi-width, 380px) !important;
+}
+
+body.lmat-fi-floating {
+	margin-right: 0 !important;
+}
+
+@media screen and (max-width: 782px) {
+	body.lmat-fi-open {
+		margin-right: 0 !important;
+	}
+}
+
+#lmat-fi {
+	--lmat-fi-primary: #2563eb;
+	--lmat-fi-primary-hover: #1d4ed8;
+	--lmat-fi-primary-ring: #dbeafe;
+	--lmat-fi-text: #0f172a;
+	--lmat-fi-muted: #64748b;
+	--lmat-fi-border: #e2e8f0;
+	--lmat-fi-border-hover: #93c5fd;
+	--lmat-fi-surface: #fff;
+	--lmat-fi-bg: #f8fafc;
+	--lmat-fi-warning: #f59e0b;
+	--lmat-fi-warning-text: #b45309;
+	--lmat-fi-success: #16a34a;
+	--lmat-fi-hover-bg: #f1f5f9;
+	--lmat-fi-border-strong: #cbd5e1;
+	--lmat-fi-shadow: rgba(15, 23, 42, 0.08);
+	position: fixed;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	z-index: 99999;
+	display: flex;
+	flex-direction: column;
+	width: var(--lmat-fi-width, 380px);
+	max-width: 100%;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background: var(--lmat-fi-bg);
+	color: var(--lmat-fi-text);
+	border-left: 1px solid var(--lmat-fi-border);
+	box-shadow: -8px 0 24px var(--lmat-fi-shadow);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.45;
+	text-align: left;
+}
+
+#lmat-fi.is-dark {
+	--lmat-fi-primary: #60a5fa;
+	--lmat-fi-primary-hover: #93c5fd;
+	--lmat-fi-primary-ring: rgba(96, 165, 250, 0.25);
+	--lmat-fi-text: #e2e8f0;
+	--lmat-fi-muted: #94a3b8;
+	--lmat-fi-border: #334155;
+	--lmat-fi-border-hover: #475569;
+	--lmat-fi-surface: #1e293b;
+	--lmat-fi-bg: #0f172a;
+	--lmat-fi-warning-text: #fbbf24;
+	--lmat-fi-success: #22c55e;
+	--lmat-fi-hover-bg: #334155;
+	--lmat-fi-border-strong: #475569;
+	--lmat-fi-shadow: rgba(0, 0, 0, 0.4);
+	color-scheme: dark;
+}
+
+/* Floating draggable window mode */
+#lmat-fi.is-floating {
+	position: fixed;
+	bottom: auto;
+	right: auto;
+	border-radius: 16px;
+	border: 1px solid var(--lmat-fi-border);
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--lmat-fi-border);
+	overflow: hidden;
+	max-height: calc(100vh - 48px);
+	transition: box-shadow 0.2s ease, border-radius 0.2s ease;
+}
+
+#lmat-fi.is-floating.is-dark {
+	background: #111827;
+	border: 1px solid #374151;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+#lmat-fi.is-floating .lmat-fi__resize {
+	display: none !important;
+}
+
+#lmat-fi.is-dragging {
+	user-select: none !important;
+	opacity: 0.96;
+	box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), 0 0 0 2px var(--lmat-fi-primary);
+	transition: none !important;
+}
+
+#lmat-fi *,
+#lmat-fi *::before,
+#lmat-fi *::after {
+	box-sizing: border-box;
+}
+
+@media screen and (max-width: 782px) {
+	#lmat-fi {
+		top: 46px;
+	}
+}
+
+#lmat-fi .lmat-fi__resize {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: -4px;
+	z-index: 1;
+	width: 8px;
+	cursor: ew-resize;
+	touch-action: none;
+}
+
+#lmat-fi .lmat-fi__resize:hover,
+body.lmat-fi-resizing #lmat-fi .lmat-fi__resize {
+	background: rgba(37, 99, 235, 0.25);
+}
+
+body.lmat-fi-resizing {
+	cursor: ew-resize;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+body.lmat-fi-dragging-window {
+	cursor: grabbing !important;
+	user-select: none !important;
+	-webkit-user-select: none !important;
+}
+
+body.lmat-fi-dragging-window * {
+	cursor: grabbing !important;
+	user-select: none !important;
+}
+
+/* Header. */
+
+#lmat-fi .lmat-fi__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin: 0;
+	padding: 14px 16px;
+	background: var(--lmat-fi-surface);
+	border-bottom: 1px solid var(--lmat-fi-border);
+	cursor: grab;
+	user-select: none;
+	touch-action: none;
+}
+
+#lmat-fi.is-dragging .lmat-fi__header {
+	cursor: grabbing;
+}
+
+#lmat-fi .lmat-fi__heading {
+	min-width: 0;
+}
+
+#lmat-fi .lmat-fi__brand {
+	display: block;
+	margin: 0 0 2px;
+	color: var(--lmat-fi-primary);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.3;
+	letter-spacing: 0.02em;
+}
+
+#lmat-fi .lmat-fi__title {
+	margin: 0;
+	padding: 0;
+	color: var(--lmat-fi-text);
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+#lmat-fi .lmat-fi__close,
+#lmat-fi .lmat-fi__theme,
+#lmat-fi .lmat-fi__dock {
+	cursor: pointer;
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	background: var(--lmat-fi-surface);
+	color: var(--lmat-fi-muted);
+	border: 1px solid var(--lmat-fi-border);
+	border-radius: 8px;
+	box-shadow: none;
+	text-shadow: none;
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0;
+	text-decoration: none;
+	text-transform: none;
+	transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+#lmat-fi .lmat-fi__theme {
+	margin-left: auto;
+}
+
+#lmat-fi .lmat-fi__close:hover,
+#lmat-fi .lmat-fi__close:focus,
+#lmat-fi .lmat-fi__theme:hover,
+#lmat-fi .lmat-fi__theme:focus,
+#lmat-fi .lmat-fi__dock:hover,
+#lmat-fi .lmat-fi__dock:focus {
+	background: var(--lmat-fi-hover-bg);
+	color: var(--lmat-fi-text);
+	border-color: var(--lmat-fi-border-strong);
+}
+
+#lmat-fi .lmat-fi__close:focus-visible,
+#lmat-fi .lmat-fi__theme:focus-visible,
+#lmat-fi .lmat-fi__dock:focus-visible {
+	outline: 2px solid var(--lmat-fi-primary);
+	outline-offset: 2px;
+}
+
+/* Corner resize for floating window */
+#lmat-fi .lmat-fi__corner-resize {
+	display: none;
+}
+
+#lmat-fi.is-floating .lmat-fi__corner-resize {
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+	position: absolute;
+	right: 2px;
+	bottom: 2px;
+	width: 20px;
+	height: 20px;
+	padding: 3px;
+	cursor: nwse-resize;
+	z-index: 25;
+	touch-action: none;
+	color: var(--lmat-fi-muted);
+	opacity: 0.6;
+	transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+#lmat-fi.is-floating .lmat-fi__corner-resize:hover {
+	opacity: 1;
+	color: var(--lmat-fi-primary);
+}
+
+#lmat-fi .lmat-fi__corner-resize svg {
+	width: 12px;
+	height: 12px;
+	display: block;
+}
+
+#lmat-fi .lmat-fi__dock svg {
+	width: 15px;
+	height: 15px;
+	display: block;
+}
+
+/* Dock ghost indicator */
+.lmat-fi-dock-ghost {
+	position: fixed;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	width: var(--lmat-fi-width, 380px);
+	background: rgba(37, 99, 235, 0.08);
+	border-left: 2px dashed #2563eb;
+	box-shadow: inset 12px 0 32px rgba(37, 99, 235, 0.12);
+	z-index: 99998;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateX(25px);
+	transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.lmat-fi-dock-ghost.is-active {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+#lmat-fi.is-dark ~ .lmat-fi-dock-ghost,
+.lmat-fi-dock-ghost.is-dark {
+	background: rgba(96, 165, 250, 0.12);
+	border-left: 2px dashed #60a5fa;
+	box-shadow: inset 12px 0 32px rgba(96, 165, 250, 0.16);
+}
+
+.lmat-fi-dock-ghost__label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	background: #2563eb;
+	color: #ffffff;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+	animation: lmat-pulse-dock 1.4s ease-in-out infinite;
+}
+
+@keyframes lmat-pulse-dock {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+}
+
+@media screen and (max-width: 782px) {
+	.lmat-fi-dock-ghost {
+		top: 46px;
+	}
+}
+
+/* Body. */
+
+#lmat-fi .lmat-fi__body {
+	flex: 1;
+	overflow-y: auto;
+	margin: 0;
+	padding: 16px 16px 24px;
+}
+
+#lmat-fi .lmat-fi__comparing,
+#lmat-fi .lmat-fi__notice {
+	margin: 0 0 12px;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 1.45;
+}
+
+#lmat-fi .lmat-fi__comparing {
+	padding: 0;
+	color: var(--lmat-fi-muted);
+	font-size: 12px;
+}
+
+/* Translation progress. */
+
+#lmat-fi .lmat-fi__progress {
+	margin: 0 0 12px;
+	padding: 14px;
+	background: var(--lmat-fi-surface);
+	border: 1px solid var(--lmat-fi-border);
+	border-radius: 12px;
+}
+
+#lmat-fi .lmat-fi__progress-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 4px 12px;
+	margin: 0 0 10px;
+}
+
+#lmat-fi .lmat-fi__progress-title {
+	color: var(--lmat-fi-text);
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+#lmat-fi .lmat-fi__progress-remaining {
+	color: var(--lmat-fi-text);
+	font-family: inherit;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+#lmat-fi .lmat-fi__progress-bar {
+	height: 8px;
+	margin: 0;
+	overflow: hidden;
+	background: var(--lmat-fi-hover-bg);
+	border-radius: 999px;
+}
+
+#lmat-fi .lmat-fi__progress-fill {
+	height: 100%;
+	background: var(--lmat-fi-primary);
+	border-radius: 999px;
+	transition: width 0.3s ease;
+}
+
+#lmat-fi .lmat-fi__progress.is-complete .lmat-fi__progress-fill {
+	background: var(--lmat-fi-success);
+}
+
+#lmat-fi .lmat-fi__progress-detail {
+	margin: 8px 0 0;
+	padding: 0;
+	color: var(--lmat-fi-muted);
+	font-family: inherit;
+	font-size: 12px;
+	line-height: 1.4;
+	text-align: right;
+}
+
+#lmat-fi .lmat-fi__notice {
+	padding: 12px 14px;
+	background: var(--lmat-fi-surface);
+	color: var(--lmat-fi-text);
+	border: 1px solid var(--lmat-fi-border);
+	border-left: 4px solid var(--lmat-fi-primary);
+	border-radius: 10px;
+}
+
+#lmat-fi .lmat-fi__notice.is-success {
+	border-left-color: var(--lmat-fi-success);
+}
+
+#lmat-fi [hidden] {
+	display: none !important;
+}
+
+/* Search. */
+
+#lmat-fi .lmat-fi__search {
+	margin: 0 0 4px;
+}
+
+#lmat-fi .lmat-fi__search-field {
+	position: relative;
+	margin: 0 0 12px;
+}
+
+#lmat-fi .lmat-fi__search-field::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 12px;
+	width: 16px;
+	height: 16px;
+	transform: translateY(-50%);
+	background-color: var(--lmat-fi-muted);
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center / contain no-repeat;
+	pointer-events: none;
+}
+
+#lmat-fi .lmat-fi__search-input {
+	-webkit-appearance: none;
+	appearance: none;
+	box-sizing: border-box;
+	width: 100%;
+	height: 40px;
+	margin: 0;
+	padding: 0 12px 0 36px;
+	background: var(--lmat-fi-surface);
+	color: var(--lmat-fi-text);
+	border: 1px solid var(--lmat-fi-border);
+	border-radius: 10px;
+	box-shadow: none;
+	font-family: inherit;
+	font-size: 13px;
+	line-height: 40px;
+}
+
+#lmat-fi .lmat-fi__search-input::placeholder {
+	color: var(--lmat-fi-muted);
+	opacity: 1;
+}
+
+#lmat-fi .lmat-fi__search-input:hover {
+	border-color: var(--lmat-fi-border-strong);
+}
+
+#lmat-fi .lmat-fi__search-input:focus {
+	border-color: var(--lmat-fi-primary);
+	box-shadow: 0 0 0 3px var(--lmat-fi-primary-ring);
+	outline: none;
+}
+
+/* Groups and rows. */
+
+#lmat-fi .lmat-fi__group {
+	margin: 0 0 16px;
+	padding: 0;
+}
+
+#lmat-fi .lmat-fi__group-title {
+	margin: 16px 0 8px;
+	padding: 0;
+	color: var(--lmat-fi-muted);
+	font-family: inherit;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.4;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+#lmat-fi .lmat-fi__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#lmat-fi .lmat-fi__row {
+	margin: 0 0 8px;
+	padding: 0;
+	overflow: hidden;
+	background: var(--lmat-fi-surface);
+	border: 1px solid var(--lmat-fi-border);
+	border-radius: 12px;
+	list-style: none;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#lmat-fi .lmat-fi__row:not(.is-missing):hover {
+	border-color: var(--lmat-fi-border-hover);
+}
+
+#lmat-fi .lmat-fi__row.is-active {
+	border-color: var(--lmat-fi-primary);
+	box-shadow: 0 0 0 3px var(--lmat-fi-primary-ring);
+}
+
+#lmat-fi .lmat-fi__row-main {
+	display: block;
+	margin: 0;
+	padding: 12px 14px 8px;
+	color: inherit;
+	font-size: 13px;
+	line-height: 1.45;
+	text-align: left;
+	cursor: pointer;
+	user-select: text;
+	-webkit-user-select: text;
+}
+
+#lmat-fi .lmat-fi__row-main:focus-visible {
+	outline: 2px solid var(--lmat-fi-primary);
+	outline-offset: -2px;
+}
+
+#lmat-fi .lmat-fi__row.is-missing .lmat-fi__row-main {
+	cursor: default;
+}
+
+#lmat-fi .lmat-fi__row-header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0 0 4px;
+}
+
+#lmat-fi .lmat-fi__row-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	background: var(--lmat-fi-warning);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+#lmat-fi .lmat-fi__row.is-active .lmat-fi__row-badge {
+	background: var(--lmat-fi-primary);
+}
+
+#lmat-fi .lmat-fi__row.is-missing .lmat-fi__row-badge {
+	background: var(--lmat-fi-muted);
+}
+
+#lmat-fi .lmat-fi__row-meta {
+	display: block;
+	margin: 0;
+	color: var(--lmat-fi-muted);
+	font-size: 11px;
+	font-weight: 500;
+}
+
+/* Full string in the DOM so a copy gets all of it; only three lines are shown. */
+#lmat-fi .lmat-fi__row-text {
+	display: -webkit-box;
+	overflow: hidden;
+	color: var(--lmat-fi-text);
+	font-size: 14px;
+	font-weight: 600;
+	word-break: break-word;
+	cursor: text;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+#lmat-fi .lmat-fi__row-note {
+	display: block;
+	margin: 0;
+	padding: 0 14px 8px;
+	color: var(--lmat-fi-warning-text);
+	font-size: 11px;
+}
+
+#lmat-fi .lmat-fi__row-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 14px;
+	margin: 0;
+	padding: 0 14px 12px;
+}
+
+#lmat-fi .lmat-fi__row-copy,
+#lmat-fi .lmat-fi__row-edit {
+	display: inline-block;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: var(--lmat-fi-primary);
+	border: 0;
+	box-shadow: none;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.4;
+	letter-spacing: 0;
+	text-decoration: none;
+	text-shadow: none;
+	text-transform: none;
+	cursor: pointer;
+}
+
+#lmat-fi .lmat-fi__row-copy:hover,
+#lmat-fi .lmat-fi__row-copy:focus,
+#lmat-fi .lmat-fi__row-edit:hover,
+#lmat-fi .lmat-fi__row-edit:focus {
+	color: var(--lmat-fi-primary-hover);
+	text-decoration: underline;
+}
+
+/* Strings on the page. */
+
+.lmat-fi-mark {
+	position: relative !important;
+	outline: 2px dashed rgba(245, 158, 11, 0.85) !important;
+	outline-offset: -2px !important;
+	cursor: pointer;
+}
+
+body.lmat-fi-open .elementor-widget-testimonial,
+body.lmat-fi-open .elementor-testimonial-wrapper,
+body.lmat-fi-open .elementor-testimonial {
+	overflow: visible !important;
+}
+
+span.lmat-fi-mark,
+a.lmat-fi-mark {
+	display: inline-block;
+}
+
+.lmat-fi-mark[data-lmat-index]::before {
+	content: attr(data-lmat-index);
+	position: absolute;
+	top: -11px;
+	left: -11px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	background: #f59e0b;
+	color: #ffffff;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	z-index: 99998;
+	pointer-events: none;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.lmat-fi-highlight {
+	outline: 3px solid #2563eb !important;
+	outline-offset: -3px !important;
+	background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+.lmat-fi-highlight[data-lmat-index]::before {
+	background: #2563eb;
+	box-shadow: 0 2px 6px rgba(37, 99, 235, 0.45);
+}
+
+.lmat-fi-pencil-btn {
+	position: absolute !important;
+	top: -11px !important;
+	right: -11px !important;
+	width: 22px !important;
+	height: 22px !important;
+	min-width: 22px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 50% !important;
+	background: #2563eb !important;
+	color: #ffffff !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	cursor: pointer !important;
+	z-index: 99999 !important;
+	box-shadow: 0 2px 6px rgba(37, 99, 235, 0.45) !important;
+	transition: transform 0.15s ease, background-color 0.15s ease !important;
+	line-height: 1 !important;
+}
+
+.lmat-fi-pencil-btn:hover {
+	background: #1d4ed8 !important;
+	transform: scale(1.15) !important;
+}
+
+.lmat-fi-pencil-btn svg {
+	width: 12px !important;
+	height: 12px !important;
+	stroke: #ffffff !important;
+	fill: none !important;
+	pointer-events: none !important;
+}
+
+/* Footer & Highlights Toggle */
+
+#lmat-fi .lmat-fi__footer {
+	margin: 0;
+	padding: 12px 16px;
+	background: var(--lmat-fi-surface);
+	border-top: 1px solid var(--lmat-fi-border);
+}
+
+#lmat-fi .lmat-fi__toggle-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin: 0;
+	cursor: pointer;
+	user-select: none;
+}
+
+#lmat-fi .lmat-fi__toggle-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--lmat-fi-text);
+	font-size: 13px;
+	font-weight: 500;
+}
+
+#lmat-fi .lmat-fi__toggle-icon {
+	color: var(--lmat-fi-muted);
+	flex-shrink: 0;
+}
+
+#lmat-fi .lmat-fi__switch {
+	position: relative;
+	display: inline-block;
+	width: 38px;
+	height: 22px;
+	flex-shrink: 0;
+}
+
+#lmat-fi .lmat-fi__switch-input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+
+#lmat-fi .lmat-fi__switch-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--lmat-fi-border-strong);
+	border-radius: 22px;
+	transition: background-color 0.2s ease;
+}
+
+#lmat-fi .lmat-fi__switch-slider::before {
+	position: absolute;
+	content: "";
+	height: 16px;
+	width: 16px;
+	left: 3px;
+	bottom: 3px;
+	background-color: #ffffff;
+	border-radius: 50%;
+	transition: transform 0.2s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#lmat-fi .lmat-fi__switch-input:checked + .lmat-fi__switch-slider {
+	background-color: var(--lmat-fi-primary);
+}
+
+#lmat-fi .lmat-fi__switch-input:checked + .lmat-fi__switch-slider::before {
+	transform: translateX(16px);
+}
+
+#lmat-fi .lmat-fi__switch-input:focus-visible + .lmat-fi__switch-slider {
+	box-shadow: 0 0 0 2px var(--lmat-fi-primary-ring);
+}
+
+/* When highlights on page are toggled off: hide passive dashed marks, but show the actively selected item */
+
+body.lmat-fi-hide-marks .lmat-fi-mark:not(.lmat-fi-highlight) {
+	outline: none !important;
+}
+
+body.lmat-fi-hide-marks .lmat-fi-mark:not(.lmat-fi-highlight)[data-lmat-index]::before {
+	display: none !important;
+}
+
+body.lmat-fi-hide-marks .lmat-fi-highlight {
+	outline: 3px solid #2563eb !important;
+	outline-offset: 3px;
+	background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+body.lmat-fi-hide-marks .lmat-fi-highlight[data-lmat-index]::before {
+	display: inline-flex !important;
+	background: #2563eb !important;
+	box-shadow: 0 2px 6px rgba(37, 99, 235, 0.45) !important;
+}
+
+/* Collapsible groups */
+#lmat-fi .lmat-fi__group-title {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 10px;
+	border-left: 3px solid #2563eb;
+	border-radius: 6px;
+	background: rgba(127, 127, 127, 0.08);
+	cursor: pointer;
+	user-select: none;
+}
+
+#lmat-fi .lmat-fi__group-title::before {
+	content: "";
+	border: 4px solid transparent;
+	border-top: 5px solid currentColor;
+	border-bottom: 0;
+	transition: transform 0.15s;
+}
+
+#lmat-fi .lmat-fi__group.is-collapsed .lmat-fi__group-title::before {
+	transform: rotate(-90deg);
+}
+
+#lmat-fi .lmat-fi__group.is-collapsed .lmat-fi__list {
+	display: none;
+}
+
+/* Nested container / widget groups */
+#lmat-fi .lmat-fi__sub {
+	margin: 6px 0 6px 4px;
+	padding-left: 10px;
+	border-left: 2px solid #22c55e;
+}
+
+#lmat-fi .lmat-fi__sub-title {
+	padding: 6px 4px;
+	color: var(--lmat-fi-muted);
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	user-select: none;
+}
+
+#lmat-fi .lmat-fi__sub > .lmat-fi__list {
+	margin-top: 4px;
+}
+
+#lmat-fi .lmat-fi__sub-title {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	list-style: none;
+	border-radius: 4px;
+}
+
+#lmat-fi .lmat-fi__sub-title::-webkit-details-marker {
+	display: none;
+}
+
+#lmat-fi .lmat-fi__sub-title::marker {
+	display: none;
+	content: "";
+}
+
+#lmat-fi .lmat-fi__sub-arrow {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid #ec4899;
+	border-bottom: 0;
+	flex-shrink: 0;
+	transition: transform 0.15s ease;
+	transform-origin: 50% 35%;
+}
+
+#lmat-fi .lmat-fi__sub:not([open]) > .lmat-fi__sub-title .lmat-fi__sub-arrow {
+	transform: rotate(-90deg);
+}
+
+/* Hidden string hint */
+#lmat-fi .lmat-fi__row-reveal {
+	margin-left: 6px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #2563eb;
+	font: inherit;
+	font-weight: 600;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Quick edit */
+#lmat-fi .lmat-fi__quick {
+	padding: 0 14px 12px;
+}
+
+#lmat-fi .lmat-fi__quick-input {
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0 0 8px;
+	padding: 8px;
+	border: 1px solid rgba(127, 127, 127, 0.35);
+	border-radius: 6px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 13px;
+	resize: vertical;
+}
+
+#lmat-fi .lmat-fi__quick-save,
+#lmat-fi .lmat-fi__quick-cancel {
+	margin-right: 6px;
+	padding: 5px 12px;
+	border: 1px solid #2563eb;
+	border-radius: 5px;
+	background: #2563eb;
+	color: #fff;
+	font: inherit;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+#lmat-fi .lmat-fi__quick-cancel {
+	background: transparent;
+	color: inherit;
+	border-color: rgba(127, 127, 127, 0.35);
+}
+
+#lmat-fi .lmat-fi__quick-save:disabled {
+	opacity: 0.6;
+	cursor: default;
+}

@@ -1,0 +1,2306 @@
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                :is(#lmat-page-translation-modal-open-warning-wrapper, #lmat-page-translation-setting-modal, #lmat_page_translation_strings_model) .modal-container {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+:is(#lmat-page-translation-modal-open-warning-wrapper, #lmat-page-translation-setting-modal) .modal-content {
+    position: relative;
+    background-color: #ffffff;
+    width: 500px;
+    max-width: 90%;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    -webkit-animation-name: animatetopsetting;
+    -webkit-animation-duration: 0.6s;
+    -webkit-animation-fill-mode: forwards;
+    animation-name: animatetopsetting;
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+    color: black;
+}
+
+:is(#lmat-page-translation-modal-open-warning-wrapper, #lmat-page-translation-setting-modal) .button {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    vertical-align: top;
+    text-decoration: none;
+    text-shadow: none;
+
+    &.button-primary {
+        background: #2271b1;
+        border-color: #2271b1;
+        color: #fff;
+
+        &:not(:disabled):hover,
+        &:not(:disabled):focus,
+        &:not(:disabled):active {
+            background: #135e96;
+            border-color: #135e96;
+            box-shadow: none;
+            color: #fff;
+        }
+
+        &:not(:disabled):focus {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+        }
+
+        &:disabled {
+            color: #a7aaad !important;
+            background: #f6f7f7 !important;
+            border-color: #dcdcde !important;
+            box-shadow: none !important;
+            cursor: default !important;
+        }
+    }
+}
+
+#lmat-page-translation-button {
+    &.providers-config-no-active {
+        background: #f6f7f7 !important;
+        border-color: #c3c4c7 !important;
+        color: #50575e !important;
+        transition: all .3s ease-in-out;
+
+        :hover {
+            background: #e1e1e1 !important;
+            border-color: #c9c9c9 !important;
+            color: #50575e !important;
+        }
+    }
+}
+
+#lmat-page-translation-modal-open-warning-wrapper {
+    .modal-close {
+        background: none;
+        border: none;
+        color: #000;
+        cursor: pointer;
+        font-size: 24px;
+        height: 24px;
+        margin: 0;
+        padding: 0;
+        width: 24px;
+    }
+
+    .modal-header {
+        background: #ffffff;
+        padding: 20px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f0f0f1;
+
+        .lmat-page-translation-modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+
+            h3 {
+                margin: 0;
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #1d2327;
+            }
+        }
+    }
+
+    .lmat-page-translation-modal-body {
+        padding: 20px 24px;
+        text-align: center;
+
+        p {
+            font-size: 15px;
+            color: #646970;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        .lmat-page-translation-translate-button {
+            width: 100%;
+            padding: 10px 20px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            background: #0073aa !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 6px !important;
+            cursor: pointer;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+            transition: background 0.2s ease !important;
+            height: auto !important;
+            margin-bottom: 0 !important;
+            line-height: 1.4em;
+
+            &:hover {
+                background: #135e96 !important;
+                border-color: #135e96 !important;
+            }
+        }
+    }
+
+    .modal-footer-notice {
+        background: #ffffff;
+        border-top: 1px solid #f0f0f1;
+        padding: 16px 24px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+
+        .dashicons {
+            color: #dba617;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 13px;
+            color: #646970;
+            font-style: italic;
+            line-height: 1.5;
+            text-align: left;
+        }
+    }
+}
+
+/* Setting Modal CSS Start */
+#lmat-page-translation-setting-modal {
+    .lmat-page-translation-error-modal-box-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 100000;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+        display: flex !important;
+        opacity: 1;
+        visibility: visible;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    .lmat-page-translation-error-modal-box {
+        background: #ffffff;
+        width: 500px;
+        max-width: 90%;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    .lmat-page-translation-tooltip-element {
+        position: relative;
+        overflow: visible;
+        cursor: pointer;
+        white-space: nowrap;
+        color: #2271b1;
+
+        svg {
+            color: #3c434a;
+        }
+
+        .lmat-page-translation-tooltip {
+            display: block;
+            font-size: 12.8px;
+            position: absolute;
+            background: #0073aa;
+            color: #fff !important;
+            padding: 3.2px 8px;
+            border-radius: 4px;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            margin: auto;
+            opacity: 0;
+            width: 121px;
+            white-space: nowrap;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 98%;
+                left: 50%;
+                margin-left: -8px;
+                width: 0;
+                height: 0;
+                border-top: 8px solid #0073aa;
+                border-right: 8px solid transparent;
+                border-left: 8px solid transparent;
+            }
+
+            &.lmat-page-translation-tooltip-active {
+                animation: lmat-page-translation-slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
+            }
+        }
+    }
+
+    .lmat-page-translation-error-modal-box-header {
+        position: relative;
+        align-items: flex-start;
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 10px 24px 8px;
+        border-bottom: 2px solid #00000012;
+
+        h3 {
+            height: unset;
+            padding: 0;
+            border: none;
+            background: 0 0;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 2;
+            margin: 0;
+            color: #1d2327;
+        }
+
+        .lmat-page-translation-error-modal-box-close {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0;
+            margin: 0 0 0 auto;
+            width: 24px;
+            height: 24px;
+            line-height: 1;
+            color: #000;
+        }
+    }
+
+    .lmat-page-translation-error-modal-box-body {
+        min-height: 0px;
+        max-height: 65vh;
+        height: auto;
+        padding: 15px 24px;
+        overflow: auto;
+        text-align: justify;
+
+        h4 {
+            margin: 0;
+            margin-top: 0;
+            margin-bottom: 24px;
+            display: block;
+            font-weight: 600;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ol {
+            margin-top: 16px;
+            margin-bottom: 0px;
+            list-style-type: decimal;
+            margin-left: 32px;
+            box-sizing: border-box;
+            padding: 0;
+
+            li {
+                margin-bottom: 6px;
+                list-style: decimal;
+            }
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+
+            * {
+                font-size: 15px;
+                box-shadow: unset;
+                outline: unset;
+                border: unset;
+                line-height: 1.5;
+            }
+
+            a {
+                color: #2271b1 !important;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .lmat-page-translation-error-modal-box-footer {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0;
+        padding: 16px 22.4px;
+        border-top: 2px solid #00000012;
+
+        .lmat-page-translation-error-modal-box-close.button.button-primary:not(:disabled) {
+            background-color: #ffffff;
+            border: none;
+            box-shadow: none;
+            color: var(--wp-admin-theme-color, #2271b1);
+            font-size: 14px;
+            font-weight: 600;
+
+            &:hover,
+            &:focus,
+            &:active {
+                background-color: #fff;
+                border: none;
+                color: var(--wp-admin-theme-color-darker-20, #1c5788);
+            }
+        }
+    }
+}
+
+@keyframes lmat-page-translation-slide-up {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(-35px) scale(1);
+        opacity: 1;
+    }
+}
+
+button.lmat-page-translation-error-reload-btn {
+    background: #0073aa;
+    color: #fff !important;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 9px;
+    cursor: pointer;
+}
+
+button.lmat-page-translation-error-reload-btn:hover {
+    background: #005682;
+}
+
+#lmat-page-translation-setting-modal .modal-content {
+    width: unset;
+    max-width: 100vw;
+    padding: 0px;
+}
+
+#lmat-page-translation-setting-modal .lmat-page-translation-error-message {
+    margin: 0 !important;
+    padding: 0 0 10px;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.2;
+    color: red;
+    text-align: start;
+}
+
+:is(#lmat-page-translation-setting-modal, #lmat_page_translation_strings_model) .modal-header {
+    align-items: flex-start;
+    border-bottom: 2px solid #00000012;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding: 10px 24px 8px;
+
+    .step-label {
+        color: var(--wp-admin-theme-color, #2271b1);
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    h2 {
+        background: 0 0;
+        border: none;
+        font-size: 18px;
+        font-weight: 600;
+        height: unset;
+        line-height: 2;
+        margin: 0;
+        padding: 0;
+    }
+
+    .modal-desc {
+        color: #888;
+        font-size: 12px !important;
+        font-weight: 500;
+        margin: 0 0 4px;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: #000;
+        cursor: pointer;
+        font-size: 24px;
+        height: 24px;
+        margin: 0;
+        padding: 0;
+        width: 24px;
+    }
+}
+
+.lmat-page-translation-setting-modal-body {
+    max-width: 100vw;
+    overflow-x: auto;
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-provider-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 16px 24px;
+    max-width: 560px;
+    min-width: 500px;
+    box-sizing: border-box;
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-provider-card {
+    position: relative;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    &-body {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+    &-disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+
+        // A built-in AI card stays actionable so its setup error can be opened,
+        // except on browsers that have no built-in AI at all.
+        &#lmat-page-translation-provider-card-localAiTranslator:not(.lmat-page-translation-provider-browser-other),
+        &#lmat-page-translation-provider-card-edgeLocalAiTranslator:not(.lmat-page-translation-provider-browser-other) {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .lmat-page-translation-provider-error {
+            color: var(--wp-admin-theme-color, #2271b1);
+            display: inline-flex;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--wp-admin-theme-color-darker-20, #1c5788);
+            }
+        }
+    }
+
+    &-selected {
+        border-color: var(--wp-admin-theme-color, #2271b1) !important;
+        background: #eff6ff;
+
+        .lmat-page-translation-provider-card-check {
+            border-color: var(--wp-admin-theme-color, #2271b1);
+            background: var(--wp-admin-theme-color, #2271b1);
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 6px;
+                top: 1px;
+                width: 6px;
+                height: 11px;
+                border: solid #fff;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+        }
+    }
+
+    &-icon {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        svg,
+        img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+    }
+
+    &-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #0f172a;
+        display: block;
+    }
+
+    &-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 7px;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    &-docs {
+        color: var(--wp-admin-theme-color, #2271b1);
+        display: inline-flex;
+        margin-right: auto;
+
+        &:hover {
+            color: var(--wp-admin-theme-color-darker-20, #1c5788);
+        }
+    }
+
+    &-check {
+        position: relative;
+        display: block;
+        width: 22px;
+        height: 22px;
+        border: 2px solid #cbd5e1;
+        border-radius: 50%;
+        box-sizing: border-box;
+        margin-left: auto;
+    }
+
+    &-error {
+        font-size: 0.8125rem;
+    }
+
+    // Language pack download state of a built-in AI provider.
+    &-loading {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-left: auto;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1;
+        border: 1px solid #f5c2c0;
+        cursor: default;
+        pointer-events: none;
+        white-space: nowrap;
+        background: #fff5f5;
+        color: #d63638;
+        user-select: none;
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    &-download {
+        margin-left: auto;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--wp-admin-theme-color, #2271b1);
+        background: #fff;
+        color: var(--wp-admin-theme-color, #2271b1);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+            background: #eff6ff;
+        }
+    }
+}
+
+.lmat-page-translation-provider-loading-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(214, 54, 56, .25);
+    border-top-color: #d63638;
+    border-radius: 50%;
+    animation: lmat-page-translation-spin .7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes lmat-page-translation-spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-no-provider-message {
+    padding: 16px 25px;
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-no-provider-text {
+    color: #cc1818;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-no-provider-text a {
+    color: #2271b1;
+    text-decoration: underline;
+}
+
+.lmat-page-translation-setting-modal-body .lmat-page-translation-no-provider-text a:hover {
+    color: #135e96;
+}
+
+#lmat-page-translation-setting-modal .lmat-page-translation-translator-row .lmat-page-translation-translator-footer .lmat-page-translation-localai-disabled-message:hover {
+    background: red;
+}
+
+#lmat-page-translation-setting-modal .setting-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    background: 0 0;
+    border: none;
+    border-top: 1px solid #dcdcde;
+    margin-top: 0;
+    padding: 16px 22.4px;
+}
+
+/* Setting Modal CSS End */
+
+// Single column cards once the popup no longer fits two.
+@media (max-width: 600px) {
+    .lmat-page-translation-setting-modal-body .lmat-page-translation-provider-cards {
+        grid-template-columns: 1fr;
+        min-width: 0;
+        max-width: none;
+        padding: 16px;
+    }
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    border: 1px solid #c3c4c7;
+    border-left-width: 4px;
+    padding: 4.8px;
+    margin-top: 8px;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice p {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice-info {
+    border-left-color: #72aee6;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice-warning {
+    border-left-color: #f0ad4e;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice-error {
+    border-left-color: #d9534f;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-notice-success {
+    border-left-color: #5cb85c;
+}
+
+#lmat_page_translation_strings_model .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    width: 80%;
+    max-height: calc(100% - 40px);
+    min-height: 70vh;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: .6s;
+    animation-name: animatetop;
+    animation-duration: .6s;
+    animation-fill-mode: forwards;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+
+@media (max-width: 782px) {
+    #lmat_page_translation_strings_model .modal-content {
+        width: 96%;
+    }
+}
+
+@-webkit-keyframes animatetopsetting {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes animatetopsetting {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+/* The Close Button */
+
+button.lmat-page-translation-setting-close {
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    color: #50575e;
+}
+
+button.lmat-page-translation-setting-close:hover {
+    background-color: #e1e1e1;
+    border-color: #c9c9c9;
+}
+
+#lmat_page_translation_strings_model .save_btn_cont {
+    margin: 8px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+#lmat_page_translation_strings_model .save_btn_cont button .updating-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#lmat_page_translation_strings_model .save_btn_cont button .updating-text .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: currentColor;
+    margin-left: 2px;
+    flex-shrink: 0;
+    opacity: 0.45;
+    animation: lmat-page-translation-savingBlink 1.05s infinite ease-in-out;
+    animation-delay: calc(var(--i) * 0.18s - 1.05s);
+    will-change: opacity, transform;
+}
+
+@keyframes lmat-page-translation-savingBlink {
+
+    0%,
+    20% {
+        opacity: 0.45;
+        transform: translateY(0);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-1px);
+    }
+
+    60% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.45;
+        transform: translateY(0);
+    }
+}
+
+.local_ai_translator_btn.button-primary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+    text-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.3;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.local_ai_translator_btn.button-primary[disabled] {
+    color: #a7aaad !important;
+    background: #f6f7f7 !important;
+    border-color: #dcdcde !important;
+    text-decoration: none;
+    text-shadow: none;
+    border: none;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    white-space: nowrap;
+    border-radius: 2px;
+    cursor: default;
+}
+
+@keyframes moveit {
+    from {
+        left: -22px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+#lmat_page_translation_strings_model .ytstats {
+    padding: 0;
+    margin: 5px 160px 5px 0;
+    width: calc(100% - 160px);
+}
+
+#lmat_page_translation_strings_model .ytstats a {
+    color: #fff936;
+}
+
+#lmat_page_translation_strings_model .modal-body {
+    padding: 2px 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Everything stacked above the string table keeps its natural height. */
+#lmat_page_translation_strings_model .modal-body > :not(.lmat_page_translation_string_section, .lmat-page-translation-skeleton-loader-wrapper, .lmat_page_translation_translate_progress, .lmat_page_translation_error_popup_overlay) {
+    flex: 0 0 auto;
+}
+
+#lmat_page_translation_strings_model .modal-body > .lmat_page_translation_string_section {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#lmat_page_translation_strings_model .notice-dismiss {
+    padding: 0;
+}
+
+#lmat_page_translation_strings_model h3 {
+    width: 100%;
+    display: inline-block;
+    font-size: 18px;
+    padding: 0;
+    margin: 20px 0 10px !important;
+    color: var(--wp-admin-theme-color, #2271b1);
+}
+
+#translate_element {
+    margin-bottom: 25px;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_string_section {
+    position: relative;
+    width: 100%;
+}
+
+/* Same footprint as .lmat_page_translation_translate_progress (modal overlay area). */
+#lmat_page_translation_strings_model .lmat_page_translation_error_popup_overlay {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    z-index: 100;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.45);
+    overflow: auto;
+    cursor: default;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_error_popup_card {
+    position: relative;
+    max-width: 560px;
+    width: 100%;
+    max-height: 100%;
+    margin-top: 0;
+    padding: 14px 16px 14px 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+    background-color: white;
+    border-radius: 6px;
+    border-left-width: 4px;
+    cursor: default;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_error_popup_card p.lmat_page_translation_error_popup_message {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_error_popup_html {
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+
+    .lmat_page_translation_ai_pending_heading {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin: 0.35rem 0;
+    }
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_ai_error_buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+
+    .lmat_page_translation_ai_error_btn_translate {
+        background: #30b230 !important;
+        color: #fff !important;
+        border-color: #239d23 !important;
+    }
+
+    .lmat_page_translation_ai_error_btn_continue {
+        background: #0073aa !important;
+        color: #fff !important;
+        border-color: #2271b1 !important;
+    }
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_string_container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    position: relative;
+    color: #3c3c3c;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_string_container.lmat_page_translation_empty_string {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_string_container.lmat_page_translation_empty_string p {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bolder;
+    color: #5cb85c;
+    background: whitesmoke;
+    padding: 16px;
+}
+
+#lmat_page_translation_strings_model .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    background: 0 0;
+    border: none;
+    border-top: 1px solid #dcdcde;
+    margin-top: auto;
+    padding: 16px 22.4px;
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-string-footer-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+#lmat_page_translation_strings_model .notice.lmat_page_translation_string_count {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid rgb(186 230 253);
+    border-radius: 10px;
+    background: rgb(219 234 254);
+    color: rgb(3 71 166);
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: none;
+
+    p {
+        margin: 0;
+        padding: 0;
+        font-size: 13px;
+        color: inherit;
+    }
+
+    a {
+        color: var(--wp-admin-theme-color, #2271b1);
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+}
+
+#lmat_page_translation_strings_model table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    padding: 0;
+    margin: 0;
+}
+
+#lmat_page_translation_strings_model table td:first-child,
+#lmat_page_translation_strings_model table th:first-child {
+    width: 60px;
+    text-align: center;
+}
+
+#lmat_page_translation_strings_model table td,
+#lmat_page_translation_strings_model table th {
+    border: 1px solid #ddd;
+    padding: 4px;
+    height: 26px;
+    text-align: left;
+    white-space: pre-wrap;
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+#lmat_page_translation_strings_model table tr {
+    position: relative;
+}
+
+#lmat_page_translation_strings_model table tbody tr>*:not(td, th) {
+    display: none !important;
+}
+
+#lmat_page_translation_strings_model table td {
+    &:not(.lmat-page-translation-editing-cell) {
+        padding-right: 23px;
+    }
+
+    .lmat-page-translation-glossary-count {
+        position: absolute;
+        top: 12px;
+        right: 1px;
+        background: #fff;
+        padding: 4px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: #000;
+    }
+
+    .lmat-page-translation-glossary-count-icon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .lmat-page-translation-glossary-count-badge {
+        position: absolute;
+        top: -5px;
+        right: 5px;
+        background: #ff9800;
+        color: #fff;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: bold;
+        min-height: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        aspect-ratio: 1/1;
+        pointer-events: none;
+    }
+}
+
+.lmat-page-translation-content-editable {
+    width: 292px;
+    min-height: 40px;
+    resize: vertical;
+    height: 40px;
+    border: 1px solid rgb(118, 118, 118);
+    overflow: auto;
+
+    &:focus {
+        outline: 1px solid rgb(16, 16, 16);
+    }
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress {
+    position: absolute;
+    display: none;
+    inset: 0;
+    z-index: 9;
+    box-sizing: border-box;
+    padding: 32px 32px 40px;
+    background: rgba(15, 23, 42, .55);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 700;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Animated ellipsis only — same visual as original overlay */
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 2px;
+    vertical-align: baseline;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots span {
+    display: inline-block;
+    animation: lmat-translation-progress-dot 1.05s ease-in-out infinite;
+    opacity: 0.35;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots span:nth-child(2) {
+    animation-delay: 0.18s;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots span:nth-child(3) {
+    animation-delay: 0.36s;
+}
+
+/* Second row of dots (coffee line): stagger so it doesn’t mirror the title exactly */
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots--secondary span:nth-child(1) {
+    animation-delay: 0.22s;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots--secondary span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_progress__dots--secondary span:nth-child(3) {
+    animation-delay: 0.58s;
+}
+
+@keyframes lmat-translation-progress-dot {
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+/* Strings modal — linear % bar: same diagonal stripe track as bulk translation */
+#lmat_page_translation_strings_model .lmat-page-translation-translate-progress-bar [class$="-translator_progress_bar"] {
+    position: relative;
+    background-color: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px;
+    text-align: center;
+    color: #fff;
+    background-size: 30px 30px;
+    background-image: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    animation: lmat-page-translation-progress-stripes 1.25s linear infinite reverse;
+}
+
+@keyframes lmat-page-translation-progress-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 60px 0;
+    }
+}
+
+#lmat_page_translation_strings_model .lmat-page-translation-translate-progress-bar [class$="-translator_progress"] {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: width 0.2s ease-in-out;
+    text-align: center;
+    box-sizing: border-box;
+    width: 0%;
+    background-color: #4caf50;
+    color: #fff;
+    font-weight: 600;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_element_wrapper {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    column-gap: 8px;
+    margin-block: 1rem;
+}
+
+#lmat_page_translation_strings_model .lmat_page_translation_translate_element_wrapper>button {
+    height: 34px;
+    pointer-events: none;
+}
+
+#yt-widget .yt-listbox__input:not(:checked)~.yt-listbox__text {
+    display: none !important;
+}
+
+/* Strings modal skeleton loader start */
+.lmat-page-translation-skeleton-loader-wrapper .lmat-page-translation-skeleton-loader-mini {
+    height: 19px;
+    padding: 9px;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg,
+            #e0e0e0 25%,
+            #f5f5f5 50%,
+            #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: lmat-page-translation-shimmer 1.2s infinite linear;
+}
+
+.lmat-page-translation-skeleton-loader-wrapper .translate-widget {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    height: 88px;
+    align-items: center;
+}
+
+.lmat-page-translation-skeleton-loader-wrapper .translate-widget .lmat-page-translation-skeleton-loader-mini {
+    height: 30px;
+    max-width: 180px;
+    margin-left: auto;
+}
+
+.lmat-page-translation-skeleton-loader-wrapper .translate-widget .lmat-page-translation-skeleton-loader-mini:nth-child(1) {
+    max-width: 280px;
+    margin-left: 0px;
+    margin-right: auto;
+}
+
+.lmat-page-translation-skeleton-loader-wrapper table .lmat-page-translation-skeleton-loader-mini {
+    max-width: 80%;
+    margin: .3rem auto;
+}
+
+/* Strings modal skeleton loader end */
+
+/* error message css start */
+#lmat_page_translation_strings_model.lmat_page_translation_fetch_error .lmat_page_translation_string_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#lmat_page_translation_strings_model.lmat_page_translation_fetch_error :where(.save_btn_cont, table#stringTemplate) {
+    display: none;
+}
+
+#lmat_page_translation_strings_model.lmat_page_translation_fetch_error span.lmat_page_translation_string_error_msg {
+    color: red;
+    font-size: 24px;
+    padding: 32px;
+}
+
+body>div.skiptranslate iframe.skiptranslate[frameborder][src][style="visibility:visible"] {
+    visibility: hidden !important;
+}
+
+/* meta box review notice style start */
+.lmat-page-translation-review-meta-box {
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1882352941);
+    padding: 10px 0px !important;
+    border-radius: 5px !important;
+}
+
+.lmat-page-translation-review-meta-box p {
+    margin: 0px;
+}
+
+.lmat-page-translation-review-meta-box p a {
+    margin-top: 8px;
+}
+
+.lmat-page-translation-review-meta-box p a span {
+    color: #ffb900 !important;
+    margin-left: 5px;
+}
+
+/* Skeleton Shimmer Animation */
+.lmat-page-translation-loader-skeleton {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    /* Light gray background */
+    border-radius: 4px;
+    /* Rounded corners */
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+}
+
+.lmat-page-translation-loader-skeleton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            #e0e0e0 25%,
+            #f5f5f5 50%,
+            #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: lmat-page-translation-shimmer 1.5s infinite linear;
+}
+
+@keyframes lmat-page-translation-shimmer {
+    0% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: -100%;
+    }
+}
+
+:where(#lmat-page-translation-localAiTranslator-strings-modal, #lmat-page-translation-edgeLocalAiTranslator-strings-modal, #lmat-page-translation-yandex-strings-modal, #lmat-page-translation-google-strings-modal, #lmat-page-translation-gemini-strings-modal) .translator-widget {
+    justify-content: space-between;
+    align-items: center;
+}
+
+#lmat_page_translation_strings_model :where(#lmat-page-translation-localAiTranslator-strings-modal, #lmat-page-translation-edgeLocalAiTranslator-strings-modal) h3 {
+    margin: 20px 0px;
+}
+
+#lmat_page_translation_strings_model #lmat_page_translation_google_translate_element select {
+    width: 100% !important;
+}
+
+#lmat_page_translation_strings_model :where(#lmat-page-translation-localAiTranslator-strings-modal, #lmat-page-translation-edgeLocalAiTranslator-strings-modal, #lmat-page-translation-yandex-strings-modal, #lmat-page-translation-google-strings-modal, #lmat-page-translation-gemini-strings-modal) .lmat_page_translation_string_container {
+    max-height: calc(100vh - 300px - var(--lmat-page-translation-notice-wrapper-height, 0px));
+    box-shadow: 0 -1px 4px #0000005e inset;
+}
+
+
+#lmat-page-translation-pro-notice-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(34, 34, 34, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    padding: 16px;
+    color: black;
+}
+
+#lmat-page-translation-pro-notice-wrapper.lmat-page-translation-active {
+    opacity: 1;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice {
+    position: relative;
+    top: 0;
+    left: 0;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-header h2 {
+    height: unset;
+    padding: 8px 36px 8px 25px;
+    border: none;
+    background: 0 0;
+    border-bottom: 1px solid #dcdcde;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 2;
+    margin: 0;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-header .lmat-page-translation-close-button {
+    right: 15px;
+    top: 13px;
+    border-radius: 0 !important;
+    height: 30px !important;
+    width: 20px !important;
+    position: absolute;
+    font-size: 32px;
+    font-weight: 700;
+    color: #646970;
+    cursor: pointer;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-content {
+    margin: 15px 20px;
+    font-size: 16px;
+    color: #3c3c3c;
+    line-height: 18px;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-content p {
+    font-size: 16px;
+    line-height: 18px;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #dcdcde;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-footer .lmat-page-translation-upgrade-button {
+    background: #db352b;
+    border-color: #dd362b;
+    color: #fff;
+    padding: 2px 11px;
+    align-items: center;
+    margin-inline: auto;
+    align-self: center;
+    justify-content: center;
+    width: 123px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1.3;
+    min-height: 30px;
+    margin: 0;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-weight: inherit;
+    vertical-align: top;
+    text-decoration: none;
+    text-shadow: none;
+    text-align: center;
+}
+
+#lmat-page-translation-pro-notice-wrapper .lmat-page-translation-pro-notice .lmat-page-translation-notice-footer .lmat-page-translation-upgrade-button:hover {
+    background: #dd382e;
+    border-color: #c72a20;
+}
+
+/* Tooltip element */
+#lmat-page-translation-setting-modal .lmat-page-translation-tooltip-element {
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#lmat-page-translation-setting-modal .lmat-page-translation-tooltip-element .lmat-page-translation-tooltip {
+    display: block;
+    font-size: 12.8px;
+    position: absolute;
+    background: #5cb85c;
+    color: #fff !important;
+    padding: 3.2px 8px;
+    border-radius: 4px;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    margin: auto;
+    opacity: 0;
+    width: 121px;
+    white-space: nowrap;
+}
+
+#lmat-page-translation-setting-modal .lmat-page-translation-tooltip-element .lmat-page-translation-tooltip.lmat-page-translation-tooltip-active {
+    -webkit-animation: lmat-page-translation-slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
+    animation: lmat-page-translation-slide-up 0.15s cubic-bezier(0.51, 0.92, 0.265, 1.55) both;
+}
+
+#lmat-page-translation-setting-modal .lmat-page-translation-tooltip-element .lmat-page-translation-tooltip:after {
+    content: "";
+    position: absolute;
+    top: 98%;
+    left: 50%;
+    margin-left: -8px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid #5cb85c;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+}
+
+
+
+
+/* rtl css start */
+
+/* body.rtl #lmat-page-translation-setting-modal .modal-header h2 {
+    padding: 8px 25px 8px 36px;
+}
+
+body.rtl #lmat_page_translation_strings_model .modal-header .close {
+    left: 10px;
+    right: unset;
+}
+
+body.rtl #lmat_page_translation_strings_model .modal-header h2 {
+    margin: 18px 0px 5px 159px;
+}
+
+body.rtl #lmat-page-translation-setting-modal .modal-header span.close {
+    left: 15px;
+    right: unset;
+}
+
+body.rtl #lmat_page_translation_strings_model .save_btn_cont {
+    left: 40px;
+    right: unset;
+} */
+
+/* rtl css end */
+
+@-webkit-keyframes lmat-page-translation-slide-up {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(-35px) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes lmat-page-translation-slide-up {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(-35px) scale(1);
+        opacity: 1;
+    }
+}
+
+.lmat-page-translation-right-popup {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 350px;
+    height: 100%;
+    background: #222;
+    color: #fff;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: right 0.3s cubic-bezier(.4, 0, .2, 1);
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+
+.lmat-page-translation-right-popup--open {
+    right: 0;
+    pointer-events: auto;
+}
+
+.lmat-page-translation-right-popup__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 9998;
+    display: none;
+}
+
+.lmat-page-translation-right-popup--open .lmat-page-translation-right-popup__overlay {
+    display: block;
+}
+
+.lmat-page-translation-right-popup__content {
+    padding: 24px 16px 16px 16px;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.lmat-page-translation-right-popup__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* Inline popover for right of textarea */
+.lmat-page-translation-inline-popup {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 12px;
+    min-width: 220px;
+    max-width: 320px;
+    background: #222;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+    padding: 16px 16px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.lmat-page-translation-inline-popup__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.lmat-page-translation-inline-popup__content {
+    margin-top: 24px;
+    width: 100%;
+}
+
+/* InfoPopup styles */
+.lmat-page-translation-info-popup {
+    position: absolute;
+    background: #5cb85c;
+    border-radius: 4px;
+    z-index: 99999;
+    padding: 8px 3px;
+    min-width: 48px;
+    min-height: 48px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #fff;
+    transition: left 0.25s cubic-bezier(.4, 0, .2, 1), top 0.25s cubic-bezier(.4, 0, .2, 1);
+    max-width: 320px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+
+    box-sizing: unset;
+
+    * {
+        box-sizing: unset;
+    }
+}
+
+.lmat-page-translation-info-popup__close {
+    background: #fff;
+    color: #222;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.lmat-page-translation-info-popup__glossary,
+.lmat-page-translation-info-popup__copy,
+.lmat-page-translation-info-popup__add-glossary {
+    background: none;
+    border: none;
+    color: #fff;
+    margin: 5px 0;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.lmat-page-translation-info-popup__close img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+}
+
+/* GlossaryPopup styles */
+.lmat-page-translation-glossary-popup {
+    position: absolute;
+    background: #5cb85c;
+    color: #fff;
+    border-radius: 16px;
+    padding: 10px;
+    z-index: 100000;
+    min-width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+    transition: left 0.2s, top 0.2s, width 0.2s;
+}
+
+.lmat-page-translation-glossary-popup {
+
+    input,
+    textarea {
+        color: #2c3338;
+        background-color: white;
+    }
+
+    select {
+        appearance: none;
+        background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+        background-size: 16px 16px;
+        cursor: pointer;
+        color: #2c3338;
+    }
+
+    .button {
+        display: inline-block;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 2.15384615;
+        min-height: 30px;
+        margin: 0;
+        padding: 0 10px;
+        cursor: pointer;
+        border-width: 1px;
+        border-style: solid;
+        -webkit-appearance: none;
+        border-radius: 3px;
+        white-space: nowrap;
+        box-sizing: border-box;
+
+        &.button-primary {
+            background: #2271b1;
+            border-color: #2271b1;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: none;
+
+            &:hover {
+                background: #135e96;
+                border-color: #135e96;
+                color: #fff;
+            }
+        }
+
+        &.button-secondary {
+            color: #2271b1;
+            border-color: #2271b1;
+            background: #f6f7f7;
+            vertical-align: top;
+
+
+            &:hover {
+                background: #f0f0f1;
+                border-color: #0a4b78;
+                color: #0a4b78;
+            }
+        }
+    }
+}
+
+/* Responsive: On small screens, make it full width and centered */
+@media (max-width: 600px) {
+    .lmat-page-translation-glossary-popup {
+        left: 50% !important;
+        top: 10vh !important;
+        min-width: 0;
+        width: 95vw !important;
+        max-width: 98vw;
+        transform: translateX(-50%);
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .lmat-page-translation-glossary-popup__header {
+        font-size: 1rem;
+    }
+
+    .lmat-page-translation-glossary-popup table {
+        font-size: 0.95em;
+    }
+}
+
+.lmat-page-translation-glossary-popup h3 {
+    margin-top: 0;
+}
+
+.lmat-page-translation-glossary-popup table {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+}
+
+.lmat-page-translation-glossary-popup th {
+    border: 1px solid #fff;
+    padding: 6px 8px;
+    text-align: left;
+}
+
+.lmat-page-translation-glossary-insert {
+    background: none;
+    border: 1px solid #2196f3;
+    color: #2196f3;
+    border-radius: 3px;
+    padding: 2px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* GlossaryPopup header with icon and badge */
+.lmat-page-translation-glossary-popup__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+.lmat-page-translation-glossary-popup__icon {
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+
+.lmat-page-translation-glossary-popup__badge {
+    background: #ff9800;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.85em;
+    padding: 4px 8px;
+    margin-left: 6px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 1;
+}
+
+.lmat-page-translation-glossary-popup table {
+    margin-top: 0;
+}
+
+.lmat-page-translation-glossary-popup thead tr {
+    border: none;
+    border-bottom: 2px solid #444;
+    background: transparent;
+}
+
+.lmat-page-translation-glossary-popup tbody tr {
+    border: none;
+    border-bottom: 1px solid #7a7a7a;
+    background: transparent;
+}
+
+.lmat-page-translation-glossary-popup th {
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    background: transparent;
+}
+
+.lmat-page-translation-glossary-popup td {
+    padding: 6px 8px;
+    text-align: left;
+    color: #fff;
+    font-size: 0.98em;
+}
+
+.lmat-page-translation-glossary-insert {
+    background: none;
+    border: 1px solid #2196f3;
+    color: #2196f3;
+    border-radius: 3px;
+    padding: 2px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.lmat-page-translation-glossary-insert {
+    background: #2196f3;
+    color: #fff;
+}
+
+/* Bookmark icon styling for popups */
+.lmat-page-translation-bookmark-icon {
+    width: 25px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+    margin-right: 4px;
+    border-radius: 4px;
+    padding: 8px 5px 5px 5px;
+}
+
+.lmat-page-translation-bookmark-icon:hover {
+    background: #fff;
+}
+
+.lmat-page-translation-bookmark-icon--active {
+    background: #fff;
+}
+
+/* Copy icon styling for popups */
+.lmat-page-translation-copy-icon,
+.lmat-page-translation-add-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+    margin-right: 4px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.lmat-page-translation-copy-icon:hover,
+.lmat-page-translation-add-icon:hover,
+.lmat-page-translation-add-icon--active {
+    background: #fff;
+}
+
+.lmat-page-translation-info-popup__add-glossary.lmat-page-translation-active {
+    border-radius: 4px;
+}
+
+/* Wrapper for icon and badge */
+.lmat-page-translation-bookmark-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Badge styling and placement */
+.lmat-page-translation-bookmark-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff9800;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 2px 6px;
+    min-width: 11px;
+    min-height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.lmat-page-translation-info-popup__save {
+    background: none;
+    border: none;
+    color: #fff;
+    margin: 5px 0;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.lmat-page-translation-save-icon {
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+    margin-right: 4px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.lmat-page-translation-save-icon:hover {
+    background: #fff;
+}
+
+.lmat-page-translation-translation-textarea {
+    resize: vertical !important;
+    width: 100%;
+    min-height: 40px;
+}
+
+/* Add Glossary Popup Styles */
+.lmat-page-translation-add-glossary-popup {
+    top: 50%;
+    transform: translateY(-50%);
+    min-width: 380px;
+    max-width: 400px;
+    color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+    z-index: 100001;
+    /* Higher than glossary popup */
+    position: fixed;
+    /* Ensure it's in its own stacking context */
+}
+
+.lmat-page-translation-add-glossary-popup .lmat-page-translation-glossary-popup__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    padding: 12px 16px;
+    border-bottom: 2px solid #444;
+}
+
+.lmat-page-translation-add-glossary-form {
+    padding: 16px;
+}
+
+.lmat-page-translation-form-group {
+    margin-bottom: 16px;
+}
+
+.lmat-page-translation-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333;
+}
+
+.lmat-page-translation-form-group input,
+.lmat-page-translation-form-group select,
+.lmat-page-translation-form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+    height: unset;
+}
+
+.lmat-page-translation-form-group #lmat-page-translation-term-select {
+    padding: 0px 0px 0px 8px !important
+}
+
+.lmat-page-translation-form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.lmat-page-translation-form-group label {
+    color: #fff;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.lmat-page-translation-error-message {
+    color: #ff6b6b;
+    margin-bottom: 16px;
+    font-size: 14px;
+    padding: 8px;
+    background: rgb(255 255 255 / 51%);
+    border-radius: 4px;
+}
+
+.lmat-page-translation-success-message {
+    color: #000000;
+    margin-bottom: 16px;
+    font-size: 14px;
+    padding: 8px;
+    background: rgb(255 255 255 / 44%);
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.lmat-page-translation-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+    border-top: 1px solid #444;
+    padding-top: 16px;
+}
+
+.lmat-page-translation-btn-primary,
+.lmat-page-translation-btn-secondary {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.lmat-page-translation-btn-primary {
+    background: #5cb85c;
+    color: #fff;
+    border-color: #4cae4c;
+}
+
+.lmat-page-translation-btn-primary:hover {
+    background: #4cae4c;
+}
+
+.lmat-page-translation-btn-primary:disabled {
+    background: #3a723a;
+    cursor: not-allowed;
+    color: #aaa;
+}
+
+.lmat-page-translation-btn-secondary {
+    background: #333;
+    color: #fff;
+    border-color: #444;
+}
+
+.lmat-page-translation-btn-secondary:hover {
+    background: #444;
+}
+
+.lmat-page-translation-add-translation-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes lmat-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.lmat-loading-spinner-mini {
+    animation: lmat-spin 0.8s linear infinite;
+}

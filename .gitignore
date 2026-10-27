@@ -1,0 +1,23 @@
+composer.lock
+vendor/dealerdirect
+vendor/doctrine
+vendor/nikic
+vendor/phar-io
+vendor/phpcompatibility
+vendor/phpunit
+vendor/sebastian
+vendor/squizlabs
+vendor/theseer
+vendor/wp-coding-standards
+vendor/bin
+vendor/*/*.json
+vendor/*/License
+vendor/**/LICENSE
+vendor/**/README.md
+vendor/*/installed.php
+node_modules
+*.js*LICENSE.txt 
+fix-issues-files.txt
+fix-issues.csv
+# Local scan simulation fixtures and preview helpers
+/dev/simulation/

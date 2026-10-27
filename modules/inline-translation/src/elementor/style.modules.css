@@ -1,0 +1,57 @@
+div.lmatLanguageToolbar {
+  min-width: max-content;
+  overflow: visible;
+  flex-wrap: nowrap;
+}
+
+button.lmatLanguageListButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+button.lmatLanguageListButton img {
+  display: block;
+  width: 18px;
+  height: 12px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.lmatEtTranslatorWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.lmatEtTranslatorWrapper .lmatEtTranslatorContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #515962;
+  font-size: 15px;
+  cursor: pointer;
+  margin-right: .3rem;
+}
+
+.lmatEtTranslatorWrapper .lmatEtTranslatorContainer .lmatEtTranslatorIcon {
+  fill: #f0abfc;
+}
+/*# sourceMappingURL=style.modules.css.map */

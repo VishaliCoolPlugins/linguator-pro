@@ -1,0 +1,143 @@
+<?php
+/**
+ * @package Linguator
+ */
+namespace Linguator\Integrations\jetpack;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Manages the compatibility with Jetpack.
+ *
+ *  
+ */
+class Linguator_Jetpack {
+	/**
+	 * Constructor.
+	 *
+	 *  
+	 */
+	public function __construct() {
+		add_action( 'init', array( $this, 'jetpack_init' ) );
+		add_action( 'jetpack_widget_get_top_posts', array( $this, 'jetpack_widget_get_top_posts' ) );
+		add_filter( 'grunion_contact_form_field_html', array( $this, 'grunion_contact_form_field_html_filter' ), 10, 2 );
+		add_filter( 'jetpack_open_graph_tags', array( $this, 'jetpack_ogp' ) );
+		add_filter( 'jetpack_relatedposts_filter_filters', array( $this, 'jetpack_relatedposts_filter_filters' ), 10, 2 );
+
+		// Jetpack infinite scroll.
+		if ( isset( $_GET['infinity'], $_POST['action'] ) && 'infinite_scroll' === sanitize_key( wp_unslash( $_POST['action'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			add_filter( 'lmat_is_ajax_on_front', '__return_true' );
+		}
+	}
+
+	/**
+	 * Add filters
+	 *
+	 *  
+	 */
+	public function jetpack_init() {
+		if ( ! defined( 'JETPACK__VERSION' ) ) {
+			return;
+		}
+
+		// Infinite scroll ajax url must be on the right domain.
+		if ( did_action( 'lmat_init' ) && LMAT()->options['force_lang'] > 1 ) {
+			add_filter( 'infinite_scroll_ajax_url', array( LMAT()->links_model, 'site_url' ) );
+			add_filter( 'infinite_scroll_js_settings', array( $this, 'jetpack_infinite_scroll_js_settings' ) );
+		}
+	}
+
+	/**
+	 * Filter the Top Posts and Pages by language.
+	 * Adapted from the same function in jetpack-3.0.2/3rd-party/wpml.php
+	 *
+	 *  
+	 *
+	 * @param array $posts Array of the most popular posts.
+	 * @return array
+	 */
+	public function jetpack_widget_get_top_posts( $posts ) {
+		foreach ( $posts as $k => $post ) {
+			if ( linguator_current_language() !== linguator_get_post_language( $post['post_id'] ) ) {
+				unset( $posts[ $k ] );
+			}
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Filter the HTML of the Contact Form and output the one requested by language.
+	 * Adapted from the same function in jetpack-3.0.2/3rd-party/wpml.php
+	 * Keeps using 'icl_translate' as the function registers the string.
+	 *
+	 *  
+	 *
+	 * @param string $r           Contact Form HTML output.
+	 * @param string $field_label Field label.
+	 * @return string
+	 */
+	public function grunion_contact_form_field_html_filter( $r, $field_label ) {
+		if ( function_exists( 'icl_translate' ) ) {
+			if ( linguator_current_language() !== linguator_default_language() ) {
+				$label_translation = icl_translate( 'jetpack ', $field_label . '_label', $field_label );
+				$r = str_replace( $field_label, $label_translation, $r );
+			}
+		}
+
+		return $r;
+	}
+
+	/**
+	 * Adds opengraph support for locale and translations.
+	 *
+	 *  
+	 *
+	 * @param array $tags Opengraph tags to output.
+	 * @return array
+	 */
+	public function jetpack_ogp( $tags ) {
+		if ( did_action( 'lmat_init' ) ) {
+			foreach ( LMAT()->model->get_languages_list() as $language ) {
+				if ( LMAT()->curlang->slug !== $language->slug && LMAT()->links->get_translation_url( $language ) && isset( $language->facebook ) ) {
+					$tags['og:locale:alternate'][] = $language->facebook;
+				}
+				if ( LMAT()->curlang->slug === $language->slug && isset( $language->facebook ) ) {
+					$tags['og:locale'] = $language->facebook;
+				}
+			}
+		}
+		return $tags;
+	}
+
+	/**
+	 * Allows to make sure that related posts are in the correct language.
+	 *
+	 *  
+	 *
+	 * @param array  $filters Array of ElasticSearch filters based on the post_id and args.
+	 * @param string $post_id Post ID of the post for which we are retrieving Related Posts.
+	 * @return array
+	 */
+	public function jetpack_relatedposts_filter_filters( $filters, $post_id ) {
+		$slug = sanitize_title( linguator_get_post_language( $post_id, 'slug' ) );
+		$filters[] = array( 'term' => array( 'taxonomy.language.slug' => $slug ) );
+		return $filters;
+	}
+
+	/**
+	 * Fixes the settings history host for infinite scroll when using subdomains or multiple domains.
+	 *
+	 *  
+	 *
+	 * @param array $settings Infinite scroll JS settings outputted in the head.
+	 * @return array
+	 */
+	public function jetpack_infinite_scroll_js_settings( $settings ) {
+		$settings['history']['host'] = wp_parse_url( linguator_home_url(), PHP_URL_HOST ); // Jetpack uses get_option( 'home' ).
+		return $settings;
+	}
+}
+

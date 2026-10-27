@@ -1,0 +1,90 @@
+<?php
+/**
+ * @package Linguator
+ */
+
+namespace Linguator\Includes\Options\Business;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+use NOOP_Translations;
+use Linguator\Modules\sync\Linguator_Settings_Sync;
+use Linguator\Includes\Options\Primitive\Abstract_List;
+use Linguator\Includes\Options\Options;
+
+/**
+ * Class defining synchronization settings list option.
+ *
+ *  
+ *
+ * @phpstan-import-type SchemaType from Linguator\Includes\Options\Abstract_Option
+ */
+class Sync extends Abstract_List {
+	/**
+	 * Returns option key.
+	 *
+	 *  
+	 *
+	 * @return string
+	 *
+	 * @phpstan-return 'sync'
+	 */
+	public static function key(): string {
+		return 'sync';
+	}
+
+	/**
+	 * Appends the current state of the sync option to the site health information array.
+	 *
+	 * @since 0.0.8
+	 *
+	 * @param Options $options Instance of the Options class used to retrieve configuration settings.
+	 *
+	 * @return array The updated site health information array including sync status.
+	 */
+	public function get_site_health_info( Options $options ): array { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		if ( empty( $this->get() ) ) {
+			$value = '0: ' . __( 'Synchronization disabled', 'linguator-pro' );
+		} else {
+			$value = implode( ', ', $this->get() );
+		}
+
+		return $this->format_single_value_for_site_health_info( $value );
+	}
+
+	/**
+	 * Returns the JSON schema part specific to this option.
+	 *
+	 *  
+	 *
+	 * @return array Partial schema.
+	 *
+	 * @phpstan-return array{type: 'array', items: array{type: SchemaType, enum: non-empty-list<non-falsy-string>}}
+	 */
+	protected function get_data_structure(): array {
+		$GLOBALS['l10n']['linguator-pro'] = new NOOP_Translations(); // Prevents loading the translations too early.
+		$enum = array_keys( Linguator_Settings_Sync::list_metas_to_sync() );
+		unset( $GLOBALS['l10n']['linguator-pro'] );
+
+		return array(
+			'type'  => 'array',
+			'items' => array(
+				'type' => $this->get_type(),
+				'enum' => $enum,
+			),
+		);
+	}
+
+	/**
+	 * Returns the description used in the JSON schema.
+	 *
+	 *  
+	 *
+	 * @return string
+	 */
+	protected function get_description(): string {
+		return __( 'List of data to synchronize.', 'linguator-pro' );
+	}
+}

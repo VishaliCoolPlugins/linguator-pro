@@ -1,0 +1,494 @@
+<?php
+
+/**
+ * @package Linguator
+ */
+
+namespace Linguator\Modules\Wizard;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+use Linguator\Admin\Controllers\Linguator_Admin_Notices;
+use Linguator\Includes\Other\Linguator_Language;
+use Linguator\Admin\Controllers\Linguator_Admin_Model;
+use Linguator\Includes\Core\Linguator;
+
+
+
+use Linguator\Includes\Options\Options;
+
+/**
+ * Main class for Linguator wizard.
+ *
+ *  
+ */
+class Linguator_Wizard
+{
+	/**
+	 * Reference to the model object
+	 *
+	 * @var Linguator_Admin_Model
+	 */
+	protected $model;
+
+	/**
+	 * Reference to the Linguator options array.
+	 *
+	 * @var array
+	 */
+	protected $options;
+
+	/**
+	 * Steps configuration for the wizard
+	 *
+	 * @var array
+	 */
+	protected $steps;
+
+	/**
+	 * Current step in the wizard
+	 *
+	 * @var string
+	 */
+	protected $current_step;
+
+	/**
+	 * CSS styles for the wizard
+	 *
+	 * @var array
+	 */
+	protected $styles;
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param object $linguator Reference to Linguator global object.
+	 *  
+	 */
+	public function __construct(&$linguator)
+	{
+		$this->options = &$linguator->options;
+		$this->model   = &$linguator->model;
+
+		// Add admin menu for wizard page
+		add_action('admin_menu', array($this, 'add_admin_menu'));
+		
+		// Setup wizard page handling 
+		add_action('admin_init', array($this, 'linguator_setup_wizard_page'), 40);
+
+		// Add Wizard submenu.
+		add_filter('lmat_settings_tabs', array($this, 'settings_tabs'), 10, 1);
+		// Add filter to select screens where to display the notice.
+		add_filter('lmat_can_display_notice', array($this, 'can_display_notice'), 10, 2);
+	}
+
+	/**
+	 * Add admin menu item for the wizard
+	 *
+	 *  
+	 * @return void
+	 */
+	public function add_admin_menu()
+	{
+		// Add the wizard page as a top-level admin menu item (hidden from menu)
+		add_menu_page(
+			esc_html__('Linguator Setup Wizard', 'linguator-pro'),
+			esc_html__('Linguator Setup', 'linguator-pro'),
+			'manage_options',
+			'lmat_wizard',
+			array($this, 'display_wizard_page'),
+			'dashicons-translation',
+			null
+		);
+		
+		// Remove from admin menu to hide it (we only want it accessible via direct URL)
+		remove_menu_page('lmat_wizard');
+	}
+
+	/**
+	 * Save an activation transient when Linguator is activating to redirect to the wizard
+	 *
+	 *  
+	 *
+	 * @param bool $network_wide if activated for all sites in the network.
+	 * @return void
+	 */
+	public static function start_wizard($network_wide)
+	{
+		$options = (array) get_option(Options::OPTION_NAME, array());
+
+		if (wp_doing_ajax() || $network_wide || ! empty($options['version'])) {
+			return;
+		}
+		set_transient('lmat_activation_redirect', 1, 30);
+	}
+
+	/**
+	 * Redirect to the wizard depending on the context
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_redirect_to_wizard()
+	{
+		// Only check for redirect transient on plugins page to avoid unnecessary database queries
+		global $pagenow;
+		if ( ! in_array( $pagenow, array( 'plugins.php', 'index.php' ), true ) ) {
+			return;
+		}
+		
+		if (get_transient('lmat_activation_redirect')) {
+			$do_redirect = true;
+			if ( ( isset( $_GET['page'] ) && 'lmat_wizard' === sanitize_key( wp_unslash( $_GET['page'] ) ) ) || isset( $_GET['activate-multi'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				delete_transient('lmat_activation_redirect');
+				$do_redirect = false;
+			}
+
+			if ($do_redirect) {
+				// Delete transient before redirecting to prevent repeated checks
+				delete_transient('lmat_activation_redirect');
+				wp_safe_redirect(
+					sanitize_url(
+						add_query_arg(
+							array(
+								'page' => 'lmat_wizard',
+							),
+							admin_url('admin.php')
+						)
+					)
+				);
+				exit;
+			}
+		}
+	}
+
+	/**
+	 * Add an admin Linguator submenu to access the wizard
+	 *
+	 *  
+	 *
+	 * @param string[] $tabs Submenus list.
+	 * @return string[] Submenus list updated.
+	 */
+	public function settings_tabs($tabs)
+	{
+		// Only show the wizard tab if setup is not complete
+		if (!get_option('lmat_setup_complete')) {
+			$tabs['wizard'] = esc_html__('Setup Guide', 'linguator-pro');
+		}
+		return $tabs;
+	}
+
+	/**
+	 * Returns true if the media step is displayable, false otherwise.
+	 *
+	 *  
+	 *
+	 * @param Linguator_Language[] $languages List of language objects.
+	 * @return bool
+	 */
+	public function is_media_step_displayable($languages)
+	{
+		$media = array();
+		// If there is no language or only one the media step is displayable.
+		if (! $languages || count($languages) < 2) {
+			return true;
+		}
+		foreach ($languages as $language) {
+			$media[$language->slug] = $this->model->count_posts(
+				$language,
+				array(
+					'post_type'   => array('attachment'),
+					'post_status' => 'inherit',
+				)
+			);
+		}
+		return count(array_filter($media)) === 0;
+	}
+
+
+	/**
+	 * Setup the wizard page
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function linguator_setup_wizard_page()
+	{
+
+		if (!get_option('lmat_setup_complete')) {
+			Linguator_Admin_Notices::add_notice('wizard', $this->wizard_notice());
+		}
+
+		$this->linguator_redirect_to_wizard();
+		if (! Linguator::is_wizard()) {
+			return;
+		}
+
+		// Enqueue scripts and styles especially for the wizard.
+		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+	}
+
+	/**
+	 * Adds some admin screens where to display the wizard notice
+	 *
+	 *  
+	 *
+	 * @param bool   $can_display_notice Whether the notice can be displayed.
+	 * @param string $notice             The notice name.
+	 * @return bool
+	 */
+	public function can_display_notice($can_display_notice, $notice)
+	{
+		if (! $can_display_notice && 'wizard' === $notice) {
+			$screen = get_current_screen();
+			$can_display_notice = ! empty($screen) && in_array(
+				$screen->base,
+				array(
+					'edit',
+					'upload',
+					'options-general',
+				)
+			);
+		}
+		return $can_display_notice;
+	}
+
+	/**
+	 * Return html code of the wizard notice
+	 *
+	 *  
+	 *
+	 * @return string
+	 */
+	public function wizard_notice()
+	{
+		ob_start();
+		include __DIR__ . '/html-wizard-notice.php';
+		return ob_get_clean();
+	}
+
+
+	/**
+	 * Get language switcher options formatted for JavaScript
+	 *
+	 *  
+	 *
+	 * @return array Array of language switcher options with label and value
+	 */
+	private function get_language_switcher_options() {
+		$language_switcher_options = array(
+            array(
+                'label' => __( 'Classic (Menu, Widgets) Based', 'linguator-pro' ),
+                'value' => 'default',
+				'subheading' => 'Standard language switcher widget that can be added to widget areas and sidebars.'
+            ),
+            array(
+                'label' => __( 'Block Based', 'linguator-pro' ),
+                'value' => 'block',
+				'subheading' => 'Gutenberg block widget for the block editor, compatible with modern WordPress themes.'
+            )
+        );
+        if(linguator_is_plugin_active('elementor/elementor.php')){
+            $language_switcher_options[] = array(
+                'label' => __( 'Elementor Widget Based', 'linguator-pro' ),
+                'value' => 'elementor',
+				'subheading' => 'Specialized widget for Elementor page builder with enhanced styling and customization options.'
+            );
+        }
+        return $language_switcher_options;
+    } 
+
+	/**
+	 * Display the wizard page
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function display_wizard_page()
+	{
+		// Check permissions
+		if (! current_user_can('manage_options')) {
+			wp_die(esc_html__('Sorry, you are not allowed to manage options for this site.', 'linguator-pro'));
+		}
+
+		$steps          = $this->steps;
+		$current_step   = $this->current_step;
+		$styles         = $this->styles;
+		include __DIR__ . '/view-wizard-page.php';
+	}
+
+	/**
+	 * Enqueue scripts and styles for the wizard
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts()
+	{
+		if (Linguator::is_wizard()) {
+			// Ensure rewrite rules are flushed if REST API might not be working
+			// This fixes "invalid JSON response" errors on fresh installations
+			$this->maybe_flush_rewrite_rules();
+			
+			// Enqueue React-based settings for settings tabs
+			$asset_file = plugin_dir_path(LINGUATOR_ROOT_FILE) . 'admin/assets/frontend/setup/setup.asset.php';
+			$asset = require $asset_file;
+			$languages = $this->model->get_languages_list();
+			$home_page_id = get_option('page_on_front');
+			$home_page_language = $this->model->post->get_language($home_page_id);
+			$translations = $this->model->post->get_translations($home_page_id);
+			$is_media_step_displayable = $this->is_media_step_displayable($languages);
+			$is_home_page_displayable = $home_page_id > 0 && (! $languages || count($languages) === 1 || count($translations) !== count($languages));
+			$is_untranslated_contents_displayable = ! $this->model->has_languages() || $this->model->get_objects_with_no_lang(1);
+			$home_languages = $this->model->languages->get_list();
+			$home_page_languages = [];
+			foreach ($home_languages as $language) {
+				if ($this->model->post->get($home_page_id, $language)) {
+					array_push(
+						$home_page_languages,
+						$language
+					);
+				}
+			}
+			$home_page_data = [
+				"static_page" => $home_page_id > 0 ? get_post($home_page_id) : null,
+				"static_page_language"=> $home_page_language,
+				"static_page_languages" => $home_page_languages
+			];
+			// Enqueue React-based settings script
+			wp_enqueue_script(
+				'lmat_setup',
+				plugins_url('admin/assets/frontend/setup/setup.js', LINGUATOR_ROOT_FILE),
+				$asset['dependencies'],
+				$asset['version'],
+				true
+			);
+
+			// Provide ajaxurl previously added inline in the view
+			wp_add_inline_script(
+				'lmat_setup',
+				'var ajaxurl = ' . wp_json_encode( esc_url( admin_url( 'admin-ajax.php', 'relative' ) ) ) . ';',
+				'before' // Add the script before the main script
+			);
+
+			// Check for Polylang migration
+			$polylang_detection = false;
+			// Load migration class file directly to ensure it's available
+			$polylang_migration_file = LINGUATOR_DIR . '/includes/migration/polylang-migration.php';
+			if ( file_exists( $polylang_migration_file ) ) {
+				require_once $polylang_migration_file;
+				
+				if ( class_exists( '\Linguator\Includes\Migration\Polylang_Migration' ) ) {
+					try {
+						$migration = new \Linguator\Includes\Migration\Polylang_Migration( $this->model, $this->options );
+						$polylang_detection = $migration->detect_polylang();
+					} catch ( \Exception $e ) {
+					}
+				}
+			}
+
+			// Check for WPML migration
+			$wpml_detection = false;
+			// Load migration class file directly to ensure it's available
+			$wpml_migration_file = LINGUATOR_DIR . '/includes/migration/wpml-migration.php';
+			if ( file_exists( $wpml_migration_file ) ) {
+				require_once $wpml_migration_file;
+				
+				if ( class_exists( '\Linguator\Includes\Migration\WPML_Migration' ) ) {
+					try {
+						$wpml_migration = new \Linguator\Includes\Migration\WPML_Migration( $this->model, $this->options );
+						$wpml_detection = $wpml_migration->detect_wpml();
+					} catch ( \Exception $e ) {
+					}
+				}
+			}
+
+			// Localize script with settings data
+			wp_localize_script(
+				'lmat_setup',
+				'lmat_setup',
+				array(
+					'dismiss_notice' => esc_html__('Dismiss this notice.', 'linguator-pro'),
+					'api_url'        => rest_url('lmat/v1/'),
+					'nonce'          => wp_create_nonce('wp_rest'),
+					'languages'      => $this->model->get_languages_list(),
+					'all_languages'  => \Linguator\Settings\Controllers\Linguator_Settings::get_predefined_languages(),
+					'media'          => $is_media_step_displayable,
+					'untranslated_contents' => $is_untranslated_contents_displayable,
+					'home_page' => $is_home_page_displayable,
+					'admin_url' => get_admin_url(),
+					'home_url'       => get_home_url(),
+					'home_page_data' => $home_page_data,
+					'language_switcher_options' => $this->get_language_switcher_options(),
+					'polylang_detection' => $polylang_detection,
+					'wpml_detection' => $wpml_detection,
+					'wp_ai_client_available' => function_exists( 'linguator_is_ai_provider_allowed' ) ? linguator_is_ai_provider_allowed( 'gemini' ) : false,
+					'allowed_providers'     => function_exists( 'linguator_get_allowed_ai_providers' ) ? linguator_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
+				)
+			);
+
+			wp_localize_script(
+				'lmat_setup',
+				'lmat_setup_flag_data',
+				[
+					'flagsUrl' => plugin_dir_url(LINGUATOR_ROOT_FILE) . '/assets/flags/',
+					'nonce' => wp_create_nonce('wp_rest'),
+					'restUrl' => rest_url('lmat/v1/'),
+				]
+			);
+			// Enqueue styles
+			wp_enqueue_style(
+				'lmat_setup',
+				plugins_url('admin/assets/css/build/main.css', LINGUATOR_ROOT_FILE),
+				array(),
+				LINGUATOR_VERSION
+			);
+			
+			// Enqueue custom font for icons using centralized method
+			global $linguator;
+			if ( $linguator && method_exists( $linguator, 'enqueue_linguator_font' ) ) {
+				$linguator->enqueue_linguator_font();
+			}
+		}
+	}
+
+	/**
+	 * Check if rewrite rules need to be flushed and flush them if needed
+	 * 
+	 * This prevents "invalid JSON response" errors when REST API endpoints aren't registered yet.
+	 * ONE-TIME FIX: For existing installations, this will flush rules once and set a permanent flag.
+	 *
+	 * @return void
+	 */
+	private function maybe_flush_rewrite_rules()
+	{
+		// Check if rewrite rules have ever been flushed by our code
+		$rules_flushed = get_option('lmat_rewrite_rules_flushed');
+		
+		// If rules have never been flushed, do it now (ONE TIME ONLY)
+		// This catches both new installations and existing installations that were activated before the fix
+		if (!$rules_flushed) {
+			// Flush rewrite rules to ensure REST API endpoints are accessible
+			flush_rewrite_rules();
+			// Mark that we've flushed the rules (prevents flushing on every page load)
+			update_option('lmat_rewrite_rules_flushed', 'yes');
+		}
+		
+		// Also check for the activation flag (for new installs)
+		$needs_flush = get_option('lmat_needs_rewrite_flush');
+		if ($needs_flush) {
+			flush_rewrite_rules();
+			delete_option('lmat_needs_rewrite_flush');
+			update_option('lmat_rewrite_rules_flushed', 'yes');
+		}
+	}
+}
+

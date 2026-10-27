@@ -1,0 +1,1171 @@
+<?php
+/**
+ * Menu Sync Controller
+ * 
+ * Handles synchronization of menus across languages
+ * 
+ * @package Linguator
+ */
+
+namespace Linguator\Admin\Controllers;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Class Linguator_Admin_Menu_Sync
+ * 
+ * Provides functionality to sync menu structure across multiple languages
+ */
+class Linguator_Admin_Menu_Sync {
+
+	/**
+	 * Flag to track if AJAX handler has been registered
+	 *
+	 * @var bool
+	 */
+	private static $ajax_registered = false;
+
+	/**
+	 * Linguator model instance
+	 *
+	 * @var object
+	 */
+	private $model;
+
+	/**
+	 * Linguator options instance
+	 *
+	 * @var object
+	 */
+	private $options;
+
+	/**
+	 * Theme name
+	 *
+	 * @var string
+	 */
+	private $theme;
+
+	/**
+	 * Cache for menu language mappings to avoid N+1 queries
+	 *
+	 * @var array|null
+	 */
+	private $menu_language_cache = null;
+
+	/**
+	 * Constructor
+	 *
+	 * @param object $linguator The Linguator object.
+	 * @param bool   $is_ajax Whether this is being loaded for AJAX requests only.
+	 */
+	public function __construct( &$linguator, $is_ajax = false ) {
+		$this->model = &$linguator->model;
+		$this->options = &$linguator->options;
+		$this->theme = get_option( 'stylesheet' );
+
+		// Register AJAX handler only once
+		if ( ! self::$ajax_registered ) {
+		add_action( 'wp_ajax_lmat_sync_menu', array( $this, 'linguator_ajax_sync_menu' ) );
+			self::$ajax_registered = true;
+		}
+		
+		// Only enqueue scripts when not in AJAX-only mode
+		if ( ! $is_ajax ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			}
+	}
+
+
+
+
+	/**
+	 * Enqueue scripts and styles for the menu sync UI.
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts() {
+		global $nav_menu_selected_id;
+
+		// Don't enqueue scripts if no menu is selected
+		if ( empty( $nav_menu_selected_id ) ) {
+			return;
+		}
+
+		$this->enqueue_assets();
+
+		$source_menu    = wp_get_nav_menu_object( $nav_menu_selected_id );
+		$base_menu_name = $this->get_base_menu_name( $source_menu );
+
+		// If no menu selected, skip synced menu detection
+		if ( ! $source_menu || empty( $base_menu_name ) ) {
+			wp_localize_script(
+				'lmat-menu-sync',
+				'lmatMenuSync',
+				array(
+					'ajaxurl'    => admin_url( 'admin-ajax.php' ),
+					'nonce'      => wp_create_nonce( 'lmat_sync_menu' ),
+					'languages'  => $this->build_language_data( $nav_menu_selected_id, true ),
+					'menuId'     => $nav_menu_selected_id,
+					'menuLang'   => '', // No language selected
+					'syncButton' => __( 'Sync Menu', 'linguator-pro' ),
+				)
+			);
+			return;
+		}
+
+		// Get menu ID and language for sync button
+		$menu_id   = $nav_menu_selected_id ? absint( $nav_menu_selected_id ) : 0;
+		$menu_lang = $menu_id ? $this->linguator_get_menu_language( $menu_id ) : '';
+
+		// Localize script
+		wp_localize_script(
+			'lmat-menu-sync',
+			'lmatMenuSync',
+			array(
+				'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+				'nonce'     => wp_create_nonce( 'lmat_sync_menu' ),
+				'menuId'    => $menu_id,
+				'menuLang'  => $menu_lang,
+				'languages' => $this->build_language_data( $nav_menu_selected_id, false ),
+				'strings'   => array(
+					'syncButton'          => __( 'Sync Menu', 'linguator-pro' ),
+					'selectLanguages'     => __( 'Select languages to sync', 'linguator-pro' ),
+					'selectAll'           => __( 'Select All', 'linguator-pro' ),
+					'deselectAll'         => __( 'Unselect All', 'linguator-pro' ),
+					'sync'                => __( 'Sync', 'linguator-pro' ),
+					'cancel'              => __( 'Cancel', 'linguator-pro' ),
+					'syncing'             => __( 'Syncing...', 'linguator-pro' ),
+					'success'             => __( 'Menu synced successfully!', 'linguator-pro' ),
+					'error'               => __( 'Error syncing menu. Please try again.', 'linguator-pro' ),
+					'noLanguages'         => __( 'Please select at least one language.', 'linguator-pro' ),
+					'confirmReplace'      => __( 'This will replace existing menus in the selected languages. Continue?', 'linguator-pro' ),
+					'emptyMenuError'      => __( 'The source menu is empty. Please add menu items before syncing.', 'linguator-pro' ),
+					'noTranslatedContent' => __( 'No translated content is available for selected menu items. Please add and translate content in other languages first.', 'linguator-pro' ),
+					'permissionError'     => __( 'You do not have permission to sync menus.', 'linguator-pro' ),
+					'invalidMenuError'    => __( 'Invalid menu selected.', 'linguator-pro' ),
+					'noTranslationsError' => __( 'No menu items could be synced. Please ensure translations exist for your menu items.', 'linguator-pro' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Enqueue menu sync CSS and JS assets.
+	 *
+	 * @return void
+	 */
+	private function enqueue_assets() {
+		wp_enqueue_style(
+			'lmat-menu-sync',
+			plugins_url( 'admin/assets/css/admin-menu-sync.css', LINGUATOR_ROOT_FILE ),
+			array(),
+			LINGUATOR_VERSION
+		);
+
+		wp_enqueue_script(
+			'lmat-menu-sync',
+			plugins_url( 'admin/assets/js/admin-menu-sync.js', LINGUATOR_ROOT_FILE ),
+			array( 'jquery' ),
+			LINGUATOR_VERSION,
+			true
+		);
+	}
+
+	/**
+	 * Strip a trailing "(Language)" suffix from a menu name.
+	 *
+	 * @param object|false $source_menu Nav menu term object, or false.
+	 * @return string Base menu name, or empty string when unavailable.
+	 */
+	private function get_base_menu_name( $source_menu ) {
+		$base_menu_name = '';
+
+		if ( $source_menu ) {
+			$base_menu_name = $source_menu->name;
+			// Remove language suffix pattern like " (Language)" or " (भाषा)"
+			$base_menu_name = preg_replace( '/\s*\([^)]+\)\s*$/', '', $base_menu_name );
+		}
+
+		return $base_menu_name;
+	}
+
+	/**
+	 * Build language payload for wp_localize_script.
+	 *
+	 * @param int|string $menu_id    Selected menu term ID.
+	 * @param bool       $simplified When true, return slug-keyed entries without sync eligibility checks.
+	 * @return array
+	 */
+	private function build_language_data( $menu_id, $simplified = false ) {
+		$languages            = $this->model->languages->get_list();
+		$predefined_languages = include LINGUATOR_DIR . '/admin/settings/controllers/languages.php';
+		$lang_data            = array();
+
+		if ( $simplified ) {
+			foreach ( $languages as $lang ) {
+				$names = $this->get_language_display_names( $lang, $predefined_languages );
+
+				$lang_data[ $lang->slug ] = array(
+					'name'            => $names['english'],
+					'native_name'     => $names['native'],
+					'locale'          => isset( $lang->locale ) ? $lang->locale : $lang->slug,
+					'flag'            => $this->sanitize_language_flag( $lang ),
+					'has_synced_menu' => false,
+				);
+			}
+
+			return $lang_data;
+		}
+
+		$existing_menu_langs = $this->get_existing_synced_menu_langs( $menu_id, $languages );
+		$source_items        = wp_get_nav_menu_items( $menu_id );
+		$current_menu_lang   = $this->linguator_get_menu_language( $menu_id );
+
+		foreach ( $languages as $lang ) {
+			// Skip the current menu's language (can't sync to itself)
+			if ( $lang->slug === $current_menu_lang ) {
+				continue;
+			}
+
+			// Check if this language has translated content in general
+			if ( ! $this->linguator_language_has_content( $lang->slug ) ) {
+				continue;
+			}
+
+			// Only include this language if it has translations for menu items
+			if ( ! $this->menu_has_syncable_item( $source_items, $lang ) ) {
+				continue;
+			}
+
+			$names = $this->get_language_display_names( $lang, $predefined_languages );
+
+			$lang_data[] = array(
+				'slug'            => $lang->slug,
+				'name'            => $names['english'], // English name for display
+				'native_name'     => $names['native'], // Native name
+				'locale'          => isset( $lang->locale ) ? $lang->locale : $lang->slug, // Locale code
+				'is_default'      => ! empty( $lang->is_default ),
+				'has_synced_menu' => isset( $existing_menu_langs[ $lang->slug ] ),
+			);
+		}
+
+		return $lang_data;
+	}
+
+	/**
+	 * Languages that already have a menu in an overlapping theme location.
+	 *
+	 * @param int|string $menu_id   Current menu term ID.
+	 * @param array      $languages Available language objects.
+	 * @return array<string, true> Slug => true map.
+	 */
+	private function get_existing_synced_menu_langs( $menu_id, $languages ) {
+		$existing_menu_langs = array();
+
+		// Get all menus to check for existing synced versions
+		// Get terms directly to bypass any language filtering
+		$all_menus = get_terms(
+			array(
+				'taxonomy'   => 'nav_menu',
+				'hide_empty' => false,
+				'orderby'    => 'name',
+			)
+		);
+
+		// Fallback to wp_get_nav_menus if get_terms fails
+		if ( is_wp_error( $all_menus ) || empty( $all_menus ) ) {
+			$all_menus = wp_get_nav_menus();
+		}
+
+		// Get the locations of the current menu being edited
+		$current_menu_locations = $this->linguator_get_menu_locations( $menu_id );
+
+		// Only check for conflicts if the current menu is assigned to at least one location
+		if ( ! empty( $current_menu_locations ) ) {
+			// Check menus for existing synced versions in the SAME location(s)
+			foreach ( $all_menus as $menu ) {
+				// Skip the current menu itself
+				if ( $menu->term_id === $menu_id ) {
+					continue;
+				}
+
+				// Get the language assigned to this menu using its ID
+				$menu_lang = $this->linguator_get_menu_language( $menu->term_id );
+
+				// If this menu has a language, check if it's in the same location(s)
+				if ( $menu_lang ) {
+					$menu_locations = $this->linguator_get_menu_locations( $menu->term_id );
+
+					// Check if there's any overlap in locations
+					$has_common_location = ! empty( array_intersect( $current_menu_locations, $menu_locations ) );
+
+					if ( $has_common_location ) {
+						// This menu is in the same location(s) and has a language assigned
+						foreach ( $languages as $lang ) {
+							if ( $menu_lang === $lang->slug ) {
+								$existing_menu_langs[ $lang->slug ] = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $existing_menu_langs;
+	}
+
+	/**
+	 * Whether at least one source menu item can sync to the target language.
+	 *
+	 * @param array|false $source_items Menu items.
+	 * @param object      $lang         Target language.
+	 * @return bool
+	 */
+	private function menu_has_syncable_item( $source_items, $lang ) {
+		$has_translations = false;
+
+		if ( ! empty( $source_items ) ) {
+			foreach ( $source_items as $item ) {
+				if ( $this->linguator_can_sync_item( $item, $lang ) ) {
+					$has_translations = true;
+					break; // Found at least one, no need to check more
+				}
+			}
+		}
+
+		return $has_translations;
+	}
+
+	/**
+	 * Resolve English and native display names for a language.
+	 *
+	 * @param object $lang                 Language object.
+	 * @param array  $predefined_languages Predefined language catalog.
+	 * @return array{english: string, native: string}
+	 */
+	private function get_language_display_names( $lang, $predefined_languages ) {
+		$english_name = $lang->name; // Fallback to current name
+		$native_name  = $lang->name;
+
+		// Look up by slug first, then by locale code
+		$lookup_key = $lang->slug;
+		if ( isset( $predefined_languages[ $lookup_key ] ) && isset( $predefined_languages[ $lookup_key ]['label'] ) ) {
+			$english_name = $predefined_languages[ $lookup_key ]['label'];
+			if ( isset( $predefined_languages[ $lookup_key ]['name'] ) ) {
+				$native_name = $predefined_languages[ $lookup_key ]['name'];
+			}
+		}
+
+		return array(
+			'english' => $english_name,
+			'native'  => $native_name,
+		);
+	}
+
+	/**
+	 * Sanitize language flag HTML for script localization.
+	 *
+	 * @param object $lang Language object.
+	 * @return string
+	 */
+	private function sanitize_language_flag( $lang ) {
+		return isset( $lang->flag )
+			? wp_kses(
+				(string) $lang->flag,
+				array(
+					'img'  => array(
+						'src'      => true,
+						'alt'      => true,
+						'class'    => true,
+						'width'    => true,
+						'height'   => true,
+						'style'    => true,
+						'decoding' => true,
+						'loading'  => true,
+						'title'    => true,
+					),
+					'span' => array(
+						'class' => true,
+						'style' => true,
+					),
+				),
+				array_merge( wp_allowed_protocols(), array( 'data' ) )
+			)
+			: '';
+	}
+
+	/**
+	 * AJAX handler for menu sync
+	 *
+	 * @return void
+	 */
+	public function linguator_ajax_sync_menu() {
+		try {
+		// Verify nonce
+		check_ajax_referer( 'lmat_sync_menu', 'nonce' );
+
+		// Check capabilities
+		if ( ! current_user_can( 'edit_theme_options' ) ) {
+			wp_send_json_error( array( 
+				'message' => __( 'You do not have permission to perform this action.', 'linguator-pro' ),
+				'error_code' => 'permission_denied'
+			) );
+		}
+
+		// Get parameters
+		$menu_id = ! empty( $_POST['menu_id'] ) ? absint( wp_unslash( $_POST['menu_id'] ) ) : 0;
+		$target_langs = array();
+		if ( ! empty( $_POST['target_langs'] ) && is_array( $_POST['target_langs'] ) ) {
+			$target_langs = array_filter( array_map( 'sanitize_key', wp_unslash( $_POST['target_langs'] ) ) );
+		}
+
+			if ( empty( $menu_id ) ) {
+				wp_send_json_error( array( 
+					'message' => __( 'Invalid menu ID.', 'linguator-pro' ),
+					'error_code' => 'invalid_menu_id'
+				) );
+			}
+
+			if ( empty( $target_langs ) ) {
+				wp_send_json_error( array( 
+					'message' => __( 'No target languages selected.', 'linguator-pro' ),
+					'error_code' => 'no_languages_selected'
+				) );
+		}
+		// Perform sync
+		$result = $this->linguator_sync_menu_to_languages( $menu_id, $target_langs );
+		if ( $result['success'] ) {
+			wp_send_json_success( $result );
+		} else {
+			wp_send_json_error( $result );
+			}
+		} catch ( Exception $e ) {
+			wp_send_json_error( array( 
+				'message' => $e->getMessage(),
+				'error' => 'exception'
+			) );
+		}
+	}
+
+	/**
+	 * Sync menu to multiple languages
+	 *
+	 * @param int   $source_menu_id Source menu ID.
+	 * @param array $target_langs   Target language slugs.
+	 * @return array Result data.
+	 */
+	private function linguator_sync_menu_to_languages( $source_menu_id, $target_langs ) {
+		$result = array(
+			'success' => true,
+			'synced_languages' => array(),
+			'details' => array(),
+			'message' => '',
+		);
+
+		// Get source menu items
+		$source_items = wp_get_nav_menu_items( $source_menu_id );
+		
+		if ( empty( $source_items ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Source menu is empty.', 'linguator-pro' ),
+				'error_code' => 'empty_menu'
+			);
+		}
+
+		// Get source menu object
+		$source_menu = wp_get_nav_menu_object( $source_menu_id );
+		if ( ! $source_menu ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Source menu not found.', 'linguator-pro' ),
+				'error_code' => 'menu_not_found'
+			);
+		}
+
+		// Get menu locations for source menu
+		$menu_locations = $this->linguator_get_menu_locations( $source_menu_id );
+
+		// Sync to each target language
+		foreach ( $target_langs as $lang_slug ) {
+			$lang = $this->model->languages->get( $lang_slug );
+			
+			if ( ! $lang ) {
+				continue;
+			}
+
+			$sync_result = $this->linguator_sync_menu_for_language( $source_menu, $source_items, $lang, $menu_locations );
+			
+			if ( $sync_result['synced'] > 0 ) {
+				$result['synced_languages'][] = $lang->name;
+			}
+			
+			$result['details'][ $lang_slug ] = $sync_result;
+		}
+
+		// Build success message
+		if ( ! empty( $result['synced_languages'] ) ) {
+			$result['message'] = sprintf(
+				// translators: %s: Comma-separated list of language names.
+				__( 'Menu synced to: %s', 'linguator-pro' ),
+				implode( ', ', $result['synced_languages'] )
+			);
+		} else {
+			$result['success'] = false;
+			$result['message'] = __( 'No menus were synced. Please ensure translations exist.', 'linguator-pro' );
+			$result['error_code'] = 'no_translations';
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Sync menu for a specific language
+	 *
+	 * @param object $source_menu   Source menu object.
+	 * @param array  $source_items  Source menu items.
+	 * @param object $lang          Target language object.
+	 * @param array  $menu_locations Menu locations.
+	 * @return array Sync result.
+	 */
+	private function linguator_sync_menu_for_language( $source_menu, $source_items, $lang, $menu_locations ) {
+		$result = array(
+			'synced' => 0,
+			'skipped' => 0,
+			'menu_id' => 0,
+		);
+
+		// First, check if there are any items that can be synced
+		$items_to_sync = array();
+		foreach ( $source_items as $item ) {
+			if ( $this->linguator_can_sync_item( $item, $lang ) ) {
+				$items_to_sync[] = $item;
+			}
+		}
+
+		// If no items can be synced, don't create an empty menu
+		if ( empty( $items_to_sync ) ) {
+			$result['skipped'] = count( $source_items );
+			return $result;
+		}
+
+		// Create or get target menu with unique name handling
+		$base_menu_name = $this->linguator_format_menu_name( $source_menu->name, $lang->name );
+		$target_menu = wp_get_nav_menu_object( $base_menu_name );
+
+		if ( $target_menu ) {
+			// Menu already exists - verify it's not assigned to a different language
+			$existing_menu_lang = $this->linguator_get_menu_language( $target_menu->term_id );
+			
+			if ( $existing_menu_lang && $existing_menu_lang !== $lang->slug ) {
+				// Menu exists but assigned to different language - generate unique name
+				$target_menu_name = $this->linguator_generate_unique_menu_name( $source_menu->name, $lang->name );
+				$target_menu_id = wp_create_nav_menu( $target_menu_name );
+				if ( is_wp_error( $target_menu_id ) ) {
+					return $result;
+				}
+			} else {
+				// Use existing menu and delete its items
+				$target_menu_id = $target_menu->term_id;
+				
+				// Delete existing menu items in batch
+				$existing_items = wp_get_nav_menu_items( $target_menu_id );
+				if ( $existing_items ) {
+					foreach ( $existing_items as $item ) {
+						wp_delete_post( $item->ID, true );
+					}
+				}
+			}
+		} else {
+			// Create new menu
+			$target_menu_id = wp_create_nav_menu( $base_menu_name );
+			if ( is_wp_error( $target_menu_id ) ) {
+				return $result;
+			}
+		}
+
+		$result['menu_id'] = $target_menu_id;
+
+		// Map old item IDs to new item IDs for parent relationships
+		$item_id_map = array();
+
+		// Sync menu items
+		foreach ( $source_items as $item ) {
+			$new_item_id = $this->linguator_sync_menu_item( $item, $target_menu_id, $lang, $item_id_map );
+			
+			if ( $new_item_id ) {
+				$result['synced']++;
+			} else {
+				$result['skipped']++;
+			}
+		}
+
+		// If nothing was actually synced, delete the empty menu
+		if ( $result['synced'] === 0 ) {
+			wp_delete_nav_menu( $target_menu_id );
+			$result['menu_id'] = 0;
+			return $result;
+		}
+
+		// Assign menu to locations
+		if ( ! empty( $menu_locations ) ) {
+			$this->linguator_assign_menu_to_locations( $target_menu_id, $lang->slug, $menu_locations );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Check if a menu item can be synced to a language
+	 *
+	 * @param object $item Source menu item.
+	 * @param object $lang Target language.
+	 * @return bool True if item can be synced, false otherwise.
+	 */
+	private function linguator_can_sync_item( $item, $lang ) {
+		// Custom links can always be synced (we translate the label)
+		if ( $item->type === 'custom' ) {
+			return true;
+		}
+
+		// Check if post type item has translation (supports all post types including custom)
+		if ( $item->type === 'post_type' ) {
+			// Check if this post type is enabled for translation in Linguator
+			if ( ! $this->model->post->is_translated_object_type( $item->object ) ) {
+				return false;
+			}
+			
+			// Check if the source post has a language assigned
+			$source_lang = $this->model->post->get_language( $item->object_id );
+			if ( ! $source_lang ) {
+				return false;
+			}
+			
+			$translations = linguator_get_post_translations( $item->object_id );
+			
+			// If no translations array exists, the post isn't in a translation group yet
+			if ( empty( $translations ) ) {
+				return false;
+			}
+			
+			if ( ! isset( $translations[ $lang->slug ] ) ) {
+				return false;
+			}
+			
+			$translated_post_id = $translations[ $lang->slug ];
+			$translated_post = get_post( $translated_post_id );
+			
+			// Check if translated post exists and is published
+			if ( ! $translated_post || ! in_array( $translated_post->post_status, array( 'publish', 'private' ), true ) ) {
+				return false;
+			}
+			
+			return true;
+		}
+
+		// Check if taxonomy item has translation
+		if ( $item->type === 'taxonomy' ) {
+			$translations = linguator_get_term_translations( $item->object_id );
+			
+			if ( ! isset( $translations[ $lang->slug ] ) ) {
+				return false;
+			}
+			
+			$translated_term_id = $translations[ $lang->slug ];
+			$translated_term = get_term( $translated_term_id );
+			
+			// Check if translated term exists and is valid
+			if ( ! $translated_term || is_wp_error( $translated_term ) ) {
+				return false;
+			}
+			
+			return true;
+		}
+
+		// For other types, allow sync
+		return true;
+	}
+
+	/**
+	 * Sync a single menu item
+	 *
+	 * @param object $item        Source menu item.
+	 * @param int    $menu_id     Target menu ID.
+	 * @param object $lang        Target language.
+	 * @param array  &$item_id_map Item ID mapping.
+	 * @return int|false New menu item ID or false.
+	 */
+	private function linguator_sync_menu_item( $item, $menu_id, $lang, &$item_id_map ) {
+		// Build base item data
+		$item_data = array(
+			'menu-item-title' => $item->title,
+			'menu-item-url' => $item->url,
+			'menu-item-status' => 'publish',
+			'menu-item-type' => $item->type,
+			'menu-item-object' => $item->object,
+			'menu-item-object-id' => $item->object_id,
+			'menu-item-position' => $item->menu_order,
+			'menu-item-classes' => implode( ' ', $item->classes ),
+			'menu-item-xfn' => $item->xfn,
+			'menu-item-description' => $item->description,
+			'menu-item-attr-title' => $item->attr_title,
+			'menu-item-target' => $item->target,
+		);
+
+		// Handle parent relationship
+		if ( $item->menu_item_parent && isset( $item_id_map[ $item->menu_item_parent ] ) ) {
+			$item_data['menu-item-parent-id'] = $item_id_map[ $item->menu_item_parent ];
+		}
+
+		// Handle different item types
+		if ( $item->type === 'post_type' ) {
+			// Check if this post type is enabled for translation in Linguator
+			if ( ! $this->model->post->is_translated_object_type( $item->object ) ) {
+				return false; // Post type not enabled for translation
+			}
+			
+			// Get translated post (supports all post types including custom)
+			$translations = linguator_get_post_translations( $item->object_id );
+			
+			if ( ! isset( $translations[ $lang->slug ] ) ) {
+				return false; // No translation available
+			}
+			
+			$translated_post_id = $translations[ $lang->slug ];
+			
+			// Get the translated post and verify it exists and is published
+			$translated_post = get_post( $translated_post_id );
+			
+			// Skip if translated post doesn't exist or is not published
+			if ( ! $translated_post || ! in_array( $translated_post->post_status, array( 'publish', 'private' ), true ) ) {
+				return false; // Translated post doesn't exist or is not published
+			}
+			
+			$item_data['menu-item-object-id'] = $translated_post_id;
+			
+			// Get the original post
+			$original_post = get_post( $item->object_id );
+			
+			// Check if navigation label is customized (different from original post title)
+			if ( $original_post && $item->title !== $original_post->post_title ) {
+				// Navigation label is custom, translate it
+				$translated_title = $this->linguator_translate_custom_link_title( $item->title, $lang );
+				$item_data['menu-item-title'] = $translated_title ? $translated_title : $item->title;
+			} else {
+				// Use translated post title
+				$item_data['menu-item-title'] = $translated_post->post_title;
+			}
+		} elseif ( $item->type === 'taxonomy' ) {
+			// Get translated term
+			$translations = linguator_get_term_translations( $item->object_id );
+			
+			if ( ! isset( $translations[ $lang->slug ] ) ) {
+				return false; // No translation available
+			}
+			
+			$translated_term_id = $translations[ $lang->slug ];
+			
+			// Get the translated term and verify it exists
+			$translated_term = get_term( $translated_term_id );
+			
+			// Skip if translated term doesn't exist or is an error
+			if ( ! $translated_term || is_wp_error( $translated_term ) ) {
+				return false; // Translated term doesn't exist
+			}
+			
+			$item_data['menu-item-object-id'] = $translated_term_id;
+			
+			// Get the original term
+			$original_term = get_term( $item->object_id );
+			
+			// Check if navigation label is customized (different from original term name)
+			if ( $original_term && ! is_wp_error( $original_term ) && $item->title !== $original_term->name ) {
+				// Navigation label is custom, translate it
+				$translated_title = $this->linguator_translate_custom_link_title( $item->title, $lang );
+				$item_data['menu-item-title'] = $translated_title ? $translated_title : $item->title;
+			} else {
+				// Use translated term name
+				$item_data['menu-item-title'] = $translated_term->name;
+			}
+		} elseif ( $item->type === 'custom' ) {
+			// Handle custom links - translate navigation label
+			$translated_title = $this->linguator_translate_custom_link_title( $item->title, $lang );
+			if ( $translated_title ) {
+				$item_data['menu-item-title'] = $translated_title;
+			}
+			// URL remains the same for custom links
+		}
+
+		// Add menu item
+		$new_item_id = wp_update_nav_menu_item( $menu_id, 0, $item_data );
+
+		if ( is_wp_error( $new_item_id ) ) {
+			return false;
+		}
+
+			// Store mapping for parent relationships
+			$item_id_map[ $item->ID ] = $new_item_id;
+			
+		// Copy custom meta for language switcher items
+			if ( $item->type === 'custom' && $item->url === '#lmat_switcher' ) {
+				$meta = get_post_meta( $item->ID, '_lmat_menu_item', true );
+				if ( $meta ) {
+					update_post_meta( $new_item_id, '_lmat_menu_item', $meta );
+				}
+			}
+			
+			return $new_item_id;
+	}
+
+	/**
+	 * Get menu locations for a menu
+	 *
+	 * @param int $menu_id Menu ID.
+	 * @return array Menu locations.
+	 */
+	private function linguator_get_menu_locations( $menu_id ) {
+		$locations = array();
+		$nav_menus = $this->options->get( 'nav_menus' );
+		
+		if ( empty( $nav_menus[ $this->theme ] ) ) {
+			return $locations;
+		}
+
+		foreach ( $nav_menus[ $this->theme ] as $location => $languages ) {
+			foreach ( $languages as $lang => $assigned_menu_id ) {
+				if ( $assigned_menu_id === $menu_id ) {
+					$locations[] = $location;
+					break;
+				}
+			}
+		}
+
+		return $locations;
+	}
+
+	/**
+	 * Assign menu to locations
+	 *
+	 * @param int    $menu_id   Menu ID.
+	 * @param string $lang_slug Language slug.
+	 * @param array  $locations Locations to assign.
+	 * @return void
+	 */
+	private function linguator_assign_menu_to_locations( $menu_id, $lang_slug, $locations ) {
+		$nav_menus = $this->options->get( 'nav_menus' );
+		
+		foreach ( $locations as $location ) {
+			$nav_menus[ $this->theme ][ $location ][ $lang_slug ] = $menu_id;
+		}
+		
+		$this->options->set( 'nav_menus', $nav_menus );
+	}
+
+	/**
+	 * Format a nav menu name as "Base (Language)[ extra]" within WordPress's 200-char term name limit.
+	 *
+	 * @param string $base_name Base menu name.
+	 * @param string $lang_name Language display name used in the suffix.
+	 * @param string $extra     Optional uniqueness suffix (counter or timestamp).
+	 * @return string Formatted menu name (max 200 characters).
+	 */
+	private function linguator_format_menu_name( $base_name, $lang_name, $extra = '' ) {
+		$base_name = sanitize_text_field( (string) $base_name );
+		$lang_name = sanitize_text_field( (string) $lang_name );
+		$extra     = '' !== (string) $extra ? sanitize_text_field( (string) $extra ) : '';
+
+		$max_length = 200;
+		$suffix     = ' (' . $lang_name . ')';
+		if ( '' !== $extra ) {
+			$suffix .= ' ' . $extra;
+		}
+
+		// Extreme case: language/extra alone exceed the limit — keep a truncated suffix.
+		if ( strlen( $suffix ) >= $max_length ) {
+			return substr( $suffix, 0, $max_length );
+		}
+
+		$available = $max_length - strlen( $suffix );
+		if ( strlen( $base_name ) > $available ) {
+			$base_name = rtrim( substr( $base_name, 0, $available ) );
+		}
+
+		return $base_name . $suffix;
+	}
+
+	/**
+	 * Generate a unique menu name to avoid collisions
+	 * Handles cases where menu name already exists with different language assignment
+	 *
+	 * @param string $base_name Base menu name.
+	 * @param string $lang_name Language name.
+	 * @return string Unique menu name.
+	 */
+	private function linguator_generate_unique_menu_name( $base_name, $lang_name ) {
+		$menu_name = $this->linguator_format_menu_name( $base_name, $lang_name );
+		$counter   = 1;
+
+		// Keep incrementing counter until we find a unique name.
+		while ( wp_get_nav_menu_object( $menu_name ) ) {
+			$menu_name = $this->linguator_format_menu_name( $base_name, $lang_name, (string) $counter );
+			$counter++;
+
+			// Safety limit to prevent infinite loops — fall back to timestamp.
+			if ( $counter > 100 ) {
+				$menu_name = $this->linguator_format_menu_name( $base_name, $lang_name, (string) time() );
+				break;
+			}
+		}
+
+		return $menu_name;
+	}
+
+	/**
+	 * Build cache of menu ID to language mappings
+	 * Prevents N+1 query problem when checking multiple menu languages
+	 *
+	 * @return void
+	 */
+	private function linguator_build_menu_language_cache() {
+		if ( $this->menu_language_cache !== null ) {
+			return; // Already cached
+		}
+		
+		$this->menu_language_cache = array();
+		$nav_menus = $this->options->get( 'nav_menus' );
+		
+		if ( empty( $nav_menus[ $this->theme ] ) ) {
+			return;
+		}
+
+		foreach ( $nav_menus[ $this->theme ] as $location => $languages ) {
+			foreach ( $languages as $lang => $assigned_menu_id ) {
+				// Store menu_id => language mapping
+				$this->menu_language_cache[ $assigned_menu_id ] = $lang;
+			}
+		}
+	}
+
+	/**
+	 * Get the language assigned to a menu
+	 * Uses cache to avoid repeated database queries
+	 *
+	 * @param int $menu_id Menu ID.
+	 * @return string Language slug or empty string if not found.
+	 */
+	private function linguator_get_menu_language( $menu_id ) {
+		// Build cache on first call
+		$this->linguator_build_menu_language_cache();
+		
+		// Return from cache
+		return isset( $this->menu_language_cache[ $menu_id ] ) 
+			? $this->menu_language_cache[ $menu_id ] 
+			: '';
+	}
+
+	/**
+	 * Custom Link Title Translation
+	 *
+	 * @param string $title Original navigation label.
+	 * @param object $lang Target language object.
+	 * @return string Translated title or original if translation fails.
+	 */
+	/**
+	 * Translate custom link title using glossary or AI translation
+	 *
+	 * @param string $title Original navigation label.
+	 * @param object $lang Target language object.
+	 * @return string Translated title or original if translation fails.
+	 */
+	private function linguator_translate_custom_link_title( $title, $lang ) {
+		// Get source language (default language)
+		$default_lang = $this->model->languages->get_default();
+		if ( ! $default_lang ) {
+			return $title;
+		}
+		
+		$source_lang_code = $default_lang->slug;
+		$target_lang_code = $lang->slug;
+		
+		// First, check glossary for existing translation
+		$glossary_translation = $this->linguator_get_glossary_translation( $title, $source_lang_code, $target_lang_code );
+		if ( $glossary_translation ) {
+			return $glossary_translation;
+		}
+		
+		// No glossary entry found, use AI translation
+		$ai_translation = $this->linguator_translate_with_ai( $title, $lang );
+		if ( $ai_translation && $ai_translation !== $title ) {
+			return $ai_translation;
+		}
+		
+		// No translation found, return original title
+		return $title;
+	}
+	
+	/**
+	 * Get translation from glossary
+	 *
+	 * @param string $title Original navigation label.
+	 * @param string $source_lang_code Source language code.
+	 * @param string $target_lang_code Target language code.
+	 * @return string|false Translated title or false if not found.
+	 */
+	private function linguator_get_glossary_translation( $title, $source_lang_code, $target_lang_code ) {
+		$glossary_data = get_option( 'lmat_glossary_data', array() );
+		
+		if ( empty( $glossary_data ) || ! is_array( $glossary_data ) ) {
+			return false;
+		}
+		
+		// Search for translation in glossary
+		foreach ( $glossary_data as $entry ) {
+			// Check if the original term matches (case-insensitive)
+			if ( isset( $entry['original_term'] ) && 
+			     strcasecmp( trim( $entry['original_term'] ), trim( $title ) ) === 0 &&
+			     isset( $entry['original_language_code'] ) &&
+			     $entry['original_language_code'] === $source_lang_code ) {
+				
+				// Look for translation in target language
+				if ( isset( $entry['translations'] ) && is_array( $entry['translations'] ) ) {
+					foreach ( $entry['translations'] as $translation ) {
+						if ( isset( $translation['target_language_code'] ) &&
+						     $translation['target_language_code'] === $target_lang_code &&
+						     ! empty( $translation['translated_term'] ) ) {
+							return trim( $translation['translated_term'] );
+						}
+					}
+				}
+				break;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Translate text using Google Translate
+	 *
+	 * @param string $text Text to translate.
+	 * @param object $lang Target language object.
+	 * @return string|false Translated text or false if translation fails.
+	 */
+	private function linguator_translate_with_ai( $text, $lang ) {
+		// Get translation configuration
+		$ai_config = $this->options->get( 'ai_translation_configuration' );
+		
+		// Check if Google translation is enabled
+		if ( empty( $ai_config['provider']['google'] ) ) {
+			return false;
+		}
+		
+		// Get source language
+		$default_lang = $this->model->languages->get_default();
+		if ( ! $default_lang ) {
+			return false;
+		}
+		
+		// Use Google Translate
+		return $this->linguator_translate_with_google( $text, $default_lang->locale, $lang->locale );
+	}
+	
+	/**
+	 * Translate using Google Translate
+	 *
+	 * @param string $text Text to translate.
+	 * @param string $source_locale Source language locale.
+	 * @param string $target_locale Target language locale.
+	 * @return string|false Translated text or false.
+	 */
+	private function linguator_translate_with_google( $text, $source_locale, $target_locale ) {
+		// Extract language codes (first 2 letters)
+		$source_lang = substr( $source_locale, 0, 2 );
+		$target_lang = substr( $target_locale, 0, 2 );
+		
+		// Build Google Translate URL
+		$url = add_query_arg(
+			array(
+				'client' => 'gtx',
+				'sl'     => $source_lang,
+				'tl'     => $target_lang,
+				'dt'     => 't',
+				'q'      => rawurlencode( $text ),
+			),
+			'https://translate.googleapis.com/translate_a/single'
+		);
+		
+		// Make the request
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'    => 15,
+				'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+			)
+		);
+		
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+		
+		$body = wp_remote_retrieve_body( $response );
+		
+		// Parse the response
+		$data = json_decode( $body, true );
+		
+		if ( isset( $data[0][0][0] ) && ! empty( $data[0][0][0] ) ) {
+			return trim( $data[0][0][0] );
+		}
+		return false;
+	}
+
+	/**
+	 * Check if a language has any translated content (posts or pages)
+	 *
+	 * @param string $lang_slug Language slug.
+	 * @return bool True if language has content, false otherwise.
+	 */
+	private function linguator_language_has_content( $lang_slug ) {
+		global $wpdb;
+		
+		// Get all translatable post types (includes custom post types)
+		$post_types = $this->model->post->get_translated_object_types();
+		
+		// If no post types are enabled, return false
+		if ( empty( $post_types ) ) {
+			return false;
+		}
+		
+		// Get the language term ID for faster querying
+		$lang_term = get_term_by( 'slug', $lang_slug, 'lmat_language' );
+		if ( ! $lang_term ) {
+			return false;
+		}
+		
+		// Use direct SQL query for maximum performance
+		// This avoids WP_Query overhead and is much faster
+		$post_types_placeholder = implode( ',', array_fill( 0, count( $post_types ), '%s' ) );
+		
+		$params = array_merge( array( $lang_term->term_id ), $post_types );
+		
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct DB query is required here because WordPress core does not provide an efficient or native way to fetch all objects (posts/terms/etc) that do NOT have a language assigned (i.e., not related to any language term_taxonomy_id) in bulk. This negative relationship cannot be expressed using get_terms()/wp_get_object_terms(), especially when type filtering is needed. Using a raw query here ensures both performance and compatibility. The $post_types_placeholder is safely constructed from array_fill() with placeholders.
+		return (bool) $wpdb->get_var( 
+			$wpdb->prepare(
+				"SELECT 1 
+				FROM {$wpdb->posts} p 
+				INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+				INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+				WHERE tt.taxonomy = 'lmat_language' 
+				AND tt.term_id = %d 
+				AND p.post_status = 'publish' 
+				AND p.post_type IN ($post_types_placeholder)
+				LIMIT 1",
+				$params
+			)
+		 );
+		// phpcs:enable
+	}
+}

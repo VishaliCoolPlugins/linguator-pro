@@ -1,0 +1,147 @@
+<?php
+/**
+ * @package Linguator
+ */
+namespace Linguator\Integrations;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+use Linguator\Includes\Core\Linguator;
+
+
+
+/**
+ * Container for 3rd party plugins ( and themes ) integrations.
+ * This class is available as soon as the plugin is loaded.
+ *
+ *  
+ *   Renamed from Linguator_Plugins_Compat to Linguator_Integrations.
+ */
+#[AllowDynamicProperties]
+class Linguator_Integrations {
+	/**
+	 * Singleton instance.
+	 *
+	 * @var Linguator_Integrations|null
+	 */
+	protected static $instance = null;
+
+	// Integration properties
+	/**
+	 * @var mixed
+	 */
+	public $aq_resizer;
+
+	/**
+	 * @var mixed
+	 */
+	public $dm;
+
+	/**
+	 * @var mixed
+	 */
+	public $jetpack;
+
+	/**
+	 * @var mixed
+	 */
+	public $featured_content;
+
+	/**
+	 * @var mixed
+	 */
+	public $no_category_base;
+
+	/**
+	 * @var mixed
+	 */
+	public $twenty_seventeen;
+
+	/**
+	 * @var mixed
+	 */
+	public $wp_importer;
+
+	/**
+	 * @var mixed
+	 */
+	public $yarpp;
+
+	/**
+	 * @var mixed
+	 */
+	public $wpseo;
+
+	/**
+	 * @var mixed
+	 */
+	public $wp_sweep;
+
+	/**
+	 * @var mixed
+	 */
+	public $as3cf;
+
+	/**
+	 * @var mixed
+	 */
+	public $duplicate_post;
+
+	/**
+	 * @var mixed
+	 */
+	public $cft;
+
+	/**
+	 * @var mixed
+	 */
+	public $cache_compat;
+
+	/**
+	 * @var mixed
+	 */
+	public $rankmath;
+
+	/**
+	 * Constructor.
+	 *
+	 *  
+	 */
+	protected function __construct() {}
+
+	/**
+	 * Returns the single instance of the class.
+	 *
+	 *  
+	 *
+	 * @return self
+	 */
+	public static function instance(): self {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+			self::$instance->init();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Requires integrations.
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	protected function init(): void {
+		$load_scripts = require __DIR__ . '/integration-build.php';
+
+		foreach ( $load_scripts as $load_script ) {
+			if(file_exists(__DIR__ . "/{$load_script}/load.php")) {
+				require_once __DIR__ . "/{$load_script}/load.php";
+			}
+		}
+	}
+}
+
+

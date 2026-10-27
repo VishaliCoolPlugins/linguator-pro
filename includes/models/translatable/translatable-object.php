@@ -1,0 +1,721 @@
+<?php
+/**
+ * @package Linguator
+ */
+
+namespace Linguator\Includes\Models\Translatable;
+
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+use Linguator\Includes\Models\Languages;
+use Linguator\Includes\Options\Options;
+use Linguator\Includes\Other\Linguator_Model;
+use Linguator\Includes\Helpers\Linguator_Cache;
+use Linguator\Includes\Other\Linguator_Language;
+use WP_Term;
+
+
+
+/**
+ * Abstract class to use for object types that support at least one language.
+ *
+ *  
+ *
+ * @phpstan-type DBInfo array{
+ *     table: non-empty-string,
+ *     id_column: non-empty-string,
+ *     default_alias: non-empty-string
+ * }
+ */
+abstract class Linguator_Translatable_Object {
+	/**
+	 * Model for the languages.
+	 *
+	 * @var Languages
+	 */
+	protected $languages;
+
+	/**
+	 * Linguator's options.
+	 *
+	 * @var Options
+	 */
+	protected $options;
+
+	/**
+	 * Internal non persistent cache object.
+	 *
+	 * @var Linguator_Cache<mixed>
+	 */
+	protected $cache;
+
+	/**
+	 * List of taxonomies to cache.
+	 *
+	 * @var string[]
+	 * @see Linguator_Translatable_Object::get_object_term()
+	 *
+	 * @phpstan-var list<non-empty-string>
+	 */
+	protected $tax_to_cache = array();
+
+	/**
+	 * Taxonomy name for the languages.
+	 *
+	 * @var string
+	 *
+	 * @phpstan-var non-empty-string
+	 */
+	protected $tax_language;
+
+	/**
+	 * Identifier that must be unique for each type of content.
+	 * Also used when checking capabilities.
+	 *
+	 * @var string
+	 *
+	 * @phpstan-var non-empty-string
+	 */
+	protected $type;
+
+	/**
+	 * Identifier for each type of content to used for cache type.
+	 *
+	 * @var string
+	 *
+	 * @phpstan-var non-empty-string
+	 */
+	protected $cache_type;
+
+	/**
+	 * Object type to use when registering the taxonomy.
+	 * Left empty for posts.
+	 *
+	 * @var string|null
+	 *
+	 * @phpstan-var non-empty-string|null
+	 */
+	protected $object_type = null;
+
+	/**
+	 * Constructor.
+	 *
+	 *  
+	 *
+	 * @param Linguator_Model $model Instance of `Linguator_Model`.
+	 */
+	public function __construct( Linguator_Model $model ) {
+		$this->languages      = $model->languages;
+		$this->options        = $model->options;
+		$this->cache          = $model->cache;
+		$this->tax_to_cache[] = $this->tax_language;
+
+		/*
+		 * Register our taxonomy as soon as possible.
+		 */
+		$this->register_language_taxonomy();
+	}
+
+	/**
+	 * Registers the language taxonomy.
+	 *
+	 *  
+	 *
+	 * @return void
+	 */
+	protected function register_language_taxonomy(): void {
+		register_taxonomy(
+			$this->tax_language,
+			(array) $this->object_type,
+			array(
+				'label'     => false,
+				'public'    => false,
+				'query_var' => false,
+				'rewrite'   => false,
+				'_lmat'      => true,
+			)
+		);
+
+		$this->add_sanitization_hooks( $this->tax_language );
+	}
+
+	/**
+	 * Sanitizes descriptions written to or read from an internal taxonomy.
+	 *
+	 * @param string $taxonomy Internal taxonomy name.
+	 * @return void
+	 */
+	protected function add_sanitization_hooks( string $taxonomy ): void {
+		add_filter( "pre_{$taxonomy}_description", array( $this, 'sanitize_description' ), 0 );
+		add_filter( "get_{$taxonomy}", array( $this, 'sanitize_term' ), 0 );
+	}
+
+	/**
+	 * Hides disallowed serialized values from hydrated term objects.
+	 * The stored database value is unchanged.
+	 *
+	 * @param mixed $term Term object or value returned by another filter.
+	 * @return mixed
+	 */
+	public function sanitize_term( $term ) {
+		if ( $term instanceof WP_Term && $this->has_disallowed_type( $term->description ) ) {
+			$term->description = '';
+		}
+
+		return $term;
+	}
+
+	/**
+	 * Rejects non-string descriptions and serialized values with disallowed types.
+	 *
+	 * @param mixed $description Term description.
+	 * @return string
+	 */
+	public function sanitize_description( $description ) {
+		if ( ! is_string( $description ) || '' === $description ) {
+			return '';
+		}
+
+		return $this->has_disallowed_type( $description ) ? '' : $description;
+	}
+
+	/**
+	 * Allows serialized arrays, strings, integers, and booleans only.
+	 * Strings resembling a disallowed type may also be rejected.
+	 *
+	 * @param string $description Term description.
+	 * @return bool
+	 */
+	private function has_disallowed_type( string $description ): bool {
+		return 0 !== preg_match( '#(?:^|[;{])(?:[OCEdrR]:|N;)#', $description );
+	}
+
+	/**
+	 * Returns the language taxonomy name.
+	 *
+	 *  
+	 *
+	 * @return string
+	 *
+	 * @phpstan-return non-empty-string
+	 */
+	public function get_tax_language() {
+		return $this->tax_language;
+	}
+
+	/**
+	 * Returns the type of object.
+	 *
+	 *  
+	 *
+	 * @return string
+	 *
+	 * @phpstan-return non-empty-string
+	 */
+	public function get_type() {
+		return $this->type;
+	}
+
+	/**
+	 * Adds hooks.
+	 *
+	 *  
+	 *
+	 * @return static
+	 */
+	public function init() {
+		return $this;
+	}
+
+	/**
+	 * Stores the object's language into the database.
+	 *
+	 *  
+	 *
+	 * @param int                     $id   Object ID.
+	 * @param Linguator_Language|string|int $lang Language (object, slug, or term ID).
+	 * @return bool True when successfully assigned. False otherwise (or if the given language is already assigned to
+	 *              the object).
+	 */
+	public function set_language( $id, $lang ) {
+		$id = linguator_sanitize_id( $id );
+
+		if ( empty( $id ) ) {
+			return false;
+		}
+
+		$old_lang = $this->get_language( $id );
+		$old_lang = $old_lang ? $old_lang->get_tax_prop( $this->tax_language, 'term_id' ) : 0;
+
+		$lang = $this->languages->get( $lang );
+		$lang = $lang ? $lang->get_tax_prop( $this->tax_language, 'term_id' ) : 0;
+
+		if ( $old_lang === $lang ) {
+			return false;
+		}
+
+		$term_taxonomy_ids = wp_set_object_terms( $id, $lang, $this->tax_language );
+
+		wp_cache_set_last_changed( $this->cache_type );
+
+		return is_array( $term_taxonomy_ids );
+	}
+
+	/**
+	 * Returns the language of an object.
+	 *
+	 *  
+	 *   Renamed the parameter $post_id into $id.
+	 *
+	 * @param int $id Object ID.
+	 * @return Linguator_Language|false A `Linguator_Language` object. `false` if no language is associated to that object or if the
+	 *                            ID is invalid.
+	 */
+	public function get_language( $id ) {
+		$id = linguator_sanitize_id( $id );
+
+		if ( empty( $id ) ) {
+			return false;
+		}
+
+		// Get the language and make sure it is a Linguator_Language object.
+		$lang = $this->get_object_term( $id, $this->tax_language );
+
+		if ( empty( $lang ) ) {
+			return false;
+		}
+
+		return $this->languages->get( $lang->term_id );
+	}
+
+	/**
+	 * Removes the term language from the database.
+	 *
+	 *  
+	 *
+	 * @param int $id Term ID.
+	 * @return void
+	 */
+	public function delete_language( $id ) {
+		$id = linguator_sanitize_id( $id );
+
+		if ( empty( $id ) ) {
+			return;
+		}
+
+		wp_delete_object_term_relationships( $id, $this->tax_language );
+	}
+
+	/**
+	 * Wraps `wp_get_object_terms()` to cache it and return only one object.
+	 * Inspired by the WordPress function `get_the_terms()`.
+	 *
+	 *  @since 0.0.8
+	 *
+	 * @param int[]    $object_ids Array of object IDs.
+	 * @param string $taxonomy Linguator taxonomy depending if we are looking for a post (or term, or else) language.
+	 * @return array<int,WP_Term> Array of terms with object ID as key.
+	 */
+	protected function get_object_terms( array $object_ids, string $taxonomy ) {
+		$object_ids = linguator_sanitize_ids( $object_ids );
+		if ( empty( $object_ids ) ) {
+			return array();
+		}
+
+		$cached_values = $this->get_from_object_term_cache( $object_ids, $taxonomy );
+
+		$all_term_ids = array_values( $cached_values );
+		_prime_term_caches( $all_term_ids, false );
+
+		$terms = array();
+		foreach ( $cached_values as $object_id => $term_id ) {
+			/** @var WP_Term $term */
+			$term                = get_term( $term_id );
+			$terms[ $object_id ] = $term;
+		}
+
+		return $terms;
+	}
+
+	/**
+	 * Caches all object-relationship terms.
+	 *
+	 * @since 0.0.8
+	 *
+	 * @param int[] $object_ids Array of object IDs.
+	 *
+	 * @return int[][][]
+	 */
+	protected function update_object_term_cache( array $object_ids ) {
+		$non_cached_ids = array();
+		foreach ( $this->tax_to_cache as $tax ) {
+			$non_cached_ids = array_merge( $non_cached_ids, _get_non_cached_ids( $object_ids, "{$tax}_relationships" ) );
+		}
+
+		if ( empty( $non_cached_ids ) ) {
+			return array();
+		}
+
+		$terms = wp_get_object_terms(
+			array_unique( $non_cached_ids ),
+			$this->tax_to_cache,
+			array(
+				'fields'                 => 'all_with_object_id',
+				'update_term_meta_cache' => false,
+			)
+		);
+
+		if ( ! is_array( $terms ) ) {
+			return array();
+		}
+
+		$object_terms = array();
+		foreach ( $terms as $term ) {
+			$object_terms[ $term->taxonomy ][ $term->object_id ][] = $term->term_id;
+		}
+
+		foreach ( $non_cached_ids as $id ) {
+			foreach ( $this->tax_to_cache as $tax ) {
+				if ( ! isset( $object_terms[ $tax ][ $id ] ) ) {
+					$object_terms[ $tax ][ $id ] = array();
+				}
+			}
+		}
+
+		foreach ( $object_terms as $tax => $data ) {
+			wp_cache_add_multiple( $data, "{$tax}_relationships" );
+		}
+
+		return $object_terms;
+	}
+
+	/**
+	 * Caches all object-relationship terms and returns them for the specified taxonomy.
+	 *
+	 * @since 0.0.8
+	 *
+	 * @param int[]  $object_ids Array of object IDs to retrieve terms for.
+	 * @param string $taxonomy   Linguator taxonomy depending if we are looking for a post (or term, or else) language.
+	 *
+	 * @return int[] Array of term IDs with object ID as key.
+	 */
+	protected function get_from_object_term_cache( array $object_ids, string $taxonomy ): array {
+		$values = wp_cache_get_multiple( $object_ids, "{$taxonomy}_relationships" );
+
+		// If values are missing, then update the cache and replace missed values by freshly cached ones.
+		$object_terms = $this->update_object_term_cache( $object_ids );
+		if ( isset( $object_terms[ $taxonomy ] ) ) {
+			$values = array_replace( $values, $object_terms[ $taxonomy ] );
+		}
+
+		$sanitized_values = array();
+		foreach ( $values as $object_id => $term_ids ) {
+			if ( ! is_array( $term_ids ) ) {
+				continue;
+			}
+
+			$id = reset( $term_ids );
+			if ( ! is_numeric( $id ) || empty( $id ) ) {
+				continue;
+			}
+
+			$sanitized_values[ $object_id ] = (int) $id;
+		}
+
+		return $sanitized_values;
+	}
+
+	/**
+	 * Return terms associated to the given object in the given taxonomy.
+	 *
+	 *
+	 * @param int    $id Object ID.
+	 * @param string $taxonomy  Linguator taxonomy depending if we are looking for a post (or term, or else) language.
+	 * @return WP_Term|null The term associated to the object in the requested taxonomy if it exists, `false` otherwise.
+	 */
+	public function get_object_term( $object_id, $taxonomy ) {
+		$terms = $this->get_object_terms( array( $object_id ), $taxonomy );
+		return $terms[ $object_id ] ?? null;
+	}
+
+	/**
+	 * A JOIN clause to add to sql queries when filtering by language is needed directly in query.
+	 *
+	 *  
+	 *
+	 * @param string $alias Optional alias for object table.
+	 * @return string The JOIN clause.
+	 *
+	 * @phpstan-return non-empty-string
+	 */
+	public function join_clause( $alias = '' ) {
+		global $wpdb;
+
+		$db = $this->get_db_infos();
+
+		if ( empty( $alias ) ) {
+			$alias = $db['default_alias'];
+		}
+
+		return " INNER JOIN {$wpdb->term_relationships} AS lmat_tr ON lmat_tr.object_id = {$alias}.{$db['id_column']}";
+	}
+
+	/**
+	 * A WHERE clause to add to sql queries when filtering by language is needed directly in query.
+	 *
+	 *  
+	 *
+	 * @param Linguator_Language|Linguator_Language[]|string|string[] $lang A `Linguator_Language` object, or a comma separated list of language slugs, or an array of language slugs or objects.
+	 * @return string The WHERE clause.
+	 *
+	 * @phpstan-param Linguator_Language|Linguator_Language[]|non-empty-string|non-empty-string[] $lang
+	 */
+	public function where_clause( $lang ) {
+		/*
+		 * $lang is an object.
+		 * This is generally the case if the query is coming from Linguator.
+		 */
+		if ( $lang instanceof Linguator_Language ) {
+			return ' AND lmat_tr.term_taxonomy_id = ' . absint( $lang->get_tax_prop( $this->tax_language, 'term_taxonomy_id' ) );
+		}
+
+		/*
+		 * $lang is an array of objects, an array of slugs, or a comma separated list of slugs.
+		 * The comma separated list of slugs can happen if the query is coming from outside with a 'lmat_lang' parameter.
+		 */
+		$languages        = is_array( $lang ) ? $lang : explode( ',', $lang );
+		$languages_tt_ids = array();
+
+		foreach ( $languages as $language ) {
+			$language = $this->languages->get( $language );
+
+			if ( ! empty( $language ) ) {
+				$languages_tt_ids[] = absint( $language->get_tax_prop( $this->tax_language, 'term_taxonomy_id' ) );
+			}
+		}
+
+		if ( empty( $languages_tt_ids ) ) {
+			return '';
+		}
+
+		return ' AND lmat_tr.term_taxonomy_id IN ( ' . implode( ',', $languages_tt_ids ) . ' )';
+	}
+
+	/**
+	 * Returns the IDs of the objects without language.
+	 *
+	 *  
+	 *
+	 * @param int   $limit  Max number of objects to return. `-1` to return all of them.
+	 * @param array $args   The object args.
+	 * @return int[] Array of object IDs.
+	 *
+	 * @phpstan-param -1|positive-int $limit
+	 * @phpstan-return list<positive-int>
+	 */
+	public function get_objects_with_no_lang( $limit, array $args = array() ) {
+		$language_ids = array();
+
+		foreach ( $this->languages->get_list() as $language ) {
+			$language_ids[] = $language->get_tax_prop( $this->get_tax_language(), 'term_taxonomy_id' );
+		}
+
+		$language_ids = array_filter( $language_ids );
+
+		if ( empty( $language_ids ) ) {
+			return array();
+		}
+
+		$object_ids = $this->query_objects_with_no_lang( $language_ids, $limit, $args );
+
+		return array_values( linguator_sanitize_ids( $object_ids ) );
+	}
+
+	/**
+	 * Returns object IDs without language.
+	 * Can be overridden by child classes in case queried object doesn't use
+	 * `wp_cache_set_last_changed()` or another cache system.
+	 *
+	 *  
+	 *   Changed all parameters.
+	 *
+	 * @param int[] $language_ids List of language `term_taxonomy_id`.
+	 * @param int   $limit        Max number of objects to return. `-1` to return all of them.
+	 * @param array $args         The object args.
+	 * @return string[] An array of numeric object IDs.
+	 *
+	 * @phpstan-param array<positive-int> $language_ids
+	 * @phpstan-param -1|positive-int $limit
+	 * @phpstan-param array<empty> $args
+	 */
+	protected function query_objects_with_no_lang( array $language_ids, $limit, array $args = array() ) {
+		$key        = "{$this->cache_type}_no_lang:" . md5( maybe_serialize( $language_ids ) . maybe_serialize( $args ) . $limit );
+		$object_ids = $this->get_from_cache( $key );
+
+		if ( is_array( $object_ids ) ) {
+			return $object_ids;
+		}
+
+		$object_ids = $this->get_raw_objects_with_no_lang( $language_ids, $limit, $args );
+		$this->set_to_cache( $key, $object_ids );
+
+		return $object_ids;
+	}
+
+	/**
+	 * Fetches the IDs of the objects without language.
+	 *
+	 *  
+	 *
+	 * @param int[] $language_ids List of language `term_taxonomy_id`.
+	 * @param int   $limit        Max number of objects to return. `-1` to return all of them.
+	 * @param array $args         The object args.
+	 * @return string[]
+	 *
+	 * @phpstan-param array<positive-int> $language_ids
+	 * @phpstan-param -1|positive-int $limit
+	 * @phpstan-param array<empty> $args
+	 */
+	protected function get_raw_objects_with_no_lang( array $language_ids, $limit, array $args = array() ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		global $wpdb;
+
+		$db = $this->get_db_infos();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct DB query is required here because WordPress core does not provide an efficient or native way to fetch all objects (posts/terms/etc) that do NOT have a language assigned (i.e., not related to any language term_taxonomy_id) in bulk. This negative relationship cannot be expressed using get_terms()/wp_get_object_terms(), especially when type filtering is needed. Using a raw query here ensures both performance and compatibility.
+		return $wpdb->get_col(
+			$wpdb->prepare(
+				sprintf(
+					"SELECT %%i FROM %%i
+					WHERE %%i NOT IN (
+						SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN (%s)
+					)
+					LIMIT %%d",
+					implode( ',', array_fill( 0, count( $language_ids ), '%d' ) )
+				),
+				array_merge(
+					array( $db['id_column'], $db['table'], $db['id_column'] ),
+					$language_ids,
+					array( $limit >= 1 ? $limit : 4294967295 )
+				)
+			)
+		);
+	}
+
+	/**
+	 * Assigns a language to object in mass.
+	 *
+	 *  
+	 *
+	 * @param int[]        $ids  Array of post ids or term ids.
+	 * @param Linguator_Language $lang Language to assign to the posts or terms.
+	 * @return void
+	 */
+	public function set_language_in_mass( $ids, $lang ) {
+		global $wpdb;
+
+		$tt_id = $lang->get_tax_prop( $this->tax_language, 'term_taxonomy_id' );
+
+		if ( empty( $tt_id ) ) {
+			return;
+		}
+		$ids = array_map( 'intval', $ids );
+		$ids = array_filter( $ids );
+
+		if ( empty( $ids ) ) {
+			return;
+		}
+
+		$values = array();
+
+		foreach ( $ids as $id ) {
+			$values[] = $wpdb->prepare( '( %d, %d )', $id, $tt_id );
+		}
+
+		// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery -- Bulk insert is dynamically generated and already safely prepared per value; no better alternative for mass assignment in this context.
+		$wpdb->query( "INSERT INTO {$wpdb->term_relationships} ( object_id, term_taxonomy_id ) VALUES " . implode( ',', array_unique( $values ) ) );
+
+		// Updating term count is mandatory .
+		$lang->update_count();
+		clean_term_cache( $ids, $this->tax_language );
+
+		// Invalidate our cache.
+		wp_cache_set_last_changed( $this->cache_type );
+	}
+
+	/**
+	 * Returns the description to use for the "language properties" in the REST API.
+	 *
+	 *  
+	 * @see Linguator\modules\REST\V2\Languages::get_item_schema()
+	 *
+	 * @return string
+	 */
+	public function get_rest_description(): string {
+		/* translators: %s is the name of a database table. */
+		return sprintf( __( 'Language taxonomy properties for table %s.', 'linguator-pro' ), $this->get_db_infos()['table'] );
+	}
+
+
+	/**
+	 * Fetches the value from the cache. Handles backward compatibility with WordPress < 6.9.
+	 *
+	 * @since 3.8
+	 *
+	 * @param string $key The cache key.
+	 * @return mixed|false The cached value, false if not found.
+	 */
+	private function get_from_cache( $key ) {
+		$last_changed = wp_cache_get_last_changed( $this->cache_type );
+
+		if ( ! function_exists( 'wp_cache_get_salted' ) ) {
+			// Backward compatibility with WordPress < 6.9.
+			$cache_key = "{$key}:{$last_changed}";
+			return wp_cache_get( $cache_key, $this->cache_type );
+		}
+
+		return wp_cache_get_salted( $key, $this->cache_type, $last_changed );
+	}
+
+	/**
+	 * Stores the value in the cache. Handles backward compatibility with WordPress < 6.9.
+	 *
+	 * @since 3.8
+	 *
+	 * @param string $key   The cache key.
+	 * @param mixed  $value The value to store in the cache.
+	 * @return bool True if the value has been stored, false otherwise.
+	 */
+	private function set_to_cache( $key, $value ): bool {
+		$last_changed = wp_cache_get_last_changed( $this->cache_type );
+
+		if ( ! function_exists( 'wp_cache_set_salted' ) ) {
+			// Backward compatibility with WordPress < 6.9.
+			$cache_key = "{$key}:{$last_changed}";
+			return wp_cache_set( $cache_key, $value, $this->cache_type );
+		}
+
+		return wp_cache_set_salted( $key, $value, $this->cache_type, $last_changed );
+	}
+
+
+	/**
+	 * Returns database-related information that can be used in some of this class methods.
+	 * These are specific to the table containing the objects.
+	 *
+	 * @see Linguator_Translatable_Object::join_clause()
+	 * @see Linguator_Translatable_Object::get_raw_objects_with_no_lang()
+	 *
+	 *  
+	 *
+	 * @return string[] {
+	 *     @type string $table         Name of the table.
+	 *     @type string $id_column     Name of the column containing the object's ID.
+	 *     @type string $default_alias Default alias corresponding to the object's table.
+	 * }
+	 * @phpstan-return DBInfo
+	 */
+	abstract protected function get_db_infos();
+}

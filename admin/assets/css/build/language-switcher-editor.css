@@ -1,0 +1,15 @@
+/**
+ * Language switcher block (editor).
+ *
+ * Block supports wrap an outer `.wp-block-linguator-language-switcher` around the
+ * switcher preview. On the frontend those classes are merged onto the switcher root.
+ */
+
+.wp-block-linguator-language-switcher {
+	width: 100%;
+}
+.wp-block-linguator-language-switcher .components-disabled {
+	display: block;
+	width: 100%;
+}
+
