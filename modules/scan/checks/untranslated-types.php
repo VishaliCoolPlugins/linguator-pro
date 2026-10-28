@@ -39,7 +39,7 @@ class Untranslated_Types extends Abstract_Check {
 	 * @return Result[]
 	 */
 	public function run(): array {
-		if ( count( $this->active_languages() ) < 2 || ! $this->wants( 'lang_untranslated_types' ) ) {
+		if ( ! $this->wants( 'lang_untranslated_types' ) ) {
 			return array();
 		}
 

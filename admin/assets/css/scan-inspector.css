@@ -2585,3 +2585,11 @@ a.lmat-scan-content-lang-chip-link:focus {
 .lmat-styles .lmat-inspector .lmat-scan-content-pending-intro p { margin:0 0 12px; }
 .lmat-styles .lmat-inspector .lmat-inspector-actions:empty { display:none; }
 @media(max-width:900px) { .lmat-styles .lmat-inspector .lmat-scan-detail-row { grid-template-columns:1fr; } .lmat-styles .lmat-inspector .lmat-scan-detail-row--card { grid-template-columns:36px minmax(0,1fr); } .lmat-styles .lmat-inspector .lmat-scan-detail-row--card .lmat-scan-content-actions { grid-column:1 / -1; } }
+
+/* Live settings notice, matching Toolkit's untranslated content notice. */
+.lmat-styles .lmat-inspector .lmat-scan-untranslated-notice { display:flex; align-items:center; flex-wrap:wrap; gap:16px; justify-content:space-between; width:100%; margin:20px 0 16px; padding:14px 20px; border:1px solid #fef3c7; border-left:4px solid #f59e0b; border-radius:8px; background:#fffbeb; color:#92400e; }
+.lmat-styles .lmat-inspector .lmat-scan-untranslated-notice p { flex:1 1 480px; margin:0; color:#92400e; font-size:13.5px; font-weight:500; line-height:1.45; }
+.lmat-styles .lmat-inspector .lmat-scan-notice-actions { display:flex; flex-wrap:wrap; align-items:center; gap:16px; }
+.lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .button { min-height:38px; height:auto; padding:8px 14px; border-radius:6px; font-size:13.5px; line-height:1; white-space:nowrap; }
+.lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .button-primary { background:#2563eb; border-color:#2563eb; color:#fff; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .lmat-scan-notice-ignore { background:transparent; border-color:#d97706; color:#92400e; }

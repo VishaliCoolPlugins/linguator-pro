@@ -619,8 +619,18 @@ class Scan extends Abstract_Controller {
 	 * @return array
 	 */
 	private function prepare_report( ?array $report ): array {
+        // Settings notices stay current even before the first scan or after changing settings.
+        $type_check = new \LinguatorPro\Modules\Scan\Checks\Untranslated_Types( $this->model );
+        $type_results = array_map( static function ( $result ) { return $result->to_array(); }, $type_check->run() );
+        $type_report = Scanner::apply_ignored( array( 'results' => $type_results ) );
+        $type_notice = null;
+        foreach ( $type_report['results'] as $result ) {
+            if ( 'warning' === $result['status'] ) { $type_notice = $result; break; }
+        }
+
 		$base = array(
-			'unassigned'          => Scanner::has_unassigned_content( $this->model ),
+			'untranslated_types_notice' => $type_notice,
+            'unassigned'          => Scanner::has_unassigned_content( $this->model ),
 			'elementor_available' => \LinguatorPro\Modules\Scan\Checks\Elementor::available(),
 			'scan_icon_url' => plugins_url( 'assets/logo/site-scan.svg', LINGUATOR_PRO_ROOT_FILE ),
 			'environment' => $this->environment(),
@@ -641,7 +651,7 @@ class Scan extends Abstract_Controller {
 			return $base + array(
 				'has_scan'      => false,
 				'results'       => array(),
-				'ignored_items' => array(),
+				'ignored_items' => $type_report['ignored_items'],
 				'coverage'      => array(),
 				'summary'       => Scanner::summarize( array() ),
 				'health'        => array(
@@ -660,10 +670,12 @@ class Scan extends Abstract_Controller {
 			array_filter(
 				(array) $report['results'],
 				static function ( $result ) {
-					return ! in_array( $result['id'] ?? '', array( 'content_no_language', 'term_no_language' ), true );
+					return ! in_array( $result['id'] ?? '', array( 'content_no_language', 'term_no_language', 'lang_untranslated_types' ), true );
 				}
 			)
 		);
+        $report['ignored_items'] = array_values( array_filter( $report['ignored_items'], static function ( $item ) { return 'lang_untranslated_types' !== $item['key']; } ) );
+        $report['ignored_items'] = array_merge( $report['ignored_items'], $type_report['ignored_items'] );
 		$report['summary'] = Scanner::summarize( $report['results'] );
 		$coverage = isset( $report['coverage'] ) && is_array( $report['coverage'] ) ? $report['coverage'] : array();
 		$format   = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );

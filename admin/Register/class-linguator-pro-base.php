@@ -740,6 +740,11 @@ class Linguator_Pro_Base {
 	 * @return bool
 	 */
 	public static function is_license_active() {
+        // REST requests do not construct the admin-only license manager.
+        // Read the same site-bound cached record without contacting the server.
+        if ( empty( self::$selfobj ) && defined( 'LINGUATOR_PRO_FILE' ) ) {
+            self::getInstance( LINGUATOR_PRO_FILE );
+        }
 		$license_info = self::get_register_info();
 		if ( ! is_object( $license_info ) || empty( $license_info->is_valid ) ) {
 			return false;

@@ -197,7 +197,7 @@ const Scan = () => {
             setStatus(statusId, { state: 'checking', message: __('Checking…', 'linguator-pro') })
             try {
                 const next = await request('/recheck', 'POST', { id: item.id, section: item.section })
-                const present = next.results?.some(result => result.id === item.id && result.status !== 'pass')
+                const present = next.untranslated_types_notice?.id === item.id || next.results?.some(result => result.id === item.id && result.status !== 'pass')
                 setStatus(statusId, { state: present ? 'present' : 'resolved', message: present ? __('This issue is still present.', 'linguator-pro') : __('This issue is now resolved.', 'linguator-pro') })
                 if (!present) await new Promise(resolve => setTimeout(resolve, 1100))
                 setReport(next)
@@ -253,6 +253,13 @@ const Scan = () => {
         if (next !== undefined) { event.preventDefault(); setTab(tabs[next].key); event.currentTarget.parentElement.querySelectorAll('[role="tab"]')[next]?.focus() }
     }
     return <div className='lmat-inspector lmat-scan-wrap'>
+        {report.untranslated_types_notice && <div className='lmat-scan-untranslated-notice' role='alert'>
+            <p>{report.untranslated_types_notice.message}</p>
+            <div className='lmat-scan-notice-actions' data-track-id='lang_untranslated_types' data-track-section='site' onPointerDownCapture={trackFix}>
+                <a className='button button-primary' href={report.untranslated_types_notice.fix_url} target='_blank' rel='noopener noreferrer'>{__('Linguator settings', 'linguator-pro')}</a>
+                <button type='button' className='button lmat-scan-notice-ignore' disabled={busy} onClick={() => call('/ignore', { key: 'lang_untranslated_types', ignore: true })}>{__('Ignore', 'linguator-pro')}</button>
+            </div>
+        </div>}
         {report.unassigned && <div className='lmat-scan-nolang-notice' role='alert'>
             <Icon name='warning' />
             <p>{__('There are posts, pages, categories or tags without a language. Set them all to the default language so they can be scanned and translated. Scanning is paused until then.', 'linguator-pro')}</p>
