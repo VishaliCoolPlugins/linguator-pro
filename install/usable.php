@@ -92,7 +92,7 @@ class Linguator_Usable {
 		?>
 		<div class="notice notice-error">
 			<p>
-				<strong><?php esc_html_e( 'Linguator AI – Auto Translate & Create Multilingual Sites', 'linguator-pro' ); ?></strong>
+				<strong><?php esc_html_e( 'Linguator Pro – AI Multilingual WordPress', 'linguator-pro' ); ?></strong>
 			</p>
 			<p>
 				<?php 

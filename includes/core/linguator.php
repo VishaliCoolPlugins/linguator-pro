@@ -26,6 +26,7 @@ use LinguatorPro\Supported_Blocks\Custom_Block_Post;
 use LinguatorPro\Custom_Fields\Custom_Fields;
 use LinguatorPro\Includes\Other\Linguator_Translation_Dashboard;
 use LinguatorPro\Install\Linguator_Upgrade;
+use LinguatorPro\Admin\Register\Linguator_Pro_Register;
 
 // Define directory safely
 if ( ! defined( 'LMATP_LOCAL_DIR' ) ) {
@@ -134,6 +135,9 @@ class Linguator {
 		}
 
 		$this->register_cpfm_feedback();
+
+		// The license screen needs the current user, which is only known once plugins are loaded.
+		add_action( 'plugins_loaded', array( $this, 'register_license' ), 10, 0 );
 
 		/*
 		 * Loads the compatibility with some plugins and themes.
@@ -414,6 +418,21 @@ class Linguator {
 	}
 
 	/**
+	 * Load the license manager for administrators.
+	 *
+	 * @since 2.2.2
+	 *
+	 * @return void
+	 */
+	public function register_license() {
+		if ( ! is_admin() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		new Linguator_Pro_Register();
+	}
+
+	/**
 	 * Boot CPFM loader and register hooks.
 	 *
 	 * @return void
@@ -476,7 +495,7 @@ class Linguator {
 		\CPFM_Usage_Cron::cpfm_register(
 			array(
 				'id'                     => 'lmat',
-				'plugin_name'            => 'Linguator Pro - AI Auto Translate & Create Multilingual Sites',
+				'plugin_name'            => 'Linguator Pro – AI Multilingual WordPress',
 				'version'                => LINGUATOR_PRO_VERSION,
 				'api'                    => LINGUATOR_PRO_FEEDBACK_API,
 				'cron_hook'              => 'lmat_extra_data_update',
@@ -485,7 +504,7 @@ class Linguator {
 				'install_date_option'    => 'lmat_install_date',
 				'initial_version_option' => 'lmat_initial_version',
 				'onboarding_data'        => 'linguator',
-				'site_key'               => '153',
+				'site_key'               => '1531',
 			)
 		);
 	}

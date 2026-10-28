@@ -6,7 +6,7 @@
  *
  *   CPFM_Usage_Cron::cpfm_register( array(
  *       'id'                       => 'lmat',
- *       'plugin_name'              => 'Linguator AI – Auto Translate & Create Multilingual Sites',
+ *       'plugin_name'              => 'Linguator Pro – AI Multilingual WordPress',
  *       'version'                  => LINGUATOR_PRO_VERSION,
  *       'api'                      => LINGUATOR_PRO_FEEDBACK_API,        // https://feedback.coolplugins.net/
  *       'cron_hook'                => 'lmat_extra_data_update', // THIS plugin's own hook name

@@ -87,6 +87,8 @@ class ComposerStaticInit57d7bdd931eb93629849829cd8c3965b
         'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_Static_Pages' => __DIR__ . '/../..' . '/admin/controllers/admin-static-pages.php',
         'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_Strings' => __DIR__ . '/../..' . '/admin/controllers/admin-strings.php',
         'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_View_Language_Links' => __DIR__ . '/../..' . '/admin/controllers/admin-view-language-links.php',
+        'LinguatorPro\\Admin\\Register\\Linguator_Pro_Base' => __DIR__ . '/../..' . '/admin/Register/class-linguator-pro-base.php',
+        'LinguatorPro\\Admin\\Register\\Linguator_Pro_Register' => __DIR__ . '/../..' . '/admin/Register/Linguator_Pro_Register.php',
         'LinguatorPro\\Custom_Fields\\Custom_Fields' => __DIR__ . '/../..' . '/admin/custom-fields/custom-fields.php',
         'LinguatorPro\\Frontend\\Controllers\\Linguator_Choose_Lang' => __DIR__ . '/../..' . '/frontend/controllers/choose-lang.php',
         'LinguatorPro\\Frontend\\Controllers\\Linguator_Choose_Lang_Content' => __DIR__ . '/../..' . '/frontend/controllers/choose-lang-content.php',

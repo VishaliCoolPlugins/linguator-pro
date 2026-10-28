@@ -399,7 +399,7 @@ const SetupPage = () => {
                 /></h1> <h1 className='m-0'>{__("Loading", "linguator-pro")}</h1>
             </div> :
             <>
-            <h1 style={{paddingTop: "30px"}} className='bg-background-secondary text-center m-0'>{__("Linguator AI – Auto Translate & Create Multilingual Sites", "linguator-pro")}</h1>
+            <h1 style={{paddingTop: "30px"}} className='bg-background-secondary text-center m-0'>{__("Linguator Pro – AI Multilingual WordPress", "linguator-pro")}</h1>
               {data.lmat_video_status === false ? (
                 <VideoIntro onGetStarted={handleGetStarted} />
               ) : showMigration ? (

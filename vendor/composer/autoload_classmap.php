@@ -31,6 +31,8 @@ return array(
     'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_Static_Pages' => $baseDir . '/admin/controllers/admin-static-pages.php',
     'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_Strings' => $baseDir . '/admin/controllers/admin-strings.php',
     'LinguatorPro\\Admin\\Controllers\\Linguator_Admin_View_Language_Links' => $baseDir . '/admin/controllers/admin-view-language-links.php',
+    'LinguatorPro\\Admin\\Register\\Linguator_Pro_Base' => $baseDir . '/admin/Register/class-linguator-pro-base.php',
+    'LinguatorPro\\Admin\\Register\\Linguator_Pro_Register' => $baseDir . '/admin/Register/Linguator_Pro_Register.php',
     'LinguatorPro\\Custom_Fields\\Custom_Fields' => $baseDir . '/admin/custom-fields/custom-fields.php',
     'LinguatorPro\\Frontend\\Controllers\\Linguator_Choose_Lang' => $baseDir . '/frontend/controllers/choose-lang.php',
     'LinguatorPro\\Frontend\\Controllers\\Linguator_Choose_Lang_Content' => $baseDir . '/frontend/controllers/choose-lang-content.php',

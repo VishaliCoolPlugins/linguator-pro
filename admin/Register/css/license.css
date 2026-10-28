@@ -1,0 +1,985 @@
+/* Linguator Pro - license card UI */
+
+.lmatp-license-card,
+.lmatp-license-box {
+	background: #ffffff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 30px;
+	margin: 0 0 25px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+	box-sizing: border-box;
+	color: #1d2327;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.lmatp-license-card *,
+.lmatp-license-box * {
+	box-sizing: border-box;
+}
+
+/* Restore the icon font: the dashboard wrapper sets a text font on every
+   descendant via `*`, which otherwise beats core .dashicons on source order. */
+.lmatp-license-card .dashicons,
+.lmatp-license-box .dashicons,
+.lmatp-license-card .dashicons-before:before,
+.lmatp-license-box .dashicons-before:before {
+	font-family: dashicons;
+}
+
+.lmatp-license-header {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	margin-bottom: 28px;
+	flex-wrap: wrap;
+}
+
+.lmatp-license-header h2 {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.35;
+	font-weight: 700;
+	color: #1d2327;
+}
+
+.lmatp-license-header p {
+	margin: 6px 0 0;
+	font-size: 14px;
+	color: #646970;
+}
+
+.lmatp-license-icon {
+	width: 42px;
+	height: 42px;
+	min-width: 42px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.lmatp-license-icon .dashicons {
+	width: auto;
+	height: auto;
+	font-size: 20px;
+	line-height: 1;
+}
+
+.lmatp-license-icon-danger {
+	background: #fff1f3;
+	color: #ef476f;
+	font-weight: 700;
+	font-size: 22px;
+}
+
+.lmatp-license-icon-success {
+	background: #ecfdf3;
+	color: #16a34a;
+	font-weight: 700;
+	font-size: 22px;
+}
+
+.lmatp-license-form {
+	max-width: 660px;
+}
+
+.lmatp-form-group,
+.lmatp-license-field {
+	margin-bottom: 22px;
+}
+
+.lmatp-form-group label,
+.lmatp-license-field label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.lmatp-input-wrap {
+	position: relative;
+}
+
+.lmatp-license-card .lmatp-input-wrap input,
+.lmatp-license-card .lmatp-license-field input {
+	width: 100%;
+	min-height: 46px;
+	padding: 0 14px 0 44px;
+	border: 1px solid #c3c4c7;
+	border-radius: 5px;
+	background: #ffffff;
+	color: #1d2327;
+	font-size: 14px;
+}
+
+.lmatp-license-card .lmatp-input-wrap input:focus,
+.lmatp-license-card .lmatp-license-field input:focus {
+	border-color: #0693e3;
+	box-shadow: 0 0 0 1px #0693e3;
+	outline: none;
+}
+
+.lmatp-input-icon {
+	position: absolute;
+	top: 50%;
+	left: 14px;
+	transform: translateY(-50%);
+	color: #646970;
+	font-size: 18px;
+	width: auto;
+	height: auto;
+	pointer-events: none;
+}
+
+.lmatp-help-text {
+	margin: 8px 0 0;
+	color: #646970;
+	font-size: 13px;
+}
+
+.lmatp-help-text a,
+.lmatp-notice a {
+	color: #0073aa;
+	text-decoration: underline;
+}
+
+.lmatp-help-text a:hover,
+.lmatp-notice a:hover {
+	color: #005177;
+}
+
+.lmatp-btn,
+.lmatp-el-license-active-btn .button,
+.lmatp-el-license-active-btn input[type="submit"],
+.lmatp-submit-button .button,
+.lmatp-submit-button input[type="submit"] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	padding: 0 22px;
+	border-radius: 5px;
+	border: 1px solid transparent;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+	box-sizing: border-box;
+	transition: 0.18s ease;
+	line-height: normal;
+}
+
+.lmatp-btn-primary,
+.lmatp-el-license-active-btn .button,
+.lmatp-el-license-active-btn input[type="submit"] {
+	background: #0693e3;
+	border-color: #0693e3;
+	color: #ffffff;
+}
+
+.lmatp-btn-primary:hover,
+.lmatp-el-license-active-btn .button:hover,
+.lmatp-el-license-active-btn input[type="submit"]:hover {
+	background: #057bbf;
+	border-color: #057bbf;
+	color: #ffffff;
+}
+
+.lmatp-btn-danger,
+.lmatp-submit-button .button,
+.lmatp-submit-button input[type="submit"] {
+	background: #0693e3;
+	border-color: #0693e3;
+	color: #ffffff;
+}
+
+.lmatp-btn-danger:hover,
+.lmatp-submit-button .button:hover,
+.lmatp-submit-button input[type="submit"]:hover {
+	background: #057bbf;
+	border-color: #057bbf;
+	color: #ffffff;
+}
+
+.lmatp-btn-secondary {
+	background: #ffffff;
+	border-color: #dcdcde;
+	color: #1d2327;
+}
+
+.lmatp-btn-secondary:hover {
+	background: #f6f7f7;
+	border-color: #b8b9ba;
+	color: #1d2327;
+}
+
+.lmatp-el-license-active-btn input[type="submit"]:focus,
+.lmatp-submit-button .button:focus {
+	box-shadow: none;
+}
+
+.lmatp-separator {
+	height: 1px;
+	background: #dcdcde;
+	margin: 30px 0 24px;
+}
+
+.lmatp-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 16px 18px;
+	margin: 22px 0;
+	border-radius: 6px;
+}
+
+.lmatp-notice-icon {
+	width: 28px;
+	height: 28px;
+	min-width: 28px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+}
+
+.lmatp-notice-icon .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1;
+}
+
+.lmatp-notice strong {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 14px;
+}
+
+.lmatp-notice p {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.lmatp-notice-info {
+	background: #eef7ff;
+	border: 1px solid #9ecff5;
+	color: #084b83;
+}
+
+.lmatp-notice-info .lmatp-notice-icon {
+	background: #0693e3;
+	color: #ffffff;
+}
+
+.lmatp-notice-success {
+	background: #ecfdf3;
+	border: 1px solid #86efac;
+	color: #166534;
+}
+
+.lmatp-notice-success .lmatp-notice-icon {
+	background: #22c55e;
+	color: #ffffff;
+}
+
+.lmatp-notice-danger {
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	color: #b91c1c;
+}
+
+.lmatp-notice-danger .lmatp-notice-icon {
+	background: #ef476f;
+	color: #ffffff;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.lmatp-action-row,
+.lmatp-support-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 22px;
+}
+
+.lmatp-action-row .lmatp-btn {
+	min-width: 170px;
+}
+
+.lmatp-license-details {
+	border-top: 1px solid #dcdcde;
+	margin-top: 22px;
+}
+
+.lmatp-detail-row {
+	display: grid;
+	grid-template-columns: 230px 1fr;
+	gap: 20px;
+	align-items: center;
+	min-height: 58px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.lmatp-detail-label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	color: #1d2327;
+}
+
+.lmatp-detail-label .dashicons {
+	font-size: 18px;
+	width: auto;
+	height: auto;
+	color: #646970;
+}
+
+.lmatp-detail-value {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 12px;
+	text-align: right;
+	font-size: 14px;
+	color: #1d2327;
+}
+
+.lmatp-status-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 12px;
+	border-radius: 4px;
+	background: #ecfdf3;
+	border: 1px solid #86efac;
+	color: #166534;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.lmatp-status-badge.invalid,
+.lmatp-status-badge.expired,
+.lmatp-status-badge.support-expired,
+.lmatp-status-badge.no-support {
+	background: #fef2f2;
+	border-color: #fecaca;
+	color: #b91c1c;
+}
+
+.lmatp-status-badge.valid {
+	background: #ecfdf3;
+	border-color: #86efac;
+	color: #166534;
+}
+
+/* The refresh JS mirrors the status class onto the inner <strong>; keep the
+   badge's own colour rather than a dashboard-wide `.valid { color: green }`. */
+.lmatp-status-badge strong {
+	color: inherit;
+	font-weight: 700;
+}
+
+.lmatp-license-key code,
+.license-key {
+	padding: 6px 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #f6f7f7;
+	color: #1d2327;
+	font-size: 12px;
+	font-family: monospace;
+	display: inline-block;
+}
+
+.lmatp-copy-btn {
+	min-height: 34px;
+	padding: 0 12px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #ffffff;
+	color: #1d2327;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.lmatp-copy-btn:hover {
+	background: #f6f7f7;
+}
+
+.lmatp-submit-button {
+	margin-top: 8px;
+}
+
+.lmatp-deactivate-row {
+	margin-top: 8px;
+}
+
+.lmatp-deactivate-row .lmatp-notice {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.lmatp-deactivate-row .lmatp-notice-body {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.lmatp-deactivate-row .lmatp-notice > form {
+	flex: 0 0 auto;
+	margin-left: auto;
+}
+
+.lmatp-deactivate-row .lmatp-submit-button {
+	margin-top: 0;
+}
+
+/* Licence notices sit above .tab-content, as a sibling of the two columns, so
+   they push the card and the sidebar down together. Inside the card they moved
+   only the left column and broke the top alignment. */
+.lmatp-license-notices {
+	margin: 30px 30px 0;
+}
+
+.lmatp-license-notices:empty {
+	display: none;
+}
+
+.lmatp-license-notices > .notice {
+	margin: 0 0 10px;
+}
+
+.lmatp-license-notices > .notice:last-child {
+	margin-bottom: 0;
+}
+
+/* WordPress injects a 38px .notice-dismiss into this notice, whose message has
+   no <p> wrapper; without extra height the x overflows below the box. */
+.lmatp-license-notices > .lmatp-newLicense {
+	position: relative;
+	min-height: 42px;
+	padding: 12px 46px 12px 12px;
+	color: #d63638;
+}
+
+.lmatp-license-notices > .lmatp-newLicense .notice-dismiss {
+	position: absolute;
+	top: 50%;
+	right: 4px;
+	margin: 0;
+	padding: 9px;
+	transform: translateY(-50%);
+}
+
+.lmatp-license-support {
+	margin-top: 0;
+}
+
+.lmatp-license-support + .lmatp-notice {
+	margin-top: 24px;
+}
+
+.lmatp-license-support > p {
+	margin: 0 0 14px;
+	color: #646970;
+	font-size: 13px;
+}
+
+.lmatp-license-support-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.lmatp-license-support-label .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1;
+	color: #646970;
+}
+
+.lmatp-license-support .lmatp-support-buttons {
+	margin-top: 0;
+}
+
+.lmatp-refresh-row {
+	margin-left: auto;
+}
+
+button#lmatp-refresh-license-btn,
+.lmatp-refresh-btn {
+	color: #0693e3;
+	border: 1px solid #0693e3;
+	background: #f6f7f7;
+	min-height: 34px;
+	padding: 0 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+button#lmatp-refresh-license-btn:hover,
+.lmatp-refresh-btn:hover {
+	background: #eef7ff;
+}
+
+.lmatp-license-form .notice.notice-error.is-dismissible {
+	border-left-color: #dc3232;
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 3px;
+	background: #fff7f7;
+}
+
+.lmatp-license-form .notice.notice-error.is-dismissible p {
+	margin: 0;
+	color: #dc3232;
+}
+
+.lmatp-license-box .lmatp-validity {
+	font-weight: bold;
+}
+
+@media (max-width: 782px) {
+	.lmatp-license-card,
+	.lmatp-license-box {
+		padding: 22px;
+	}
+
+	.lmatp-license-header {
+		gap: 12px;
+	}
+
+	.lmatp-refresh-row {
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.lmatp-detail-row {
+		grid-template-columns: 1fr;
+		gap: 8px;
+		padding: 14px 0;
+		min-height: 0;
+	}
+
+	.lmatp-detail-value {
+		justify-content: flex-start;
+		text-align: left;
+		flex-wrap: wrap;
+	}
+
+	.lmatp-action-row .lmatp-btn,
+	.lmatp-btn-danger,
+	.lmatp-el-license-active-btn .button,
+	.lmatp-el-license-active-btn input[type="submit"],
+	.lmatp-submit-button .button,
+	.lmatp-submit-button input[type="submit"],
+	.lmatp-support-buttons .lmatp-btn {
+		width: 100%;
+		min-width: 0;
+	}
+
+	.lmatp-deactivate-row .lmatp-notice {
+		flex-wrap: wrap;
+	}
+
+	.lmatp-deactivate-row .lmatp-notice-body,
+	.lmatp-deactivate-row .lmatp-notice > form {
+		flex: 1 1 100%;
+		margin-left: 0;
+	}
+}
+
+/* ================================================
+   Linguator look: same layout and tokens as the General Settings tab
+   (75% card + 25% sidebar, 32px gaps, white 8px cards, green primary buttons).
+   AutoPoly keeps its page layout in a dashboard stylesheet; Linguator has none, so it lives here.
+================================================ */
+.lmatp-license-wrap {
+	--lmatp-primary: #30b230;
+	--lmatp-primary-dark: #239d23;
+	--lmatp-text: #111827;
+	--lmatp-text-muted: #4b5563;
+	--lmatp-border: #e5e7eb;
+	--lmatp-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	margin: 0;
+	padding: 0 32px 32px;
+	max-width: none;
+	color: var(--lmatp-text);
+}
+
+.lmatp-license-wrap * {
+	box-sizing: border-box;
+}
+
+.lmatp-license-notices:not(:empty) {
+	margin-top: 32px;
+}
+
+.lmatp-tab-content {
+	display: flex;
+	align-items: flex-start;
+	gap: 32px;
+	margin-top: 32px;
+}
+
+/* Main card: 75% */
+.lmatp-dashboard-license {
+	flex: 3 1 0;
+	min-width: 0;
+	width: auto;
+	margin-top: 0;
+}
+
+.lmatp-license-wrap .lmatp-license-card {
+	margin: 0;
+	padding: 40px;
+	border: 0;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: var(--lmatp-shadow);
+}
+
+.lmatp-dashboard-license p {
+	margin: 0;
+	font-size: 14px;
+}
+
+/* Card header: title on the left, divider below (like "General Settings") */
+.lmatp-license-wrap .lmatp-license-header {
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 28px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid var(--lmatp-border);
+}
+
+.lmatp-license-wrap .lmatp-license-header h2 {
+	font-size: 23px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: #1d2327;
+}
+
+.lmatp-license-wrap .lmatp-license-header p {
+	margin-top: 4px;
+	font-size: 14px;
+	color: var(--lmatp-text-muted);
+}
+
+.lmatp-license-wrap .lmatp-license-field label {
+	margin-bottom: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--lmatp-text);
+}
+
+.lmatp-license-wrap .lmatp-license-card .lmatp-license-field input {
+	height: 40px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+}
+
+.lmatp-license-wrap .lmatp-license-card .lmatp-license-field input:focus {
+	border-color: var(--lmatp-primary);
+	box-shadow: 0 0 0 1px var(--lmatp-primary);
+	outline: 0;
+}
+
+.lmatp-license-wrap .lmatp-help-text {
+	margin-top: 8px;
+	font-size: 13px;
+	color: var(--lmatp-text-muted);
+}
+
+/* Buttons: 40px, 6px radius, 14px semibold, green primary */
+.lmatp-license-wrap .lmatp-btn,
+.lmatp-license-wrap .lmatp-submit-button input[type="submit"] {
+	min-height: 40px;
+	padding: 10px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.lmatp-license-wrap .lmatp-btn-primary,
+.lmatp-license-wrap .lmatp-el-license-active-btn .button,
+.lmatp-license-wrap .lmatp-el-license-active-btn input[type="submit"] {
+	background: var(--lmatp-primary);
+	border-color: var(--lmatp-primary);
+	color: #fff;
+}
+
+.lmatp-license-wrap .lmatp-btn-primary:hover,
+.lmatp-license-wrap .lmatp-btn-primary:focus,
+.lmatp-license-wrap .lmatp-el-license-active-btn .button:hover,
+.lmatp-license-wrap .lmatp-el-license-active-btn input[type="submit"]:hover {
+	background: var(--lmatp-primary-dark);
+	border-color: var(--lmatp-primary-dark);
+	color: #fff;
+}
+
+.lmatp-license-wrap .lmatp-btn-secondary {
+	background: #fff;
+	border: 1px solid #d1d5db;
+	color: var(--lmatp-text);
+}
+
+.lmatp-license-wrap .lmatp-btn-secondary:hover {
+	background: #f9fafb;
+	border-color: #9ca3af;
+	color: var(--lmatp-text);
+}
+
+/* Sidebar: 25% */
+.lmatp-dashboard-sidebar {
+	flex: 1 1 0;
+	min-width: 280px;
+	width: auto;
+	max-width: none;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	margin-top: 0;
+}
+
+.lmatp-dashboard-card {
+	display: flex;
+	flex-direction: column;
+	padding: 24px;
+	background: #fff;
+	border: 0;
+	border-radius: 8px;
+	box-shadow: var(--lmatp-shadow);
+	color: var(--lmatp-text);
+}
+
+.lmatp-dashboard-card h3 {
+	margin: 0 0 8px;
+	padding: 0;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 28px;
+	color: var(--lmatp-text);
+}
+
+.lmatp-dashboard-card h3 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.lmatp-dashboard-card p {
+	margin: 0 0 12px;
+	font-size: 14px;
+	color: var(--lmatp-text-muted);
+}
+
+.lmatp-dashboard-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	min-height: 40px;
+	padding: 10px 16px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	background: #fff;
+	color: var(--lmatp-text);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: background-color 0.15s ease-in-out;
+	cursor: pointer;
+}
+
+.lmatp-dashboard-btn:hover,
+.lmatp-dashboard-btn:focus {
+	background: #f9fafb;
+	color: var(--lmatp-text);
+	box-shadow: none;
+}
+
+.lmatp-dashboard-btn.primary {
+	background: var(--lmatp-primary);
+	border-color: var(--lmatp-primary);
+	color: #fff;
+}
+
+.lmatp-dashboard-btn.primary:hover,
+.lmatp-dashboard-btn.primary:focus {
+	background: var(--lmatp-primary-dark);
+	border-color: var(--lmatp-primary-dark);
+	color: #fff;
+}
+
+/* Translation status */
+.lmatp-dashboard-sts-top {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid var(--lmatp-border);
+	font-size: 14px;
+	color: var(--lmatp-text-muted);
+}
+
+.lmatp-dashboard-sts-top span:first-child {
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 36px;
+	color: var(--lmatp-text);
+}
+
+ul.lmatp-dashboard-sts-btm {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.lmatp-dashboard-sts-btm li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+	padding-block: 4px;
+	border: 0;
+	font-size: 14px;
+	color: var(--lmatp-text);
+}
+
+ul.lmatp-dashboard-sts-btm li span:first-child {
+	font-weight: 400;
+	color: #374151;
+}
+
+ul.lmatp-dashboard-sts-btm li span:last-child {
+	font-weight: 500;
+}
+
+.lmatp-dashboard-providers {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 8px;
+	padding: 0;
+	border: 0;
+}
+
+.lmatp-dashboard-providers-label {
+	font-size: 14px;
+	font-weight: 400;
+	color: #374151;
+}
+
+.lmatp-dashboard-providers-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.lmatp-dashboard-provider {
+	padding: 4px 8px;
+	border-radius: 6px;
+	background: var(--lmatp-border);
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--lmatp-text);
+}
+
+/* Add-on card: title, divider, then name + button on the left and logo on the right */
+.lmatp-dashboard-translate-full h3 {
+	padding-bottom: 8px;
+	border-bottom: 1px solid var(--lmatp-border);
+	margin-bottom: 16px;
+}
+
+.lmatp-dashboard-translate-full .lmatp-dashboard-addon {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.lmatp-dashboard-addon-l {
+	display: flex;
+	flex: 1 1 70%;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.lmatp-dashboard-addon-l strong {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.lmatp-dashboard-addon-r {
+	flex: 0 0 30%;
+	display: flex;
+	justify-content: center;
+}
+
+.lmatp-dashboard-addon-r img {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	max-height: 96px;
+}
+
+/* Rate us */
+.lmatp-dashboard-rate-us {
+	align-items: flex-start;
+}
+
+.lmatp-dashboard-rate-us .review-link {
+	font-size: 14px;
+	color: #0369a1;
+	text-decoration: underline;
+}
+
+.lmatp-dashboard-rate-us .review-link:hover {
+	color: #075985;
+}
+
+/* Stack below the lg breakpoint, like the settings page */
+@media (max-width: 1024px) {
+	.lmatp-tab-content {
+		flex-direction: column;
+	}
+
+	.lmatp-dashboard-license,
+	.lmatp-dashboard-sidebar {
+		flex: none;
+		width: 100%;
+	}
+}
+
+@media (max-width: 782px) {
+	.lmatp-license-wrap {
+		padding: 0 16px 24px;
+	}
+
+	.lmatp-license-wrap .lmatp-license-card {
+		padding: 24px;
+	}
+}
+
+.lmatp-license-wrap .lmatp-license-support > p {
+	margin-bottom: 12px;
+}
