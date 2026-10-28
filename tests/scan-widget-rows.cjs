@@ -44,3 +44,10 @@ assert(!stringsHtml.includes('Rescan issue'),'Toolkit string rows have Ignore ra
 const linkHtml=renderIssue({id:'content_links',section:'content',status:'warning',label:'Links',details:[{...detail,code:'dead_link',url:'/missing/'}]});
 assert(linkHtml.includes('Current link:') && linkHtml.includes('Problem:') && linkHtml.includes('How to fix:'),'Broken links need numbered guidance');
 console.log('Toolkit parity: detail rows, Elementor cards, top settings actions and link instructions verified.');
+
+const {groupResults, issueCount}=component.exports;
+const menuGroup=groupResults(['header','footer'].map(location=>({id:'menu_'+location,status:'critical',section:'site',label:location,details:['en','eo','es'].map(language=>({label:language,ignore_key:'menu:'+location+':'+language}))})))[0];
+assert.equal(issueCount(menuGroup),2,'Navigation totals count locations rather than six language gaps or one group');
+const contentGroup=groupResults([{id:'content_unpublished_page',status:'warning',section:'content',details:[{label:'A',ignore_key:'content:1:eo'},{label:'A',ignore_key:'content:1:es'},{label:'B',ignore_key:'content:2:eo'}]}])[0];
+assert.equal(issueCount(contentGroup),2,'Content totals count source pages, not languages');
+console.log('Header statistics: shared row counts match menu locations and source pages.');

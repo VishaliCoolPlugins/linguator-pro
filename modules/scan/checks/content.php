@@ -104,6 +104,21 @@ class Content extends Abstract_Check {
 			$results[] = $this->source_updated_result( $types, $default_lang, $targets );
 		}
 
+        // Coverage measures linked translations, including terms, as Toolkit does.
+        if ( ! $this->row_keys && null === $this->only ) {
+            foreach ( (array) $this->model->get_translated_taxonomies() as $taxonomy ) {
+                if ( in_array( $taxonomy, array('nav_menu', 'link_category', 'post_format'), true ) || ! taxonomy_exists($taxonomy) ) continue;
+                $terms = get_terms(array('taxonomy'=>$taxonomy,'lang'=>$default,'hide_empty'=>false,'number'=>0));
+                if ( is_wp_error($terms) ) continue;
+                foreach ( $terms as $term ) {
+                    $translations = $this->model->term->get_translations((int)$term->term_id);
+                    foreach ( $targets as $lang ) {
+                        ++$this->coverage[$lang->slug]['total'];
+                        if ( !empty($translations[$lang->slug]) ) ++$this->coverage[$lang->slug]['translated'];
+                    }
+                }
+            }
+        }
 		foreach ( $this->coverage as $slug => $row ) {
 			$this->coverage[ $slug ]['percent'] = $row['total'] > 0 ? (int) floor( 100 * $row['translated'] / $row['total'] ) : 100;
 		}
@@ -156,12 +171,12 @@ class Content extends Abstract_Check {
 				}
 
 				$translation_id = (int) ( $translations[ $lang->slug ] ?? 0 );
-				$unpublished    = $translation_id > 0 && 'publish' !== get_post_status( $translation_id );
+				$status = $translation_id > 0 ? get_post_status( $translation_id ) : false;
+                if ( ! $status || in_array( $status, array( 'trash', 'auto-draft' ), true ) ) $translation_id = 0;
+                $unpublished = $translation_id > 0 && 'publish' !== $status;
+                if ( $translation_id > 0 && ! $scoped ) ++$this->coverage[ $lang->slug ]['translated'];
 
 				if ( $translation_id > 0 && ! $unpublished ) {
-					if ( ! $scoped ) {
-						++$this->coverage[ $lang->slug ]['translated'];
-					}
 					continue;
 				}
 
@@ -169,14 +184,6 @@ class Content extends Abstract_Check {
 					++$unpub;
 				} else {
 					++$missing;
-				}
-				if ( ! $scoped && count( $unpublished ? $drafts : $details ) >= self::DETAIL_LIMIT ) {
-					if ( $unpublished ) {
-						$truncated_drafts = true;
-					} else {
-						$truncated = true;
-					}
-					continue;
 				}
 
 				$title = get_the_title( $post_id );

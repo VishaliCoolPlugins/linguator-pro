@@ -98,15 +98,17 @@ class Elementor extends Abstract_Check {
 				continue;
 			}
 			$type = (string) get_post_meta( $document->ID, '_elementor_template_type', true );
-			if ( 'kit' === $type ) {
+			if ( in_array( $type, array( 'kit', 'widget' ), true ) ) {
 				continue;
 			}
-			++$checked;
-			$label = '' !== $type ? $type : (string) $document->post_type;
-			$this->summary['types'][ $label ] = ( $this->summary['types'][ $label ] ?? 0 ) + 1;
-			$this->summary['widgets']        += Elementor_Fields::count_widgets( (int) $document->ID );
 			$language = $this->model->post->get_language( $document->ID );
-			$slug = $language ? $language->slug : '';
+            $slug = $language ? $language->slug : '';
+            if ( $slug === $default ) {
+                ++$checked;
+                $label = '' !== $type ? $type : (string) $document->post_type;
+                $this->summary['types'][$label] = ($this->summary['types'][$label] ?? 0) + 1;
+                $this->summary['widgets'] += Elementor_Fields::count_widgets( (int) $document->ID );
+            }
 			if ( ! $slug ) {
 				$buckets['language'][] = $this->detail( $document, '', __( 'This template has no language assigned.', 'linguator-pro' ), 'language' );
 			}
@@ -121,7 +123,7 @@ class Elementor extends Abstract_Check {
 			if ( $slug && $default && $slug !== $default && in_array( $slug, $active_slugs, true ) && empty( $translations[ $default ] ) ) {
 				$buckets['orphan'][] = $this->detail( $document, $slug, __( 'This translation is not linked to a default-language template.', 'linguator-pro' ), 'orphan' );
 			}
-			if ( ! $default || $slug !== $default || 'publish' !== $document->post_status ) {
+			if ( ! $default || $slug !== $default ) {
 				continue;
 			}
 			foreach ( $languages as $target ) {
@@ -138,22 +140,19 @@ class Elementor extends Abstract_Check {
 					$buckets['missing'][] = $row;
 					continue;
 				}
-				if ( 'publish' !== $translated->post_status ) {
+				if ( $is_template && 'publish' !== $translated->post_status ) {
 					$buckets['unpublished'][] = $this->detail( $translated, $target->slug, __( 'The linked Elementor translation is not published.', 'linguator-pro' ), 'unpublished' );
 				}
 				$translated_type = (string) get_post_meta( $translated->ID, '_elementor_template_type', true );
 				if ( $translated->post_type !== $document->post_type || ( $type && $type !== $translated_type ) ) {
 					$buckets['type'][] = $this->detail( $translated, $target->slug, sprintf( __( 'The translation should use the same template type as its source: %s.', 'linguator-pro' ), $type ?: $document->post_type ), 'type' );
 				}
-				if ( 'publish' !== $translated->post_status ) {
-					continue;
-				}
 				if ( Elementor_Fields::has_widgets( $document->ID ) && ! Elementor_Fields::has_widgets( $translated->ID ) ) {
 					$buckets['empty'][] = $this->detail( $translated, $target->slug, __( 'This translation has no Elementor widgets, but the original has. Visitors may see an empty template.', 'linguator-pro' ), 'empty' );
 				}
-				$this->compare_widgets( $document, $translated, $target, $buckets, $is_template );
+				$this->compare_widgets( $document, $translated, $target, $buckets, $is_template || 'publish' !== $translated->post_status );
 				$fresh = $fresh ?? new Freshness( $this->model );
-				if ( 'source_updated' === $fresh->classify( $document->ID, $target->slug, $fresh->changed_at( $document->ID ), $fresh->changed_at( $translated->ID ) ) ) {
+				if ( 'publish' === $document->post_status && 'publish' === $translated->post_status && 'source_updated' === $fresh->classify( $document->ID, $target->slug, $fresh->changed_at( $document->ID ), $fresh->changed_at( $translated->ID ) ) ) {
 					$buckets['outdated'][] = $this->detail( $translated, $target->slug, __( 'The original was updated after this translation. Review the changes and update the translated template.', 'linguator-pro' ), 'outdated' );
 				}
 			}
@@ -183,7 +182,7 @@ class Elementor extends Abstract_Check {
 				continue;
 			}
 			$result = $this->result( $id, $details ? Result::WARNING : Result::PASS, $labels[ $key ][0], $details ? $labels[ $key ][1] : __( 'No issues found in the scanned Elementor templates.', 'linguator-pro' ) );
-			$result->with_details( array_slice( $details, 0, self::DETAIL_LIMIT ), count( $details ) > self::DETAIL_LIMIT );
+			$result->with_details( $details );
 			$has_content_rows = array_filter( $details, static function ( $detail ) { return ! in_array( $detail['post_type'] ?? '', array( 'elementor_library', 'elementor_component' ), true ); } );
 			if ( ! $has_content_rows ) $result->with_fix( admin_url( 'edit.php?post_type=elementor_library' ), __( 'Manage templates', 'linguator-pro' ) );
 			$results[] = $result;

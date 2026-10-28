@@ -103,7 +103,7 @@ class Menus extends Abstract_Check {
 
 			$results[] = $this->result(
 				'menu_' . $location,
-				Result::WARNING,
+				Result::CRITICAL,
 				/* translators: %s: menu location label */
 				sprintf( __( '"%s" menu not set for all languages', 'linguator-pro' ), $label ),
 				sprintf(

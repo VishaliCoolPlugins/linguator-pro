@@ -60,17 +60,30 @@ class Scanner {
 	 * @return array Report with `time`, `summary`, `results` and `coverage`.
 	 */
 	public function scan(): array {
-		$run = $this->run_checks( $this->load_checks() );
-
-		return self::save_report(
-			array(
-				'summary'  => self::summarize( $run['results'] ),
-				'results'  => $run['results'],
-				'coverage' => $run['coverage'],
-				'elementor' => $run['elementor'],
-			)
-		);
-	}
+        $saved = self::get_saved_report();
+        $checks = array_filter( $this->load_checks(), static function ( $check ) {
+            return 'urls' !== $check->section();
+        } );
+        $run = $this->run_checks( $checks );
+        // URL checks are explicit. A full scan must neither rerun nor erase them.
+        $url_results = array_values( array_filter( $saved['results'] ?? array(), static function ( $result ) {
+            return 'urls' === ( $result['section'] ?? '' );
+        } ) );
+        $results = array_merge( $run['results'], $url_results );
+        $partial = array();
+        if ( isset( $saved['partial_scans']['urls'] ) ) {
+            $partial['urls'] = $saved['partial_scans']['urls'];
+        } elseif ( $url_results && isset( $saved['time'] ) ) {
+            $partial['urls'] = $saved['time'];
+        }
+        return self::save_report( array(
+            'summary' => self::summarize( $results ),
+            'results' => $results,
+            'coverage' => $run['coverage'],
+            'elementor' => $run['elementor'],
+            'partial_scans' => $partial,
+        ) );
+    }
 
 	/**
 	 * Rescans one section, or one issue of it, and swaps those rows in the saved report.
@@ -340,6 +353,10 @@ class Scanner {
 		$ignored                 = self::get_ignored();
 
 		foreach ( $report['results'] as $i => $result ) {
+            // Missing menu assignments and broken navigation prevent visitors from reaching a language.
+            if ( 'warning' === ($result['status'] ?? '') && ( 0 === strpos($result['id'], 'menu_') || 0 === strpos($result['id'], 'nav_') ) ) {
+                $result['status'] = Result::CRITICAL;
+            }
 			if ( 'pass' === $result['status'] ) {
 				continue;
 			}
@@ -431,12 +448,18 @@ class Scanner {
 	 * @param array[] $coverage Coverage rows.
 	 * @return array{score:int,coverage:int,setup:int}
 	 */
-	public static function health( array $results, array $coverage ): array {
+	public static function health( array $results, array $coverage, array $elementor = array() ): array {
 		$coverage_score = 100;
 		if ( ! empty( $coverage ) ) {
 			$coverage_score = (int) round( array_sum( wp_list_pluck( $coverage, 'percent' ) ) / count( $coverage ) );
 		}
 
+        $quality_keys = array();
+        foreach ( $results as $result ) {
+            if ( ! in_array($result['status'], array('warning','critical'), true) || ! preg_match('/^(content_identical|content_link|content_acf|content_placeholder|elementor_untranslated)/', $result['id']) ) continue;
+            foreach ($result['details'] ?? array() as $row) $quality_keys[$row['ignore_key'] ?? $row['label']] = true;
+        }
+        $coverage_score = max(0, $coverage_score - min(25, 2 * count($quality_keys)));
 		$penalty = 0;
 		$once    = array();
 		$other   = 0;
@@ -457,15 +480,15 @@ class Scanner {
 				$penalty += 25;
 			} elseif ( 0 === strpos( $id, 'menu_' ) && ! isset( $once['menus'] ) ) {
 				$once['menus'] = true;
-				$penalty      += 15;
+				$penalty      += 25;
 			} elseif ( 0 === strpos( $id, 'string_' ) && ! isset( $once['strings'] ) ) {
 				$once['strings'] = true;
 				$penalty        += 10;
-			} elseif ( 'url_permalinks' === $id ) {
+			} elseif ( 'url_permalinks' === $id || 'lang_permalinks' === $id ) {
 				$penalty += 10;
 			} elseif ( 0 === strpos( $id, 'url_' ) && ! isset( $once['urls'] ) ) {
 				$once['urls'] = true;
-				$penalty     += 15;
+				$penalty     += 30;
 			} elseif ( 0 !== strpos( $id, 'content_' ) && 0 !== strpos( $id, 'menu_' ) && 0 !== strpos( $id, 'string_' ) && 0 !== strpos( $id, 'url_' ) ) {
 				$other += 'critical' === $result['status'] ? 10 : 5;
 			}
@@ -478,8 +501,23 @@ class Scanner {
 		} );
 		$builder = null;
 		if ( $builder_checks ) {
-			$passed = count( array_filter( $builder_checks, static function ( $result ) { return 'pass' === $result['status']; } ) );
-			$builder = (int) round( 100 * $passed / count( $builder_checks ) );
+            $critical = 0; $warning = 0; $missing = 0; $fields = 0;
+            foreach ($builder_checks as $result) {
+                if ('pass' === $result['status']) continue;
+                $count = max(1, count($result['details'] ?? array()));
+                if ('critical' === $result['status']) $critical += $count; else $warning += $count;
+                if ('elementor_missing' === $result['id']) $missing += $count;
+                if (in_array($result['id'], array('elementor_empty','elementor_fields'), true)) $fields += $count;
+            }
+            $documents = max(1, (int)($elementor['checked'] ?? count($builder_checks)));
+            $widgets = max(0, (int)($elementor['widgets'] ?? 0));
+            $expected = max(1, $documents * max(1,count($coverage)));
+            $builder_coverage = max(0, round(100 * ($expected - $missing) / $expected));
+            $integrity = max(0, round(100 * (1 - min(1, ($critical * 3 + $warning) / max(1, $expected + $widgets)))));
+            $fidelity = max(0, round(100 * (1 - min(1, $fields / max(1,$widgets)))));
+            $builder = (int)round($widgets > 0 ? .5 * $builder_coverage + .3 * $integrity + .2 * $fidelity : .6 * $builder_coverage + .4 * $integrity);
+            if ($critical) $builder = min(95,$builder); elseif ($warning) $builder = min(98,$builder);
+
 			$score = (int) round( 0.50 * $coverage_score + 0.30 * $setup + 0.20 * $builder );
 		}
 

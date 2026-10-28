@@ -11,6 +11,7 @@ namespace LinguatorPro\Includes\Other {
 	}
 }
 namespace {
+    function wp_list_pluck($rows,$field) { return array_column($rows,$field); }
 	define( 'ABSPATH', __DIR__ );
 	$active = true;
 	class WP_Post {
@@ -150,4 +151,11 @@ namespace {
 	$active = false;
 	check( array() === $scan->run(), 'Inactive Elementor must produce no template results.' );
 	echo "Passed Elementor findings, widget detection, scoped queries, row-only report updates, resolution, unknown-row rejection and preservation of unrelated checks, coverage and scan times.\n";
+
+    $menu_report = \LinguatorPro\Modules\Scan\Scanner::apply_ignored(array('results'=>array(array('id'=>'menu_header','status'=>'warning','section'=>'site','group'=>'Menus','label'=>'Header','message'=>'Missing menu','details'=>array()))));
+    check('critical' === $menu_report['results'][0]['status'], 'Existing missing-menu reports must appear in Overview as critical.');
+    $menu_health = \LinguatorPro\Modules\Scan\Scanner::health($menu_report['results'], array(array('percent'=>96)));
+    check(75 === $menu_health['setup'], 'Critical navigation should cost setup points once.');
+    check(96 === $menu_health['coverage'], 'Linked draft coverage must not be reset to published-only coverage.');
+    echo "Navigation parity: existing reports become critical and setup penalties apply once.\n";
 }

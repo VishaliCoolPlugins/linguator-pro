@@ -708,7 +708,7 @@ class Scan extends Abstract_Controller {
 			'summary'        => $report['summary'],
 			'coverage'       => $coverage,
 			'elementor_summary' => isset( $report['elementor'] ) && is_array( $report['elementor'] ) ? $report['elementor'] : null,
-			'health'         => Scanner::health( $report['results'], $coverage ),
+			'health'         => Scanner::health( $report['results'], $coverage, $report['elementor'] ?? array() ),
 			'time_formatted' => wp_date( $format, (int) $report['time'] ),
 			'partial_scans'  => (object) $partial,
 		);

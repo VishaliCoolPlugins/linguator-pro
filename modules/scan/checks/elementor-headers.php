@@ -133,7 +133,7 @@ class Elementor_Headers extends Abstract_Check {
 		}
 
 		return array(
-			$this->result( 'elementor_header', Result::WARNING, $label, $message )
+			$this->result( 'elementor_header', Result::CRITICAL, $label, $message )
 				->with_details(
 					array(
 						array(

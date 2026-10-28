@@ -112,14 +112,8 @@ const IssueInstructions = ({ row }) => {
 const IssueCheckStatus = ({ status }) => !status ? null : <span className={`lmat-scan-issue-check-status is-${status.state}`} role='status' aria-live='polite'><Icon name={status.state === 'checking' ? 'update' : status.state === 'resolved' ? 'yes-alt' : 'warning'} /> {status.message}</span>
 const RecheckRowButton = ({ busy, status, onClick }) => <button className={`button button-small${status?.state === 'checking' ? ' is-loading' : ''}`} disabled={busy || status?.state === 'checking'} onClick={onClick}><Icon name='update' />{__('Rescan issue', 'linguator-pro')}</button>
 
-export const IssueCard = ({ rowStatus = {}, result, filters, busy, onIgnore, onIgnoreMany, onRecheck, onRecheckRow, onDiff, whyHow, languages = [], initialOpen = false, open: controlledOpen, onToggle }) => {
-    const [localOpen, setLocalOpen] = useState(initialOpen || !!whyHow)
-    const controlled = controlledOpen !== undefined
-    const open = controlled ? controlledOpen : localOpen
-    const setOpen = next => controlled ? (next !== open && onToggle?.(next)) : setLocalOpen(next)
-    const [page, setPage] = useState(0)
-    const status = STATUS[result.status] || STATUS.info
-    const rows = (result.details || []).filter(row => (!filters?.type || (result.section === 'elementor' ? row.template_type : row.post_type) === filters.type) && (!filters?.search || String(row.label).toLowerCase().includes(filters.search.toLowerCase())))
+// Use one grouping rule for accordion rows and header statistics.
+export const issueRows = (result, rows = result.details || []) => {
     const grouped = new Map()
     for (const row of rows) {
         const contentId = row.ignore_key?.match(/^(?:content(?:_updated)?|term):(\d+):/)
@@ -129,7 +123,19 @@ export const IssueCard = ({ rowStatus = {}, result, filters, busy, onIgnore, onI
         if (!grouped.has(key)) grouped.set(key, { ...row, label: result.id === 'lang_homepage' ? row.source_title || __('Homepage', 'linguator-pro') : result.id === 'menu_assignments' ? row.location_label || row.source_label : row.label, targets: [] })
         grouped.get(key).targets.push(row)
     }
-    const items = [...grouped.values()]
+    return [...grouped.values()]
+}
+export const issueCount = result => Math.max(1, issueRows(result).length)
+
+export const IssueCard = ({ rowStatus = {}, result, filters, busy, onIgnore, onIgnoreMany, onRecheck, onRecheckRow, onDiff, whyHow, languages = [], initialOpen = false, open: controlledOpen, onToggle }) => {
+    const [localOpen, setLocalOpen] = useState(initialOpen || !!whyHow)
+    const controlled = controlledOpen !== undefined
+    const open = controlled ? controlledOpen : localOpen
+    const setOpen = next => controlled ? (next !== open && onToggle?.(next)) : setLocalOpen(next)
+    const [page, setPage] = useState(0)
+    const status = STATUS[result.status] || STATUS.info
+    const rows = (result.details || []).filter(row => (!filters?.type || (result.section === 'elementor' ? row.template_type : row.post_type) === filters.type) && (!filters?.search || String(row.label).toLowerCase().includes(filters.search.toLowerCase())))
+    const items = issueRows(result, rows)
     const currentPage = Math.min(page, Math.max(0, Math.ceil(items.length / 10) - 1))
     const pageRows = items.slice(currentPage * 10, currentPage * 10 + 10)
     const hasLanguageColumn = items.some(row => row.targets.some(target => languageForRow(target, languages)))
