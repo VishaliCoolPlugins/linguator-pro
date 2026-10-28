@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { __, _n, sprintf } from '@wordpress/i18n'
 import { getNonce } from '../utils'
 import DiffModal from './scan-diff'
-import { STATUS, Icon, LanguageFlag, Pill, IssueCard, IgnoredPanel, PassedChecks, groupResults, issueCount, useAccordion } from './scan-parts'
+import { STATUS, Icon, LanguageFlag, Pill, IssueCard, IgnoredPanel, PassedChecks, groupResults, issueCount, groupIgnoredItems, useAccordion } from './scan-parts'
 
 const isLicenseActive = () => !!window.lmat_settings?.license_active
 const LICENSE_NOTICE = __('Add your Linguator Pro license key to run scans. Click to open the license page.', 'linguator-pro')
@@ -51,7 +51,7 @@ const Summary = ({ report, groups }) => <div className='lmat-scan-summary-counts
         ['crit', __('Critical', 'linguator-pro'), groups.filter(result => result.status === 'critical').reduce((total, result) => total + issueCount(result), 0), 'dismiss', __('Important', 'linguator-pro')],
         ['warn', __('Warnings', 'linguator-pro'), groups.filter(result => result.status === 'warning').reduce((total, result) => total + issueCount(result), 0), 'warning', __('Needs attention', 'linguator-pro')],
         ['pass', __('Passed', 'linguator-pro'), groups.filter(result => result.status === 'pass').length, 'yes-alt', __('Good', 'linguator-pro')],
-        ['ignored', __('Ignored', 'linguator-pro'), report.ignored_items.length, 'hidden', __('Dismissed', 'linguator-pro')],
+        ['ignored', __('Ignored', 'linguator-pro'), groupIgnoredItems(report.ignored_items).length, 'hidden', __('Dismissed', 'linguator-pro')],
     ].map(([key, label, count, icon, hint]) => <div key={key} className={`lmat-scan-summary-count lmat-scan-summary-count-${key}`}><Icon name={icon} /><span className='lmat-scan-summary-count-label'>{label}</span><strong>{count}</strong><span className='lmat-scan-summary-count-sub'>{hint}</span></div>)}
 </div>
 
@@ -92,7 +92,7 @@ const Overview = ({ report, groups, cardProps, onGoto, onScan }) => {
 
 const DOCUMENT_TYPES = { header: __('Headers', 'linguator-pro'), footer: __('Footers', 'linguator-pro'), single: __('Single templates', 'linguator-pro'), archive: __('Archives', 'linguator-pro'), popup: __('Popups', 'linguator-pro'), 'loop-item': __('Loop items', 'linguator-pro'), section: __('Sections', 'linguator-pro'), container: __('Containers', 'linguator-pro'), page: __('Pages', 'linguator-pro'), 'wp-page': __('Pages', 'linguator-pro'), 'wp-post': __('Posts', 'linguator-pro'), 'error-404': __('404 pages', 'linguator-pro'), 'search-results': __('Search results', 'linguator-pro'), elementor_library: __('Templates', 'linguator-pro'), elementor_component: __('Components', 'linguator-pro') }
 
-const SectionPanel = ({ section, report, groups, cardProps, onScan, onGoto, onRestore }) => {
+const SectionPanel = ({ section, report, groups, cardProps, onScan, onGoto, onRestore, onRestoreMany }) => {
     const [severity, setSeverity] = useState('all')
     const [search, setSearch] = useState('')
     const [type, setType] = useState('')
@@ -126,7 +126,7 @@ const SectionPanel = ({ section, report, groups, cardProps, onScan, onGoto, onRe
         {critical.length > 0 && (severity === 'all' || severity === 'critical') && <div className='lmat-scan-critical-pointer'><Icon name='dismiss' /><p>{sprintf(__('%d critical issue types in this area are listed in Fix These First.', 'linguator-pro'), critical.length)}</p><button className='button button-secondary' onClick={() => onGoto('overview')}>{__('Open Overview', 'linguator-pro')}</button></div>}
         {severity !== 'pass' && severity !== 'ignored' && <div className='lmat-scan-card-stack'>{visible.map(result => <IssueCard key={`${result.id}:${severity}:${search}:${type}`} result={result} open={accordion.isOpen(result.id)} onToggle={accordion.toggle(result.id)} filters={{ search, type }} {...cardProps} />)}{!visible.length && !(critical.length && (severity === 'all' || severity === 'critical')) && <p role='status' className='lmat-scan-url-empty'>{needsElementorScan ? __('Run Scan Elementor to check your templates.', 'linguator-pro') : needsUrlScan ? __('Run Scan URLs to check language URLs and routing.', 'linguator-pro') : problems.length ? __('No issues match this filter.', 'linguator-pro') : __('No issues in this section.', 'linguator-pro')}</p>}</div>}
         {(severity === 'all' || severity === 'pass') && <PassedChecks key={`passed-${severity}`} results={passed} open={accordion.isOpen('passed')} onToggle={accordion.toggle('passed')} />}
-        {(severity === 'all' || severity === 'ignored') && <IgnoredPanel key={`ignored-${severity}`} languages={report.languages || []} open={accordion.isOpen('ignored')} onToggle={accordion.toggle('ignored')} items={ignored} busy={cardProps.busy} onRestore={onRestore} />}
+        {(severity === 'all' || severity === 'ignored') && <IgnoredPanel key={`ignored-${severity}`} languages={report.languages || []} open={accordion.isOpen('ignored')} onToggle={accordion.toggle('ignored')} items={ignored} busy={cardProps.busy} onRestore={onRestore} onRestoreMany={onRestoreMany} />}
         {severity === 'ignored' && !ignored.length && <p role='status'>{__('No ignored items in this section.', 'linguator-pro')}</p>}
     </section>
 }
@@ -235,10 +235,7 @@ const Scan = () => {
     const cardProps = {
         busy, blocked: !!report.unassigned, languages: report.languages || [],
         onIgnore: key => call('/ignore', { key, ignore: true }),
-        onIgnoreMany: async keys => {
-            setBusy(true)
-            try { for (const key of [...new Set(keys)]) setReport(await request('/ignore', 'POST', { key, ignore: true })) } catch (error) { fail(error) } finally { setBusy(false) }
-        },
+        onIgnoreMany: keys => call('/ignore', { keys: [...new Set(keys)], ignore: true }),
         onRecheck: result => result.members?.length > 1 ? call('/section', { section: result.section }, __('Issues rechecked.', 'linguator-pro')) : call('/recheck', { id: result.members?.[0]?.id || result.id, section: result.section }, __('Issue rechecked.', 'linguator-pro')),
         rowStatus, onRecheckRow: recheckRow,
         onDiff: row => setDiff(row),
@@ -275,7 +272,7 @@ const Scan = () => {
         <div className='lmat-scan-report-stack'><nav className='lmat-scan-section-nav' aria-label={__('Report sections', 'linguator-pro')}><div className='lmat-scan-section-nav-list' role='tablist' aria-label={__('Report sections', 'linguator-pro')}>{tabs.map(item => <button key={item.key} id={`scan-tab-${item.key}`} type='button' role='tab' aria-selected={tab === item.key} aria-controls='scan-panel' tabIndex={tab === item.key ? 0 : -1} className={`lmat-scan-nav-tab${tab === item.key ? ' is-active' : ''}`} onKeyDown={selectTabByKey} onClick={() => setTab(item.key)}><Icon name={item.icon} /><span className='lmat-scan-nav-tab-label'>{item.label}</span></button>)}</div></nav>
             <div id='scan-panel' onPointerDownCapture={trackFix} role='tabpanel' aria-labelledby={`scan-tab-${tab}`} aria-busy={busy} className='lmat-scan-tab-panel' tabIndex={0}>
                 {tab === 'overview' && <Overview report={report} groups={groups} cardProps={cardProps} onGoto={setTab} onScan={scan} />}
-                {current && <SectionPanel key={current.key} section={current} report={report} groups={groups} cardProps={cardProps} onGoto={setTab} onScan={section => call('/section', { section }, __('Scan finished. Results are up to date.', 'linguator-pro'))} onRestore={key => call('/ignore', { key, ignore: false })} />}
+                {current && <SectionPanel key={current.key} section={current} report={report} groups={groups} cardProps={cardProps} onGoto={setTab} onScan={section => call('/section', { section }, __('Scan finished. Results are up to date.', 'linguator-pro'))} onRestore={key => call('/ignore', { key, ignore: false })} onRestoreMany={keys => call('/ignore', { keys, ignore: false })} />}
                 {tab === 'coverage' && <Coverage report={report} />}
             </div>
         </div>

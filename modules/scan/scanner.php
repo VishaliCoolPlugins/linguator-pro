@@ -320,22 +320,21 @@ class Scanner {
 	 * @return void
 	 */
 	public static function set_ignored( string $key, bool $ignore ): void {
-		$ignored = self::get_ignored();
+        self::set_ignored_many( array( $key ), $ignore );
+    }
 
-		// Special key that restores everything the user dismissed.
-		if ( self::RESET_KEY === $key && ! $ignore ) {
-			delete_option( self::IGNORED_OPTION );
-			return;
-		}
-
-		if ( $ignore ) {
-			$ignored[] = $key;
-		} else {
-			$ignored = array_diff( $ignored, array( $key ) );
-		}
-
-		update_option( self::IGNORED_OPTION, array_values( array_unique( $ignored ) ), false );
-	}
+    /** Update an accordion's dismissed items in a single option write. */
+    public static function set_ignored_many( array $keys, bool $ignore ): void {
+        $keys = array_values( array_unique( array_filter( array_map( 'strval', $keys ), static function ( $key ) { return '' !== $key; } ) ) );
+        if ( ! $keys ) return;
+        if ( ! $ignore && in_array( self::RESET_KEY, $keys, true ) ) {
+            delete_option( self::IGNORED_OPTION );
+            return;
+        }
+        $ignored = self::get_ignored();
+        $ignored = $ignore ? array_merge( $ignored, $keys ) : array_diff( $ignored, $keys );
+        update_option( self::IGNORED_OPTION, array_values( array_unique( $ignored ) ), false );
+    }
 
 	/**
 	 * Applies the ignore list so dismissed rows disappear without a rescan.
@@ -372,6 +371,7 @@ class Scanner {
 						'label'   => $row['label'],
 						'message' => $row['message'],
 						'issue'   => $result['label'],
+                        'issue_id' => $result['id'],
 						'section' => $result['section'],
 						'post_type' => $row['post_type'] ?? '',
 						'language' => $row['language'] ?? '',
@@ -387,6 +387,7 @@ class Scanner {
 					'label'   => $result['label'],
 					'message' => $result['message'],
 					'issue'   => $result['label'],
+                        'issue_id' => $result['id'],
 					'section' => $result['section'],
 				);
 			}

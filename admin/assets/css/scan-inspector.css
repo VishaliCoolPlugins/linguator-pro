@@ -2593,3 +2593,29 @@ a.lmat-scan-content-lang-chip-link:focus {
 .lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .button { min-height:38px; height:auto; padding:8px 14px; border-radius:6px; font-size:13.5px; line-height:1; white-space:nowrap; }
 .lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .button-primary { background:#2563eb; border-color:#2563eb; color:#fff; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.05); }
 .lmat-styles .lmat-inspector .lmat-scan-untranslated-notice .lmat-scan-notice-ignore { background:transparent; border-color:#d97706; color:#92400e; }
+
+.lmat-styles .lmat-inspector .lmat-scan-bulk-actions { display:flex; justify-content:flex-end; margin-bottom:12px; }
+
+.lmat-scan-bulk-actions { gap: 10px; align-items: center; flex-wrap: wrap; }
+.lmat-scan-select-all { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; }
+.lmat-scan-row-select { margin-right: 6px !important; vertical-align: middle !important; }
+.lmat-scan-issue-card input.lmat-scan-row-select,
+.lmat-scan-issue-card .lmat-scan-select-all input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    padding: 0;
+}
+.lmat-scan-issue-card input.lmat-scan-row-select:checked::before,
+.lmat-scan-issue-card .lmat-scan-select-all input[type="checkbox"]:checked::before {
+    width: 18px;
+    height: 18px;
+    margin: -3px 0 0 -3px;
+}
+.lmat-scan-issue-card input.lmat-scan-row-select:indeterminate::before,
+.lmat-scan-issue-card .lmat-scan-select-all input[type="checkbox"]:indeterminate::before {
+    width: 6px;
+    height: 2px;
+    margin: 5px 0 0 3px;
+}

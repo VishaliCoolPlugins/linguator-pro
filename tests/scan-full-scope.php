@@ -41,4 +41,10 @@ namespace {
  $result=$scanner->scan();
  if(array_filter($result['results'],fn($row)=>$row['section']==='urls') || !empty($result['partial_scans']))throw new \Exception('First full scan fabricated URL results.');
  echo "Full scan skips URL checks and preserves saved URL rows/timestamps; explicit URL scan runs normally.\n";
+
+ \LinguatorPro\Modules\Scan\Scanner::set_ignored_many(['first','second','first'],true);
+ if(\LinguatorPro\Modules\Scan\Scanner::get_ignored()!==['first','second'])throw new \Exception('Bulk ignore must deduplicate keys.');
+ \LinguatorPro\Modules\Scan\Scanner::set_ignored_many(['first','second'],false);
+ if(\LinguatorPro\Modules\Scan\Scanner::get_ignored()!==[])throw new \Exception('Bulk restore must restore every selected key.');
+ echo "Bulk ignore and restore preserve unique keys.\n";
 }

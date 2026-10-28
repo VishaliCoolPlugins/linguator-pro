@@ -84,12 +84,17 @@ class Scan extends Abstract_Controller {
 				'args'                => array(
 					'key'    => array(
 						'type'              => 'string',
-						'required'          => true,
+						'required'          => false,
 						'sanitize_callback' => 'sanitize_text_field',
 						'validate_callback' => static function ( $value ) {
 							return is_string( $value ) && '' !== $value && strlen( $value ) <= 200;
 						},
 					),
+                    'keys' => array(
+                        'type' => 'array',
+                        'maxItems' => 10000,
+                        'items' => array( 'type' => 'string', 'minLength' => 1, 'maxLength' => 200 ),
+                    ),
 					'ignore' => array(
 						'type'    => 'boolean',
 						'default' => true,
@@ -559,7 +564,10 @@ class Scan extends Abstract_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function ignore( WP_REST_Request $request ): WP_REST_Response {
-		Scanner::set_ignored( (string) $request->get_param( 'key' ), (bool) $request->get_param( 'ignore' ) );
+		$keys = (array) ( $request->get_param( 'keys' ) ?? array() );
+        if ( $request->get_param( 'key' ) ) $keys[] = (string) $request->get_param( 'key' );
+        if ( ! $keys ) return new WP_REST_Response( array( 'message' => __( 'Choose at least one issue to ignore or restore.', 'linguator-pro' ) ), 400 );
+        Scanner::set_ignored_many( array_map( 'sanitize_text_field', $keys ), (bool) $request->get_param( 'ignore' ) );
 
 		return new WP_REST_Response( $this->prepare_report( Scanner::get_saved_report() ) );
 	}
@@ -695,6 +703,30 @@ class Scan extends Abstract_Controller {
 				}
 			}
 		}
+
+        $page_groups = array();
+        $default_language = $this->model->get_default_language();
+        foreach ( $report['ignored_items'] as &$item ) {
+            // Use the same language-independent heading as the active issue accordion.
+            $copy = Issue_Copy::for_id( (string)($item['issue_id'] ?? '') );
+            if ( !empty($copy['display_label']) ) $item['issue'] = $copy['display_label'];
+            $key = $item['key'];
+            $post_id = 0;
+            if ( preg_match('/^(?:content(?:_updated|_identical|_placeholder|_link|_acf)?|elementor_loop):(\d+):/', $key, $matches) ) {
+                $post_id = (int)$matches[1];
+            } elseif ( preg_match('/^elementor:[^:]+:(\d+):/', $key, $matches) ) {
+                $post_id = (int)$matches[1];
+            }
+            if ( $post_id > 0 ) {
+                if ( !isset($page_groups[$post_id]) ) {
+                    $translations = $this->model->post->get_translations($post_id);
+                    $source_id = $default_language ? (int)($translations[$default_language->slug] ?? $post_id) : $post_id;
+                    $page_groups[$post_id] = array('source_post_id'=>$source_id, 'source_title'=>get_the_title($source_id));
+                }
+                $item += $page_groups[$post_id];
+            }
+        }
+        unset($item);
 
 		$partial = array();
 		foreach ( (array) ( isset( $report['partial_scans'] ) ? $report['partial_scans'] : array() ) as $section => $time ) {
