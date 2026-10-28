@@ -726,6 +726,8 @@ class Linguator_Settings extends Linguator_Admin_Base {
 					'wp_ai_client_available' => function_exists( 'linguator_pro_is_ai_provider_allowed' ) ? linguator_pro_is_ai_provider_allowed( 'gemini' ) : false,
 					'allowed_providers'     => function_exists( 'linguator_pro_get_allowed_ai_providers' ) ? linguator_pro_get_allowed_ai_providers() : array( 'chrome_local_ai', 'google' ),
 					'chrome_ai_setup'           => $this->get_chrome_ai_setup_data(),
+					'license_active'            => $this->is_license_active(),
+					'license_url'               => esc_url_raw( admin_url( 'admin.php?page=lmat_settings&tab=license' ) ),
 				)
 			);
 			wp_localize_script(
@@ -979,6 +981,26 @@ class Linguator_Settings extends Linguator_Admin_Base {
 		}
 
 		return $languages;
+	}
+
+	/**
+	 * Whether the Linguator Pro license is active (registered and not expired).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	private function is_license_active() {
+		if ( ! class_exists( \LinguatorPro\Admin\Register\Linguator_Pro_Base::class ) ) {
+			return false;
+		}
+
+		$license_info = \LinguatorPro\Admin\Register\Linguator_Pro_Base::get_register_info();
+		if ( ! is_object( $license_info ) || empty( $license_info->is_valid ) ) {
+			return false;
+		}
+
+		return 'license_expired' !== $license_info->is_valid;
 	}
 
 	/**
