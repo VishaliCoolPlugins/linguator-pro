@@ -70,7 +70,7 @@ class Scan extends Abstract_Controller {
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'run_scan' ),
-				'permission_callback' => array( $this, 'check_permission' ),
+				'permission_callback' => array( $this, 'check_scan_permission' ),
 			)
 		);
 
@@ -104,7 +104,7 @@ class Scan extends Abstract_Controller {
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'scan_section' ),
-				'permission_callback' => array( $this, 'check_permission' ),
+				'permission_callback' => array( $this, 'check_scan_permission' ),
 				'args'                => array(
 					'section' => array(
 						'type'     => 'string',
@@ -121,7 +121,7 @@ class Scan extends Abstract_Controller {
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'recheck' ),
-				'permission_callback' => array( $this, 'check_permission' ),
+				'permission_callback' => array( $this, 'check_scan_permission' ),
 				'args'                => array(
 					'id'      => array(
 						'type'              => 'string',
@@ -248,6 +248,30 @@ class Scan extends Abstract_Controller {
 				'callback'            => array( $this, 'export' ),
 				'permission_callback' => array( $this, 'check_permission' ),
 			)
+		);
+	}
+
+	/**
+	 * Running a scan needs an administrator and an active license.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @return true|WP_Error
+	 */
+	public function check_scan_permission() {
+		$allowed = $this->check_permission();
+		if ( true !== $allowed ) {
+			return $allowed;
+		}
+
+		if ( class_exists( \LinguatorPro\Admin\Register\Linguator_Pro_Base::class ) && \LinguatorPro\Admin\Register\Linguator_Pro_Base::is_license_active() ) {
+			return true;
+		}
+
+		return new WP_Error(
+			'lmat_license_required',
+			__( 'Add your Linguator Pro license key to run scans.', 'linguator-pro' ),
+			array( 'status' => 403 )
 		);
 	}
 

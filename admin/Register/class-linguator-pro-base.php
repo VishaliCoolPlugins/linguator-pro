@@ -732,6 +732,22 @@ class Linguator_Pro_Base {
 
 	}
 
+	/**
+	 * Whether the license is registered and not expired.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public static function is_license_active() {
+		$license_info = self::get_register_info();
+		if ( ! is_object( $license_info ) || empty( $license_info->is_valid ) ) {
+			return false;
+		}
+
+		return 'license_expired' !== $license_info->is_valid;
+	}
+
 	final function _check_wp_plugin( $purchase_key, &$error = "", &$response_obj = null ) {
             if(empty($purchase_key)){
                 $this->remove_old_wp_response();
