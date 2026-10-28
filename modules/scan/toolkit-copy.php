@@ -122,31 +122,31 @@ final class Toolkit_Copy {
    'elementor_fields' => array(
     'display_label' => __( 'Empty translated fields', 'linguator-pro' ),
     'display_message' => __( 'Translatable text fields are empty in translations while the original has content.', 'linguator-pro' ),
-    'why' => __( '', 'linguator-pro' ),
+    'why' => '',
     'how' => __( 'Open the translation in Elementor and fill in the empty text fields.', 'linguator-pro' ),
    ),
    'elementor_orphan' => array(
     'display_label' => __( 'Translations not linked to an original', 'linguator-pro' ),
     'display_message' => __( 'These layouts exist in another language, but Linguator has not connected them to an original (default-language) version. Visitors may not get the right layout when switching languages.', 'linguator-pro' ),
-    'why' => __( '', 'linguator-pro' ),
+    'why' => '',
     'how' => __( 'Open each layout in Linguator and link it to its original-language version, or create that original if it is missing. Delete the layout only if it is leftover and not needed.', 'linguator-pro' ),
    ),
    'elementor_untranslated' => array(
     'display_label' => __( 'Same texts as the original language', 'linguator-pro' ),
     'display_message' => __( 'These widgets still show the exact same words as the original language. Open each one in Elementor and translate the text — or ignore the warning if it should stay the same (for example a brand or product name).', 'linguator-pro' ),
-    'why' => __( '', 'linguator-pro' ),
+    'why' => '',
     'how' => __( 'Open the widget in Elementor and replace the copied original text with a translation. If the text is a brand name that should stay the same in every language, you can ignore that item.', 'linguator-pro' ),
    ),
    'elementor_empty' => array(
     'display_label' => __( 'Empty Elementor translations', 'linguator-pro' ),
     'display_message' => __( 'These translated pages have no Elementor widgets. The original has widgets in its page layout, but the translation is blank — visitors may see an empty page. Open each one in Elementor and copy the layout from the original, then translate the text. (Header and footer from Theme Builder are checked separately.)', 'linguator-pro' ),
-    'why' => __( '', 'linguator-pro' ),
+    'why' => '',
     'how' => __( 'Open the translation in Elementor, copy the layout from the original language, then translate the text.', 'linguator-pro' ),
    ),
    'elementor_repeater' => array(
     'display_label' => __( 'Repeater row mismatches', 'linguator-pro' ),
     'display_message' => __( 'Repeater rows in translations do not match the original document.', 'linguator-pro' ),
-    'why' => __( '', 'linguator-pro' ),
+    'why' => '',
     'how' => __( 'Open the translation in Elementor and match the number of repeater rows to the original.', 'linguator-pro' ),
    ),
   );

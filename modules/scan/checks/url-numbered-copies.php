@@ -24,7 +24,7 @@ class Url_Numbered_Copies extends Abstract_Check {
 		$args = array(
 			'post_type' => $types, 'post_status' => 'publish',
 			'posts_per_page' => self::POST_LIMIT + 1, 'orderby' => 'ID', 'order' => 'DESC',
-			'lang' => '', 'suppress_filters' => true, 'no_found_rows' => true,
+			'lang' => '', 'suppress_filters' => true, 'no_found_rows' => true, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
 		);
 		$posts = get_posts( $args );
 		$sampled = count( $posts ) > self::POST_LIMIT;
@@ -59,6 +59,7 @@ class Url_Numbered_Copies extends Abstract_Check {
 					);
 				}
 				$details[] = array(
+					// translators: %1$s: slug of the original item, %2$s: slug of the numbered copy.
 					'label' => sprintf( __( 'Possible duplicate: "%1$s" and "%2$s"', 'linguator-pro' ), $original->post_name, $post->post_name ),
 					'message' => __( 'These published items have matching titles or content in the same language and a numbered URL. Review whether both are intentional; their URLs are different.', 'linguator-pro' ),
 					'posts' => $items,
@@ -68,6 +69,7 @@ class Url_Numbered_Copies extends Abstract_Check {
 		}
 		$message = $details ? __( 'Review these possible accidental copies. A numbered slug alone is not an error.', 'linguator-pro' ) : __( 'No matching published items with numbered slugs were found in the inspected content.', 'linguator-pro' );
 		if ( $sampled ) {
+			// translators: %d: number of inspected items.
 			$message .= ' ' . sprintf( __( 'Only the newest %d published items were inspected.', 'linguator-pro' ), self::POST_LIMIT );
 		}
 		return array( $this->result(

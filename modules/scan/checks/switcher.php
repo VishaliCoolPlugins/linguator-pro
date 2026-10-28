@@ -178,7 +178,7 @@ class Switcher extends Abstract_Check {
 		}
 
 		// Marker strings come from the class constant above and are prepared.
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		$found = (int) $wpdb->get_var(
 			"SELECT ID FROM {$wpdb->posts}
 			WHERE post_status = 'publish'
@@ -199,8 +199,8 @@ class Switcher extends Abstract_Check {
 		}
 		$ids = get_posts( array(
 			'post_type' => 'any', 'post_status' => 'publish', 'fields' => 'ids',
-			'posts_per_page' => Elementor::DOCUMENT_LIMIT, 'suppress_filters' => true,
-			'meta_query' => array( array( 'key' => '_elementor_data', 'value' => 'lmat_widget', 'compare' => 'LIKE' ) ),
+			'posts_per_page' => Elementor::DOCUMENT_LIMIT, 'suppress_filters' => true, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
+			'meta_query' => array( array( 'key' => '_elementor_data', 'value' => 'lmat_widget', 'compare' => 'LIKE' ) ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bounded, admin-only scan that looks for the Linguator widget in Elementor data.
 		) );
 		foreach ( $ids as $id ) {
 			$raw = get_post_meta( $id, '_elementor_data', true );

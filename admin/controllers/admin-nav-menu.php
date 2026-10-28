@@ -171,7 +171,7 @@ class Linguator_Admin_Nav_Menu extends Linguator_Nav_Menu {
 				'nopaging'    => true,
 				'post_type'   => 'nav_menu_item',
 				'fields'      => 'ids',
-				'meta_key'    => '_lmat_menu_item',
+				'meta_key'    => '_lmat_menu_item', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Limited to Linguator's own nav menu items.
 			)
 		);
 

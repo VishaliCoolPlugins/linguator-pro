@@ -74,7 +74,7 @@ class Elementor_Loops extends Abstract_Check {
 				'orderby'          => 'ID',
 				'order'            => 'DESC',
 				'no_found_rows'    => true,
-				'suppress_filters' => true,
+				'suppress_filters' => true, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
 				'lang'             => '',
 				'meta_query'       => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(

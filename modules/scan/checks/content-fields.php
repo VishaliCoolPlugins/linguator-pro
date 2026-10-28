@@ -289,7 +289,7 @@ class Content_Fields extends Abstract_Check {
 			}
 
 			$fields[ 'meta_' . $key ] = array(
-				'meta_key' => $key,
+				'meta_key' => $key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Array key, not a database query.
 				'label'    => sprintf(
 					/* translators: %s: custom field label */
 					__( 'Custom field "%s"', 'linguator-pro' ),
@@ -403,7 +403,7 @@ class Content_Fields extends Abstract_Check {
 		}
 
 		$fields[ 'acf_' . $meta_key ] = array(
-			'meta_key' => $meta_key,
+			'meta_key' => $meta_key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Array key, not a database query.
 			'label'    => sprintf(
 				/* translators: %s: custom field label */
 				__( 'Custom field "%s"', 'linguator-pro' ),

@@ -329,7 +329,7 @@ class Linguator_Admin_Filters_Post extends Linguator_Admin_Filters_Post_Base {
 		}
 
 		$dropdown = new Linguator_Walker_Dropdown();
-		$selected = isset( $_GET['untranslated_in'] ) && is_string( $_GET['untranslated_in'] )
+		$selected = isset( $_GET['untranslated_in'] ) && is_string( $_GET['untranslated_in'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only list table filter.
 			? sanitize_key( wp_unslash( $_GET['untranslated_in'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			: '';
 

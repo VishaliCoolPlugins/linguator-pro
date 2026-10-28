@@ -73,7 +73,7 @@ class Elementor extends Abstract_Check {
 			'post_type' => $template_types,
 			'post_status' => array( 'publish', 'draft', 'pending', 'private', 'future' ),
 			'posts_per_page' => self::DOCUMENT_LIMIT,
-			'orderby' => 'ID', 'order' => 'DESC', 'suppress_filters' => true,
+			'orderby' => 'ID', 'order' => 'DESC', 'suppress_filters' => true, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
 			'post__in' => $this->scoped_document_ids(),
 			'lang' => '',
 		);
@@ -82,7 +82,7 @@ class Elementor extends Abstract_Check {
 		if ( $content_types ) {
 			$builder_query = $query;
 			$builder_query['post_type'] = $content_types;
-			$builder_query['meta_query'] = array( 'relation' => 'OR', array( 'key' => '_elementor_edit_mode', 'value' => 'builder' ), array( 'key' => '_elementor_data', 'compare' => 'EXISTS' ) );
+			$builder_query['meta_query'] = array( 'relation' => 'OR', array( 'key' => '_elementor_edit_mode', 'value' => 'builder' ), array( 'key' => '_elementor_data', 'compare' => 'EXISTS' ) ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Bounded, admin-only scan that must find Elementor documents by meta.
 			$documents = array_merge( $documents, $this->posts_in_batches( $builder_query ) );
 		}
 		$documents = array_values( array_column( $documents, null, 'ID' ) );
@@ -134,8 +134,10 @@ class Elementor extends Abstract_Check {
 				if ( ! $translated || in_array( $translated->post_status, array( 'trash', 'auto-draft' ), true ) ) {
 					// Missing page/post translations are already owned by the Content scan.
 					if ( ! $is_template ) continue;
+					// translators: %s: language label.
 					$row = $this->detail( $document, $target->slug, sprintf( __( 'No template translation exists for %s.', 'linguator-pro' ), $this->lang_label( $target ) ), 'missing' );
 					$row['action_url'] = $this->new_translation_url( $document->ID, $target->slug );
+					// translators: %s: language name.
 					$row['action_label'] = sprintf( __( 'Translate %s', 'linguator-pro' ), $target->name );
 					$buckets['missing'][] = $row;
 					continue;
@@ -145,6 +147,7 @@ class Elementor extends Abstract_Check {
 				}
 				$translated_type = (string) get_post_meta( $translated->ID, '_elementor_template_type', true );
 				if ( $translated->post_type !== $document->post_type || ( $type && $type !== $translated_type ) ) {
+					// translators: %s: Elementor template type or post type.
 					$buckets['type'][] = $this->detail( $translated, $target->slug, sprintf( __( 'The translation should use the same template type as its source: %s.', 'linguator-pro' ), $type ?: $document->post_type ), 'type' );
 				}
 				if ( Elementor_Fields::has_widgets( $document->ID ) && ! Elementor_Fields::has_widgets( $translated->ID ) ) {
@@ -233,6 +236,7 @@ class Elementor extends Abstract_Check {
 			foreach ( $element['fields'] as $field_key => $original ) {
 				$translated_text = $other['fields'][ $field_key ] ?? '';
 				if ( '' !== trim( wp_strip_all_tags( (string) $original ) ) && '' === trim( wp_strip_all_tags( (string) $translated_text ) ) ) {
+					// translators: %1$s: snippet of the original text, %2$s: field label.
 					$row = $this->detail( $translated, $target->slug, sprintf( __( 'The original contains "%1$s", but the translated %2$s field is empty.', 'linguator-pro' ), Elementor_Fields::snippet( (string) $original, 80 ), Elementor_Fields::field_label( $field_key ) ), 'fields' );
 					$row['layout'] = 'widget';
 					$row['label'] = $widget . ' — ' . $row['label'] . ' (' . $this->lang_label( $target ) . ')';

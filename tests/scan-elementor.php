@@ -145,7 +145,7 @@ namespace {
 	$GLOBALS['batch_fixture'] = array( 1, 2, 3, 4, 5 );
 	$batched = new \ReflectionMethod( $scan, 'posts_in_batches' );
 	$batched->setAccessible( true );
-	check( array( 1, 2, 3, 4, 5 ) === $batched->invoke( $scan, array( 'posts_per_page' => 2, 'lang' => '', 'suppress_filters' => true ) ), 'Older documents beyond the first batch were skipped.' );
+	check( array( 1, 2, 3, 4, 5 ) === $batched->invoke( $scan, array( 'posts_per_page' => 2, 'lang' => '', 'suppress_filters' => true ) ), 'Older documents beyond the first batch were skipped.' ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
 	check( 3 === count( $GLOBALS['batch_queries'] ) && 3 === $GLOBALS['batch_queries'][2]['paged'], 'The scanner must advance through bounded queries.' );
 	unset( $GLOBALS['batch_fixture'] );
 	$active = false;

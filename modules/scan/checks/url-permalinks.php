@@ -167,7 +167,7 @@ class Url_Permalinks extends Abstract_Check {
 					'posts_per_page'   => 1,
 					'fields'           => 'ids',
 					'no_found_rows'    => true,
-					'suppress_filters' => true,
+					'suppress_filters' => true, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters -- The scan must see every language, so Linguator's language query filters are bypassed.
 					'lang'             => '',
 				)
 			);
