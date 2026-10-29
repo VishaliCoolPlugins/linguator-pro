@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Linguator Pro – AI Multilingual WordPress
+ * Plugin Name:       Linguator Pro
  * Plugin URI:        https://linguator.com/
  * Description:       Pro add-on for Linguator – adds the Site Scan and the license manager. Requires the free Linguator plugin.
  * Version:           2.2.1

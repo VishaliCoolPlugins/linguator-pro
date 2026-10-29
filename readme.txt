@@ -1,4 +1,4 @@
-=== Linguator Pro – AI Multilingual WordPress ===
+=== Linguator Pro ===
 
 Contributors: narinder-singh,satindersingh,coolplugins
 Tags: automatic translation, google translate,elementor translation, multilingual, ai translator
@@ -13,7 +13,7 @@ AI-powered translation for your WordPress site, fully compatible with Elementor,
 
 == Description ==
 
-**Linguator Pro – AI Multilingual WordPress** is an AI-powered translation plugin that works seamlessly with **Elementor**, **Gutenberg**, the **Classic Editor**, **WooCommerce**, **ACF**, **Rank Math**, **Yoast SEO**, helping you create multilingual websites in just a few clicks without any complex setup.
+**Linguator Pro** is an AI-powered translation plugin that works seamlessly with **Elementor**, **Gutenberg**, the **Classic Editor**, **WooCommerce**, **ACF**, **Rank Math**, **Yoast SEO**, helping you create multilingual websites in just a few clicks without any complex setup.
 
 https://youtu.be/TNSWCCmHQPg?si=LQXRkszBIFPMG9vg
 
