@@ -4,8 +4,7 @@ import withTW from "@bsf/force-ui/withTW";
 export default withTW({
 	mode: 'jit',
 	content: [
-		'./admin/Settings/Views/src/**/*.{js,jsx}',
-		'./modules/wizard/src/**/*.{js,jsx}',
+		'./admin/scan/src/**/*.{js,jsx}',
 		'node_modules/@bsf/force-ui/dist/force-ui.js'  // Include force-ui content explicitly
 	],
 	theme: {

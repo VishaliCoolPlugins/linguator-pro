@@ -1,6 +1,6 @@
 {
     "name": "linguator/linguator-pro",
-    "description": "Linguator Pro – AI Multilingual WordPress",
+    "description": "Linguator Pro – add-on for the free Linguator plugin (Site Scan and license manager).",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
     "homepage": "https://linguator.com/",
@@ -27,32 +27,10 @@
     },
     "autoload": {
         "psr-4": {
-            "LinguatorPro\\Admin\\": "admin/",
-            "LinguatorPro\\Frontend\\": "frontend/",
-            "LinguatorPro\\Includes\\": "includes/",
-            "LinguatorPro\\includes\\": "includes/",
-            "LinguatorPro\\Settings\\": "admin/settings/",
-            "LinguatorPro\\Modules\\": "modules/",
-            "LinguatorPro\\Integrations\\": "integrations/",
-            "LinguatorPro\\Install\\": "install/"
-        },
-        "classmap": [
-            "includes/",
-            "admin/",
-            "frontend/",
-            "integrations/",
-            "modules/",
-            "admin/settings/",
-            "install/"
-        ],
-        "exclude-from-classmap": [
-            "includes/ai-providers/"
-        ],
-        "files": [
-            "includes/helpers/functions.php",
-            "includes/api/language-api.php",
-            "includes/sync-menu/menu-sync-integration.php"
-        ]
+            "LinguatorProAdmin\\": "admin/",
+            "LinguatorProModules\\": "modules/",
+            "LinguatorProIncludes\\": "includes/"
+        }
     },
     "scripts": {
         "phpcs": "phpcs --standard=WordPress --extensions=php --ignore=*/vendor/*,*/node_modules/* .",
@@ -70,4 +48,4 @@
         "preferred-install": "dist",
         "process-timeout": 0
     }
-} 
+}

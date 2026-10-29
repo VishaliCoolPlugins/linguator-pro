@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use LinguatorPro\Admin\Controllers\Linguator_Admin_Strings;
-use LinguatorPro\Includes\Helpers\Linguator_MO;
+use Linguator\Admin\Controllers\Linguator_Admin_Strings;
+use Linguator\Includes\Helpers\Linguator_MO;
 use LinguatorPro\Modules\Scan\Abstract_Check;
 use LinguatorPro\Modules\Scan\Result;
 

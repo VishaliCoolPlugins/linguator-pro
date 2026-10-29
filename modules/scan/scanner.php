@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use LinguatorPro\Includes\Other\Linguator_Model;
+use Linguator\Includes\Other\Linguator_Model;
 
 /**
  * Loads checks, runs them, applies the ignore list and persists the report.

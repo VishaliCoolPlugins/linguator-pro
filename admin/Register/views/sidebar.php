@@ -76,7 +76,7 @@ if ( ! function_exists( 'lmatp_get_translation_stats' ) ) {
 			'providers'  => array(),
 		);
 
-		$dashboard = '\\LinguatorPro\\Includes\\Other\\Linguator_Translation_Dashboard';
+		$dashboard = '\\Linguator\\Includes\\Other\\Linguator_Translation_Dashboard';
 		if ( ! class_exists( $dashboard ) ) {
 			return $stats;
 		}

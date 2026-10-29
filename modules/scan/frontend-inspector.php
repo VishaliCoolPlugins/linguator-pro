@@ -87,7 +87,7 @@ class Frontend_Inspector {
 		}
 
 		// A source-language template is edited in Elementor, not from a translation panel.
-		$model    = function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
+		$model    = function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
 		$language = $model ? $model->post->get_language( $post_id ) : false;
 		$default  = $model ? $model->get_default_language() : null;
 		if ( $language && $default && $language->slug === $default->slug && 'elementor_library' === get_post_type( $post_id ) ) {
@@ -244,7 +244,7 @@ class Frontend_Inspector {
 	 * @return bool
 	 */
 	private static function can_inspect(): bool {
-		return ! is_admin() && is_singular() && current_user_can( 'manage_options' ) && function_exists( 'LMATP' );
+		return ! is_admin() && is_singular() && current_user_can( 'manage_options' ) && function_exists( 'LMAT' );
 	}
 
 	/**

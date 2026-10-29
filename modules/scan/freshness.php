@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use LinguatorPro\Includes\Other\Linguator_Model;
+use Linguator\Includes\Other\Linguator_Model;
 
 /**
  * Content change markers, "last up to date" snapshots and the "what changed" diff.
@@ -113,11 +113,11 @@ class Freshness {
 	 */
 	public static function capture_before_update( $post_id ): void {
 		$post_id = (int) $post_id;
-		if ( $post_id <= 0 || isset( self::$captured[ $post_id ] ) || wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) || ! function_exists( 'LMATP' ) ) {
+		if ( $post_id <= 0 || isset( self::$captured[ $post_id ] ) || wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) || ! function_exists( 'LMAT' ) ) {
 			return;
 		}
 
-		$lmat = LMATP();
+		$lmat = LMAT();
 		if ( empty( $lmat->model ) ) {
 			return;
 		}

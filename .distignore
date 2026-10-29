@@ -49,11 +49,7 @@ tsconfig.json
 .cursor
 *js.LICENSE.txt
 *.scss
-admin/settings/views/src
-modules/bulk-translation/src
-modules/page-translation/src
-modules/inline-translation/src
-modules/wizard/src
+admin/scan/src
 .claude/
 .codex/
 # Licensor-generated sample code (not part of the plugin)

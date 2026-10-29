@@ -38,10 +38,10 @@ class Untranslated_Collector {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return \LinguatorPro\Includes\Other\Linguator_Model|null
+	 * @return \Linguator\Includes\Other\Linguator_Model|null
 	 */
 	private static function model() {
-		return function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
+		return function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
 	}
 
 	/**

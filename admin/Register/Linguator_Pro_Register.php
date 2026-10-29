@@ -10,7 +10,7 @@
 namespace LinguatorPro\Admin\Register;
 
 use Exception;
-use LinguatorPro\Settings\Header\Header;
+use Linguator\Settings\Header\Header;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -181,8 +181,8 @@ class Linguator_Pro_Register {
 	 * @return bool
 	 */
 	public function lmatp_header_assets( $status, $tab, $is_settings_tab ) {
-		if ( $is_settings_tab && self::TAB === $tab && function_exists( 'LMATP' ) ) {
-			Header::get_instance( self::TAB, LMATP()->model )->header_assets();
+		if ( $is_settings_tab && self::TAB === $tab && function_exists( 'LMAT' ) ) {
+			Header::get_instance( self::TAB, LMAT()->model )->header_assets();
 
 			return false;
 		}
@@ -215,13 +215,13 @@ class Linguator_Pro_Register {
 	 * @return bool False once the license tab has been rendered.
 	 */
 	public function lmatp_dashboard_page( $status, $selected_tab, $active_tab ) {
-		if ( self::TAB !== $selected_tab || 'settings' !== $active_tab || ! function_exists( 'LMATP' ) ) {
+		if ( self::TAB !== $selected_tab || 'settings' !== $active_tab || ! function_exists( 'LMAT' ) ) {
 			return $status;
 		}
 
 		$this->lmatp_check_user_capabilities();
 
-		Header::get_instance( self::TAB, LMATP()->model )->header();
+		Header::get_instance( self::TAB, LMAT()->model )->header();
 
 		$file_prefix = LINGUATOR_PRO_DIR . '/admin/Register/views/';
 

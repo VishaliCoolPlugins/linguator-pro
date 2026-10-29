@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use LinguatorPro\Includes\Other\Linguator_Model;
-use LinguatorPro\Modules\REST\Abstract_Controller;
+use Linguator\Includes\Other\Linguator_Model;
+use Linguator\Modules\REST\Abstract_Controller;
 use LinguatorPro\Modules\Scan\Freshness;
 use LinguatorPro\Modules\Scan\Issue_Copy;
 use LinguatorPro\Modules\Scan\Scanner;

@@ -40,10 +40,10 @@ class Editor_Panel {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @return \LinguatorPro\Includes\Other\Linguator_Model|null
+	 * @return \Linguator\Includes\Other\Linguator_Model|null
 	 */
 	private static function model() {
-		return function_exists( 'LMATP' ) ? ( LMATP()->model ?? null ) : null;
+		return function_exists( 'LMAT' ) ? ( LMAT()->model ?? null ) : null;
 	}
 
 	/**
@@ -235,11 +235,11 @@ class Editor_Panel {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		$post   = get_post();
 
-		if ( ! $screen || 'post' !== $screen->base || ! $post || ! function_exists( 'LMATP' ) ) {
+		if ( ! $screen || 'post' !== $screen->base || ! $post || ! function_exists( 'LMAT' ) ) {
 			return;
 		}
 
-		$model = LMATP()->model ?? null;
+		$model = LMAT()->model ?? null;
 		if ( ! $model || ! $model->has_languages() || ! in_array( $screen->post_type, (array) $model->get_translated_post_types(), true ) ) {
 			return;
 		}
