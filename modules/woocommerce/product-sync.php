@@ -42,6 +42,7 @@ class Product_Sync {
 		add_action( 'woocommerce_update_product', array( __CLASS__, 'sync_product' ), 20, 1 );
 		add_action( 'woocommerce_ajax_save_product_variations', array( __CLASS__, 'sync_product' ), 20, 1 );
 		add_action( 'lmat_save_post', array( __CLASS__, 'sync_after_language_save' ), 20, 1 );
+		add_action( 'admin_post_lmat_wc_sync_product', array( __CLASS__, 'handle_sync_request' ), 10, 0 );
 		add_action( 'woocommerce_product_set_stock', array( __CLASS__, 'sync_stock' ), 10, 1 );
 		add_action( 'woocommerce_variation_set_stock', array( __CLASS__, 'sync_stock' ), 10, 1 );
 	}
@@ -58,6 +59,52 @@ class Product_Sync {
 		if ( 'product' === get_post_type( (int) $post_id ) ) {
 			self::sync_product( (int) $post_id );
 		}
+	}
+
+	/**
+	 * URL that synchronizes a product with its translations, used by the site scan.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param int $product_id Original product ID.
+	 * @return string
+	 */
+	public static function sync_url( $product_id ) {
+		$product_id = (int) $product_id;
+
+		return wp_nonce_url(
+			add_query_arg(
+				array(
+					'action'  => 'lmat_wc_sync_product',
+					'product' => $product_id,
+				),
+				admin_url( 'admin-post.php' )
+			),
+			'lmat_wc_sync_product_' . $product_id
+		);
+	}
+
+	/**
+	 * Synchronizes one product on request, then returns to the page the request came from.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @return void
+	 */
+	public static function handle_sync_request() {
+		$product_id = isset( $_GET['product'] ) ? absint( wp_unslash( $_GET['product'] ) ) : 0;
+
+		check_admin_referer( 'lmat_wc_sync_product_' . $product_id );
+
+		if ( $product_id < 1 || ! current_user_can( 'edit_post', $product_id ) ) {
+			wp_die( esc_html__( 'You are not allowed to update this product.', 'linguator-pro' ), 403 );
+		}
+
+		self::sync_product( $product_id );
+
+		$back = wp_get_referer();
+		wp_safe_redirect( $back ? $back : admin_url( 'edit.php?post_type=product' ) );
+		exit;
 	}
 
 	/**
@@ -160,7 +207,7 @@ class Product_Sync {
 	 *
 	 * @return string[]
 	 */
-	private static function product_props() {
+	public static function product_props() {
 		$props = array(
 			'sku',
 			'regular_price',

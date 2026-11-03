@@ -21,7 +21,7 @@ export const LanguageChip = ({ language, href, showName = false }) => {
 }
 
 // Share issue identity between active accordions and ignored rows; display text is not an identity.
-const issueFamily = result => result.id.startsWith('content_identical_') ? 'content_identical' : result.id.startsWith('content_link_') ? 'content_links' : result.id.startsWith('content_placeholder_') ? 'content_placeholder' : result.id.startsWith('content_acf_') ? 'content_acf' : result.id.startsWith('term_missing_') ? 'term_missing' : result.id.startsWith('url_config_') && result.status !== 'pass' ? 'url_configuration' : result.id.startsWith('nav_') ? 'navigation' : result.id.startsWith('url_route_') && result.status !== 'pass' && result.id !== 'url_route_untestable' && result.id !== 'url_route_site_gated' ? 'routing_health' : result.id === 'translated_permalink_review' ? 'translated_permalinks' : result.status === 'pass' ? result.id : result.id.startsWith('string_') ? 'strings_missing' : result.id.startsWith('menu_') && !['menu_none', 'menu_dead_links'].includes(result.id) ? 'menu_assignments' : result.id.startsWith('content_unpublished_') ? 'content_unpublished' : result.section === 'content' && !['content_no_language', 'content_source_updated'].includes(result.id) ? 'content_missing' : result.id
+const issueFamily = result => result.id.startsWith('content_identical_') ? 'content_identical' : result.id.startsWith('content_link_') ? 'content_links' : result.id.startsWith('content_placeholder_') ? 'content_placeholder' : result.id.startsWith('content_acf_') ? 'content_acf' : result.id.startsWith('term_missing_') ? 'term_missing' : result.id.startsWith('url_config_') && result.status !== 'pass' ? 'url_configuration' : result.id.startsWith('nav_') ? 'navigation' : result.id.startsWith('url_route_') && result.status !== 'pass' && result.id !== 'url_route_untestable' && result.id !== 'url_route_site_gated' ? 'routing_health' : result.id === 'translated_permalink_review' ? 'translated_permalinks' : result.status === 'pass' ? result.id : result.id.startsWith('woo_') ? 'woocommerce' : result.id.startsWith('string_') ? 'strings_missing' : result.id.startsWith('menu_') && !['menu_none', 'menu_dead_links'].includes(result.id) ? 'menu_assignments' : result.id.startsWith('content_unpublished_') ? 'content_unpublished' : result.section === 'content' && !['content_no_language', 'content_source_updated'].includes(result.id) ? 'content_missing' : result.id
 
 // The toolkit shows one card per issue type, with languages collected in rows.
 export const groupResults = (results) => {
@@ -68,6 +68,9 @@ export const groupResults = (results) => {
         } else if (family === 'content_links') {
             group.label = result.status === 'pass' ? __('Content links work', 'linguator-pro') : __('Content Links', 'linguator-pro')
             group.message = result.status === 'pass' ? __('No link in the content points to a missing page or the wrong language.', 'linguator-pro') : __('Some links in your content point to a missing page or to the wrong language.', 'linguator-pro')
+        } else if (family === 'woocommerce') {
+            group.label = __('WooCommerce Products', 'linguator-pro')
+            group.message = __('Some translated products, variations or attributes differ from the original in ways that need a review.', 'linguator-pro')
         } else if (family === 'content_source_updated' && result.status !== 'pass') {
             group.label = __('Default Language Updated', 'linguator-pro')
             group.message = __('The default language was updated. Linked translations may need a matching update.', 'linguator-pro')

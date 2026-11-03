@@ -635,6 +635,7 @@ class Scanner {
 			new Checks\Content_Placeholders( $this->model ),
 			new Checks\Content_Fields( $this->model ),
 			new Checks\Content_Terms( $this->model ),
+			new Checks\Woocommerce( $this->model ),
 			new Checks\Untranslated_Types( $this->model ),
 			new Checks\Menus( $this->model ),
 			new Checks\Menu_Links( $this->model ),
