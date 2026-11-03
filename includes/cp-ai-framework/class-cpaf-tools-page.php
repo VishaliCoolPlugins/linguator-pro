@@ -1,6 +1,6 @@
 <?php
 /**
- * Cool Plugins AI framework: the AI Translation Tools page under Tools.
+ * Cool Plugins AI framework: the AI Translation MCP page under Tools.
  *
  * @package CoolPluginsAiFramework
  * @since   1.0.0
@@ -61,8 +61,8 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 		 */
 		public static function add_menu() {
 			$hook = add_management_page(
-				CPAF_Framework::t( 'AI Translation Tools' ),
-				CPAF_Framework::t( 'AI Translation Tools' ),
+				CPAF_Framework::t( 'AI Translation MCP' ),
+				CPAF_Framework::t( 'AI Translation MCP' ),
 				'manage_options',
 				self::PAGE,
 				array( __CLASS__, 'render' )

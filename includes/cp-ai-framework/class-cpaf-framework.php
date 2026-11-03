@@ -190,6 +190,9 @@ if ( ! class_exists( 'CPAF_Framework' ) ) {
 		public static function packs() {
 			$packs = array(
 				\CoolPlugins\AiFramework\Packs\Polylang\Pack::definition(),
+				\CoolPlugins\AiFramework\Packs\Linguator\Pack::definition(),
+				\CoolPlugins\AiFramework\Packs\LinguatorInspector\Pack::definition(),
+				\CoolPlugins\AiFramework\Packs\LinguatorWoocommerce\Pack::definition(),
 				\CoolPlugins\AiFramework\Packs\Wpml\Pack::definition(),
 				\CoolPlugins\AiFramework\Packs\Loco\Pack::definition(),
 				\CoolPlugins\AiFramework\Packs\Inspector\Pack::definition(),
@@ -402,6 +405,15 @@ if ( ! class_exists( 'CPAF_Framework' ) ) {
 				switch ( $pack['id'] ) {
 					case 'polylang':
 						$parts[] = self::t( 'AutoPoly (Polylang): for any multi-page job (homepage, header, footer, menu pages) first call get-site-info and follow its translation_workflow, then get-translation-plan. A successful save is not completion: read the outcome of every write and finish with verify-translations.' );
+						break;
+					case 'linguator':
+						$parts[] = self::t( 'Linguator Pro: call get-site-info first and follow its translation_workflow. A successful save is not completion: read the result of every write and finish with get-translation-status.' );
+						break;
+					case 'linguator-inspector':
+						$parts[] = self::t( 'Linguator Inspector: start with get-inspector-status, then run-scan, get-issues and get-fix-plan. Fix with fix-issue (dry run first) and confirm with recheck-issue.' );
+						break;
+					case 'linguator-woocommerce':
+						$parts[] = self::t( 'Linguator WooCommerce: call get-woocommerce-status first. After translate-post creates a product translation, call sync-product to build its variations and attributes, then translate-product-attributes for the attribute texts.' );
 						break;
 					case 'loco':
 						$parts[] = self::t( 'LocoAI (Loco Translate): translates the text of plugins, themes and WordPress core through language files, not posts or pages. Call get-site-info first, then list-projects and get-project-status. A successful save is not completion: check rejected and not_found in every save-translations result and confirm the counts with get-project-status.' );

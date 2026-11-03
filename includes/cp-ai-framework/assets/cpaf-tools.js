@@ -1,5 +1,5 @@
 /**
- * Cool Plugins AI framework: AI Translation Tools page.
+ * Cool Plugins AI framework: AI Translation MCP page.
  *
  * Plain ES5, no build step. Behaviours: copy buttons, config tabs, the tool
  * search box, and the prompt-based "connect an AI app" flow.
