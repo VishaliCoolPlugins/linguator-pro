@@ -99,6 +99,7 @@ final class Linguator_Pro {
 
 		require_once LINGUATOR_PRO_DIR . '/modules/scan/load.php';
 		require_once LINGUATOR_PRO_DIR . '/modules/rest/v1/scan.php';
+		require_once LINGUATOR_PRO_DIR . '/modules/woocommerce/load.php';
 		// The scan REST route reads the license state, and REST requests are not admin requests.
 		require_once LINGUATOR_PRO_DIR . '/admin/Register/class-linguator-pro-base.php';
 
