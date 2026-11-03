@@ -111,11 +111,13 @@ final class Linguator_Pro {
 
 		require_once LINGUATOR_PRO_DIR . '/admin/Register/Linguator_Pro_Register.php';
 		require_once LINGUATOR_PRO_DIR . '/admin/class-scan-page.php';
+		require_once LINGUATOR_PRO_DIR . '/includes/class-ai-tools-tab.php';
 
 		// The license screen needs the current user, which is only known once plugins are loaded.
 		add_action( 'plugins_loaded', array( $this, 'register_license' ), 10, 0 );
 
 		\LinguatorPro\Admin\Scan_Page::init();
+		\LinguatorPro\Includes\AI_Tools_Tab::init();
 	}
 
 	/**
