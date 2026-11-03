@@ -62,3 +62,14 @@ if ( ! defined( 'LINGUATOR_PRO_MIN_FREE_VERSION' ) ) {
 require_once __DIR__ . '/includes/class-linguator-pro.php';
 
 \LinguatorPro\Includes\Linguator_Pro::get_instance()->init();
+
+// Shared AI framework (Cool Plugins): the copy with the highest version among the active translation plugins boots.
+require_once __DIR__ . '/includes/cp-ai-framework/load-cpaf.php';
+cpaf_register(
+	array(
+		'dir'         => __DIR__ . '/includes/cp-ai-framework',
+		'text_domain' => 'linguator-pro',
+		'domain_path' => __DIR__ . '/languages',
+	)
+);
+
