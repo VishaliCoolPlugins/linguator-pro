@@ -260,6 +260,8 @@
 		var kindButtons = root.querySelectorAll( '[data-cpaf-kind-filter]' );
 		var banners = root.querySelectorAll( '[data-cpaf-banner]' );
 		var kind = '';
+		var packTabs = root.querySelectorAll( '[data-cpaf-pack-tab]' );
+		var activePack = packTabs.length ? packTabs[ 0 ].getAttribute( 'data-cpaf-pack-tab' ) : '';
 
 		/* "change" covers every tool that is not read only. */
 		function kindMatches( toolKind ) {
@@ -282,11 +284,39 @@
 				shown += match ? 1 : 0;
 			} );
 
+			/* With tabs, move to a tool set that has matches when the current one has none. */
+			var matches = {};
+
 			Array.prototype.forEach.call( packs, function ( pack ) {
-				var visible = pack.querySelectorAll( '.cpaf-tool:not([hidden])' ).length;
+				matches[ pack.getAttribute( 'data-cpaf-pack' ) ] = pack.querySelectorAll( '.cpaf-tool:not([hidden])' ).length;
+			} );
+
+			if ( packTabs.length && ! matches[ activePack ] ) {
+				Object.keys( matches ).some( function ( id ) {
+					if ( matches[ id ] ) {
+						activePack = id;
+					}
+
+					return matches[ id ];
+				} );
+			}
+
+			Array.prototype.forEach.call( packTabs, function ( tab ) {
+				var id = tab.getAttribute( 'data-cpaf-pack-tab' );
+				var badge = tab.querySelector( '.cpaf-pack-tab-count' );
+
+				tab.setAttribute( 'aria-selected', id === activePack ? 'true' : 'false' );
+
+				if ( badge ) {
+					badge.textContent = matches[ id ];
+				}
+			} );
+
+			Array.prototype.forEach.call( packs, function ( pack ) {
+				var visible = matches[ pack.getAttribute( 'data-cpaf-pack' ) ];
 				var count = pack.querySelector( '.cpaf-pack-count' );
 
-				pack.hidden = 0 === visible;
+				pack.hidden = 0 === visible || ( packTabs.length > 0 && pack.getAttribute( 'data-cpaf-pack' ) !== activePack );
 
 				if ( count ) {
 					count.textContent = count.getAttribute( 'data-cpaf-showing' )
@@ -304,7 +334,16 @@
 			}
 		}
 
+		filterTools();
+
 		search.addEventListener( 'input', filterTools );
+
+	Array.prototype.forEach.call( packTabs, function ( tab ) {
+		tab.addEventListener( 'click', function () {
+			activePack = tab.getAttribute( 'data-cpaf-pack-tab' );
+			filterTools();
+		} );
+	} );
 
 		Array.prototype.forEach.call( kindButtons, function ( button ) {
 			button.addEventListener( 'click', function () {

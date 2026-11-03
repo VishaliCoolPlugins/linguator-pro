@@ -693,6 +693,56 @@ body.tools_page_cp-ai-tools #wpbody-content > .wrap {
 	color: #d97706;
 }
 
+.cpaf-pack-tabs {
+	display: flex;
+	gap: 4px;
+	margin: 0 0 16px;
+	border-bottom: 1px solid var(--cpaf-border);
+	overflow-x: auto;
+}
+
+.cpaf .cpaf-pack-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: -1px;
+	padding: 10px 16px;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	background: transparent;
+	color: var(--cpaf-muted);
+	font-size: 14px;
+	font-weight: 500;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.cpaf .cpaf-pack-tab:hover {
+	color: var(--cpaf-text);
+}
+
+.cpaf .cpaf-pack-tab[aria-selected="true"] {
+	border-bottom-color: var(--cpaf-accent);
+	color: var(--cpaf-text);
+	font-weight: 600;
+}
+
+.cpaf .cpaf-pack-tab:focus-visible {
+	outline: 2px solid var(--cpaf-accent);
+	outline-offset: -2px;
+}
+
+.cpaf-pack-tab-count {
+	min-width: 22px;
+	padding: 1px 7px;
+	border-radius: 999px;
+	background: var(--cpaf-subtle);
+	color: var(--cpaf-muted);
+	font-size: 12px;
+	font-weight: 600;
+	text-align: center;
+}
+
 .cpaf-pack {
 	margin: 0 0 18px;
 	border: 1px solid var(--cpaf-border);

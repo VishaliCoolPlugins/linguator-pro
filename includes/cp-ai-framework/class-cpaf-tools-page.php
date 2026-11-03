@@ -815,9 +815,20 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 						</div>
 					<?php endif; ?>
 
+					<?php if ( count( $packs ) > 1 ) : ?>
+						<div class="cpaf-pack-tabs" role="tablist" aria-label="<?php echo esc_attr( CPAF_Framework::t( 'Translation plugins' ) ); ?>">
+							<?php foreach ( $packs as $pack_index => $pack ) : ?>
+								<button type="button" class="cpaf-pack-tab" role="tab" data-cpaf-pack-tab="<?php echo esc_attr( $pack['id'] ); ?>" aria-selected="<?php echo 0 === $pack_index ? 'true' : 'false'; ?>">
+									<span><?php echo esc_html( $pack['label'] ); ?></span>
+									<span class="cpaf-pack-tab-count" data-cpaf-tab-count="<?php echo esc_attr( $pack['id'] ); ?>"><?php echo esc_html( (string) count( $tools[ $pack['id'] ] ) ); ?></span>
+								</button>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+
 					<?php foreach ( $packs as $pack ) : ?>
 						<?php $pack_tools = $tools[ $pack['id'] ]; ?>
-						<section class="cpaf-pack" data-cpaf-total="<?php echo esc_attr( (string) count( $pack_tools ) ); ?>">
+						<section class="cpaf-pack" data-cpaf-pack="<?php echo esc_attr( $pack['id'] ); ?>" data-cpaf-total="<?php echo esc_attr( (string) count( $pack_tools ) ); ?>">
 							<div class="cpaf-pack-head">
 								<div>
 									<h3 class="cpaf-pack-name"><?php echo esc_html( $pack['label'] ); ?></h3>
@@ -825,14 +836,14 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 										<p class="cpaf-pack-desc"><?php echo esc_html( $pack['description'] ); ?></p>
 									<?php endif; ?>
 								</div>
-								<span class="cpaf-pack-count" data-cpaf-showing="<?php echo esc_attr( CPAF_Framework::t( 'Showing %1$s of %2$s tools' ) ); ?>" data-cpaf-grand="<?php echo esc_attr( (string) $tool_total ); ?>">
+								<span class="cpaf-pack-count" data-cpaf-showing="<?php echo esc_attr( CPAF_Framework::t( 'Showing %1$s of %2$s tools' ) ); ?>" data-cpaf-grand="<?php echo esc_attr( (string) count( $pack_tools ) ); ?>">
 									<?php
 									echo esc_html(
 										sprintf(
 											/* translators: 1: tools shown in this tool set, 2: total tools. */
 											CPAF_Framework::t( 'Showing %1$s of %2$s tools' ),
 											count( $pack_tools ),
-											$tool_total
+											count( $pack_tools )
 										)
 									);
 									?>
@@ -846,9 +857,7 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 											<span class="cpaf-tool-title"><?php echo esc_html( $tool['label'] ); ?></span>
 											<span class="cpaf-tool-desc"><?php echo esc_html( self::short_description( $tool['description'] ) ); ?> <code class="cpaf-tool-name"><?php echo esc_html( $tool['name'] ); ?></code></span>
 										</span>
-										<?php if ( 'read' !== $tool['kind'] ) : ?>
-											<span class="cpaf-badge <?php echo esc_attr( $info[1] ); ?>"><?php echo esc_html( $info[0] ); ?></span>
-										<?php endif; ?>
+										<span class="cpaf-badge <?php echo esc_attr( $info[1] ); ?>"><?php echo esc_html( $info[0] ); ?></span>
 									</summary>
 									<div class="cpaf-tool-body">
 										<?php $example = self::example( $tool['name'] ); ?>
