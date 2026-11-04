@@ -206,6 +206,62 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 		}
 
 		/**
+		 * A pack's tools arranged into its named groups, in group order.
+		 *
+		 * Groups are declared in the pack definition as a list of labels with
+		 * tool slugs. Tools the definition does not place anywhere fall into a
+		 * trailing "Other tools" group, so a new ability always shows up even
+		 * before it is categorized.
+		 *
+		 * @since 1.7.0
+		 * @param array $pack       Pack definition.
+		 * @param array $pack_tools Tools of this pack, as built by tools_by_pack().
+		 * @return array<int, array{label: string, tools: array<int, array<string, mixed>>}> Grouped tools.
+		 */
+		private static function grouped_tools( array $pack, array $pack_tools ) {
+			$prefix  = $pack['namespace'] . '/';
+			$by_slug = array();
+
+			foreach ( $pack_tools as $tool ) {
+				$by_slug[ substr( $tool['name'], strlen( $prefix ) ) ] = $tool;
+			}
+
+			$groups   = isset( $pack['groups'] ) && is_array( $pack['groups'] ) ? $pack['groups'] : array();
+			$sections = array();
+
+			foreach ( $groups as $group ) {
+				if ( empty( $group['label'] ) || empty( $group['tools'] ) || ! is_array( $group['tools'] ) ) {
+					continue;
+				}
+
+				$in_group = array();
+
+				foreach ( $group['tools'] as $slug ) {
+					if ( isset( $by_slug[ $slug ] ) ) {
+						$in_group[] = $by_slug[ $slug ];
+						unset( $by_slug[ $slug ] );
+					}
+				}
+
+				if ( ! empty( $in_group ) ) {
+					$sections[] = array(
+						'label' => $group['label'],
+						'tools' => $in_group,
+					);
+				}
+			}
+
+			if ( ! empty( $by_slug ) ) {
+				$sections[] = array(
+					'label' => CPAF_Framework::t( 'Other tools' ),
+					'tools' => array_values( $by_slug ),
+				);
+			}
+
+			return $sections;
+		}
+
+		/**
 		 * One short line from a tool description for the list row.
 		 *
 		 * Descriptions are written for the AI and can run to a paragraph. The row
@@ -397,6 +453,58 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 				<button type="button" class="button button-small cpaf-copy" data-cpaf-copy="<?php echo esc_attr( $id ); ?>" data-cpaf-done="<?php echo esc_attr( CPAF_Framework::t( 'Copied' ) ); ?>"><?php echo esc_html( CPAF_Framework::t( 'Copy' ) ); ?></button>
 				<pre id="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $code ); ?></pre>
 			</div>
+			<?php
+		}
+
+		/**
+		 * One expandable tool row in the tools list.
+		 *
+		 * @since 1.7.0
+		 * @param array $tool Tool entry, as built by tools_by_pack().
+		 * @return void
+		 */
+		private static function tool_row( array $tool ) {
+			$info = self::kind_info( $tool['kind'] );
+			?>
+			<details class="cpaf-tool" data-cpaf-kind="<?php echo esc_attr( $tool['kind'] ); ?>" data-cpaf-search="<?php echo esc_attr( strtolower( $tool['name'] . ' ' . $tool['label'] . ' ' . $tool['description'] ) ); ?>">
+				<summary>
+					<span class="cpaf-tool-main">
+						<span class="cpaf-tool-title"><?php echo esc_html( $tool['label'] ); ?></span>
+						<span class="cpaf-tool-desc"><?php echo esc_html( self::short_description( $tool['description'] ) ); ?> <code class="cpaf-tool-name"><?php echo esc_html( $tool['name'] ); ?></code></span>
+					</span>
+					<span class="cpaf-badge <?php echo esc_attr( $info[1] ); ?>"><?php echo esc_html( $info[0] ); ?></span>
+				</summary>
+				<div class="cpaf-tool-body">
+					<?php $example = self::example( $tool['name'] ); ?>
+					<?php if ( $example ) : ?>
+						<?php $example_id = 'cpaf-ex-' . sanitize_html_class( str_replace( '/', '-', $tool['name'] ) ); ?>
+						<div class="cpaf-examples">
+							<div class="cpaf-example">
+								<span class="cpaf-example-label"><?php echo esc_html( CPAF_Framework::t( 'Try asking' ) ); ?></span>
+								<div class="cpaf-example-row">
+									<span class="cpaf-try-text" id="<?php echo esc_attr( $example_id ); ?>"><?php echo esc_html( CPAF_Framework::t( $example['try'] ) ); ?></span>
+									<button type="button" class="cpaf-icon-btn cpaf-copy" data-cpaf-copy="<?php echo esc_attr( $example_id ); ?>" data-cpaf-done="<?php echo esc_attr( CPAF_Framework::t( 'Copied' ) ); ?>" data-cpaf-icon aria-label="<?php echo esc_attr( CPAF_Framework::t( 'Copy' ) ); ?>"><?php echo self::icon( 'copy' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded SVG from icon(). ?></button>
+								</div>
+							</div>
+							<div class="cpaf-example">
+								<span class="cpaf-example-label"><?php echo esc_html( CPAF_Framework::t( 'What it returns' ) ); ?></span>
+								<ul>
+									<?php foreach ( $example['returns'] as $returns_line ) : ?>
+										<li><?php echo esc_html( CPAF_Framework::t( $returns_line ) ); ?></li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+						</div>
+					<?php endif; ?>
+					<?php if ( 'read' !== $tool['kind'] ) : ?>
+						<p class="cpaf-step-text"><?php echo esc_html( $info[2] ); ?></p>
+					<?php endif; ?>
+					<details class="cpaf-tool-full">
+						<summary><?php echo esc_html( CPAF_Framework::t( 'Full instructions sent to AI' ) ); ?></summary>
+						<p><?php echo esc_html( $tool['description'] ); ?></p>
+					</details>
+				</div>
+			</details>
 			<?php
 		}
 
@@ -849,47 +957,26 @@ if ( ! class_exists( 'CPAF_Tools_Page' ) ) {
 									?>
 								</span>
 							</div>
-							<?php foreach ( $pack_tools as $tool ) : ?>
-								<?php $info = self::kind_info( $tool['kind'] ); ?>
-								<details class="cpaf-tool" data-cpaf-kind="<?php echo esc_attr( $tool['kind'] ); ?>" data-cpaf-search="<?php echo esc_attr( strtolower( $tool['name'] . ' ' . $tool['label'] . ' ' . $tool['description'] ) ); ?>">
-									<summary>
-										<span class="cpaf-tool-main">
-											<span class="cpaf-tool-title"><?php echo esc_html( $tool['label'] ); ?></span>
-											<span class="cpaf-tool-desc"><?php echo esc_html( self::short_description( $tool['description'] ) ); ?> <code class="cpaf-tool-name"><?php echo esc_html( $tool['name'] ); ?></code></span>
+							<?php foreach ( self::grouped_tools( $pack, $pack_tools ) as $group ) : ?>
+								<div class="cpaf-group" data-cpaf-group>
+									<div class="cpaf-group-head">
+										<span class="cpaf-group-name"><?php echo esc_html( $group['label'] ); ?></span>
+										<span class="cpaf-group-count" data-cpaf-group-count data-cpaf-count-label="<?php echo esc_attr( CPAF_Framework::t( '%d tools' ) ); ?>">
+											<?php
+											echo esc_html(
+												sprintf(
+													/* translators: %d: number of tools in this group. */
+													CPAF_Framework::t( '%d tools' ),
+													count( $group['tools'] )
+												)
+											);
+											?>
 										</span>
-										<span class="cpaf-badge <?php echo esc_attr( $info[1] ); ?>"><?php echo esc_html( $info[0] ); ?></span>
-									</summary>
-									<div class="cpaf-tool-body">
-										<?php $example = self::example( $tool['name'] ); ?>
-										<?php if ( $example ) : ?>
-											<?php $example_id = 'cpaf-ex-' . sanitize_html_class( str_replace( '/', '-', $tool['name'] ) ); ?>
-											<div class="cpaf-examples">
-												<div class="cpaf-example">
-													<span class="cpaf-example-label"><?php echo esc_html( CPAF_Framework::t( 'Try asking' ) ); ?></span>
-													<div class="cpaf-example-row">
-														<span class="cpaf-try-text" id="<?php echo esc_attr( $example_id ); ?>"><?php echo esc_html( CPAF_Framework::t( $example['try'] ) ); ?></span>
-														<button type="button" class="cpaf-icon-btn cpaf-copy" data-cpaf-copy="<?php echo esc_attr( $example_id ); ?>" data-cpaf-done="<?php echo esc_attr( CPAF_Framework::t( 'Copied' ) ); ?>" data-cpaf-icon aria-label="<?php echo esc_attr( CPAF_Framework::t( 'Copy' ) ); ?>"><?php echo self::icon( 'copy' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Hardcoded SVG from icon(). ?></button>
-													</div>
-												</div>
-												<div class="cpaf-example">
-													<span class="cpaf-example-label"><?php echo esc_html( CPAF_Framework::t( 'What it returns' ) ); ?></span>
-													<ul>
-														<?php foreach ( $example['returns'] as $returns_line ) : ?>
-															<li><?php echo esc_html( CPAF_Framework::t( $returns_line ) ); ?></li>
-														<?php endforeach; ?>
-													</ul>
-												</div>
-											</div>
-										<?php endif; ?>
-										<?php if ( 'read' !== $tool['kind'] ) : ?>
-											<p class="cpaf-step-text"><?php echo esc_html( $info[2] ); ?></p>
-										<?php endif; ?>
-										<details class="cpaf-tool-full">
-											<summary><?php echo esc_html( CPAF_Framework::t( 'Full instructions sent to AI' ) ); ?></summary>
-											<p><?php echo esc_html( $tool['description'] ); ?></p>
-										</details>
 									</div>
-								</details>
+									<?php foreach ( $group['tools'] as $tool ) : ?>
+										<?php self::tool_row( $tool ); ?>
+									<?php endforeach; ?>
+								</div>
 							<?php endforeach; ?>
 						</section>
 					<?php endforeach; ?>

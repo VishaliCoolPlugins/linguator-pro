@@ -101,6 +101,32 @@ final class Pack {
 				'description' => __( 'AI translation tools for Polylang, provided by AutoPoly.', 'autopoly-ai-translation-for-polylang-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Translate', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'translate-post', 'translate-term', 'translate-string' ),
+				),
+				array(
+					'label' => __( 'Language Structure', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'list-languages', 'create-language', 'update-language', 'delete-language', 'manage-translation-links' ),
+				),
+				array(
+					'label' => __( 'Menus', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'sync-menu', 'set-template-menu' ),
+				),
+				array(
+					'label' => __( 'Strings & Glossary', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'get-string-groups', 'get-glossary', 'manage-glossary' ),
+				),
+				array(
+					'label' => __( 'Content', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'list-content-types', 'get-untranslated-content', 'get-outdated-translations', 'get-content', 'get-term' ),
+				),
+				array(
+					'label' => __( 'Site & Status', 'autopoly-ai-translation-for-polylang-pro' ),
+					'tools' => array( 'get-site-info', 'get-translation-status', 'get-translation-plan', 'verify-translations', 'get-translation-settings', 'preflight-template' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Site_Info::class,
 				Get_Translation_Status::class,

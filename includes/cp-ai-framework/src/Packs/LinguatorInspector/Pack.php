@@ -87,6 +87,24 @@ final class Pack {
 				'description' => __( 'Tools that find and fix translation problems on a Linguator site, provided by Linguator Pro.', 'linguator-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Scans', 'linguator-pro' ),
+					'tools' => array( 'run-scan', 'recheck-issue', 'inspect-content', 'list-urls' ),
+				),
+				array(
+					'label' => __( 'Issues', 'linguator-pro' ),
+					'tools' => array( 'get-issues', 'get-fix-plan', 'ignore-issues' ),
+				),
+				array(
+					'label' => __( 'Fixes', 'linguator-pro' ),
+					'tools' => array( 'fix-issue' ),
+				),
+				array(
+					'label' => __( 'Reports & Status', 'linguator-pro' ),
+					'tools' => array( 'get-report', 'get-inspector-status' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Inspector_Status::class,
 				Get_Fix_Plan::class,

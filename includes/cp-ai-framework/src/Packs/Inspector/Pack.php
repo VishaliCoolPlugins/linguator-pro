@@ -93,6 +93,24 @@ final class Pack {
 				'description' => __( 'Tools that find and fix translation problems on a Polylang site, provided by Translation Inspector.', 'duplicate-content-addon-for-polylang' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Scans', 'duplicate-content-addon-for-polylang' ),
+					'tools' => array( 'run-scan', 'recheck-issue', 'inspect-content', 'list-urls' ),
+				),
+				array(
+					'label' => __( 'Issues', 'duplicate-content-addon-for-polylang' ),
+					'tools' => array( 'get-issues', 'get-fix-plan', 'ignore-issues' ),
+				),
+				array(
+					'label' => __( 'Fixes', 'duplicate-content-addon-for-polylang' ),
+					'tools' => array( 'fix-issue' ),
+				),
+				array(
+					'label' => __( 'Reports & Status', 'duplicate-content-addon-for-polylang' ),
+					'tools' => array( 'get-report', 'get-inspector-status' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Inspector_Status::class,
 				Get_Fix_Plan::class,

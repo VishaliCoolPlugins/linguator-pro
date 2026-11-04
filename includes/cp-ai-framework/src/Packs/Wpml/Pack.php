@@ -103,6 +103,36 @@ final class Pack {
 				'description' => __( 'AI translation tools for WPML, provided by AutoMLP.', 'wpml-translation-check-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Translate', 'wpml-translation-check-pro' ),
+					'tools' => array( 'translate-post', 'translate-term', 'translate-strings' ),
+				),
+				array(
+					'label' => __( 'Fix & Repair', 'wpml-translation-check-pro' ),
+					'tools' => array( 'fix-translated-post-url', 'repair-elementor-media', 'rebuild-elementor-data' ),
+				),
+				array(
+					'label' => __( 'Language Structure', 'wpml-translation-check-pro' ),
+					'tools' => array( 'ensure-translation', 'manage-translation-links' ),
+				),
+				array(
+					'label' => __( 'Content', 'wpml-translation-check-pro' ),
+					'tools' => array( 'list-content-types', 'list-posts', 'list-terms', 'get-untranslated-content', 'get-content', 'get-editor-type', 'audit-translation-integrity' ),
+				),
+				array(
+					'label' => __( 'Strings', 'wpml-translation-check-pro' ),
+					'tools' => array( 'get-string-groups', 'get-strings' ),
+				),
+				array(
+					'label' => __( 'Translation Status', 'wpml-translation-check-pro' ),
+					'tools' => array( 'get-post-translations', 'get-term-translations', 'get-element-language-details', 'get-translation-status', 'get-translation-plan', 'verify-translations' ),
+				),
+				array(
+					'label' => __( 'Site & Languages', 'wpml-translation-check-pro' ),
+					'tools' => array( 'get-site-info', 'get-translation-settings', 'list-languages' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Site_Info::class,
 				Get_Translation_Settings::class,

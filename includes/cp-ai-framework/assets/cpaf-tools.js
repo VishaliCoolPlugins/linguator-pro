@@ -284,6 +284,18 @@
 				shown += match ? 1 : 0;
 			} );
 
+			/* Hide a category whose tools are all filtered out, and recount the rest. */
+			Array.prototype.forEach.call( root.querySelectorAll( '[data-cpaf-group]' ), function ( group ) {
+				var visible = group.querySelectorAll( '.cpaf-tool:not([hidden])' ).length;
+				var count = group.querySelector( '[data-cpaf-group-count]' );
+
+				group.hidden = 0 === visible;
+
+				if ( count ) {
+					count.textContent = count.getAttribute( 'data-cpaf-count-label' ).replace( '%d', visible );
+				}
+			} );
+
 			/* With tabs, move to a tool set that has matches when the current one has none. */
 			var matches = {};
 

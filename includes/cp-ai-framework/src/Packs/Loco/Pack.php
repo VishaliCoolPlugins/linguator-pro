@@ -91,6 +91,24 @@ final class Pack {
 				'description' => __( 'Translation tools for plugin and theme language files managed by Loco Translate, provided by LocoAI.', 'loco-automatic-translate-addon-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Translate', 'loco-automatic-translate-addon-pro' ),
+					'tools' => array( 'get-strings', 'save-translations' ),
+				),
+				array(
+					'label' => __( 'Language Files', 'loco-automatic-translate-addon-pro' ),
+					'tools' => array( 'create-template', 'create-language-file', 'sync-language-file' ),
+				),
+				array(
+					'label' => __( 'Glossary', 'loco-automatic-translate-addon-pro' ),
+					'tools' => array( 'get-glossary', 'manage-glossary' ),
+				),
+				array(
+					'label' => __( 'Projects & Status', 'loco-automatic-translate-addon-pro' ),
+					'tools' => array( 'get-site-info', 'list-projects', 'get-project-status' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Site_Info::class,
 				List_Projects::class,

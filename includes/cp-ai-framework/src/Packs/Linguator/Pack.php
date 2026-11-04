@@ -118,6 +118,36 @@ final class Pack {
 				'description' => __( 'AI translation tools for Linguator, provided by Linguator Pro.', 'linguator-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Translate', 'linguator-pro' ),
+					'tools' => array( 'translate-post', 'translate-term', 'translate-string', 'translate-media', 'copy-post-to-language' ),
+				),
+				array(
+					'label' => __( 'Language Structure', 'linguator-pro' ),
+					'tools' => array( 'list-languages', 'create-language', 'update-language', 'delete-language', 'manage-translation-links' ),
+				),
+				array(
+					'label' => __( 'Menus', 'linguator-pro' ),
+					'tools' => array( 'list-menus', 'sync-menu', 'set-template-menu', 'manage-menu-locations' ),
+				),
+				array(
+					'label' => __( 'Strings & Glossary', 'linguator-pro' ),
+					'tools' => array( 'get-string-groups', 'get-glossary', 'manage-glossary' ),
+				),
+				array(
+					'label' => __( 'Content', 'linguator-pro' ),
+					'tools' => array( 'list-content-types', 'get-untranslated-content', 'get-outdated-translations', 'get-content', 'get-term', 'list-posts', 'list-terms', 'get-post-translations', 'list-untranslated-media' ),
+				),
+				array(
+					'label' => __( 'Pages & Settings', 'linguator-pro' ),
+					'tools' => array( 'get-static-pages', 'set-language-front-page', 'update-settings', 'manage-translated-types', 'manage-custom-fields', 'get-switcher-settings', 'update-switcher-settings' ),
+				),
+				array(
+					'label' => __( 'Site & Status', 'linguator-pro' ),
+					'tools' => array( 'get-site-info', 'get-translation-status', 'get-translation-plan', 'verify-translations', 'get-translation-settings', 'preflight-template', 'get-site-health', 'get-ai-settings', 'get-license-status' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Site_Info::class,
 				Get_Translation_Status::class,

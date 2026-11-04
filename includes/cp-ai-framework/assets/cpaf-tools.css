@@ -595,8 +595,10 @@ body.tools_page_cp-ai-tools #wpbody-content > .wrap {
 
 .cpaf-filters {
 	display: flex;
+	flex: 1 1 100%;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: space-between;
 	gap: 8px;
 }
 
@@ -785,12 +787,40 @@ body.tools_page_cp-ai-tools #wpbody-content > .wrap {
 	font-weight: 600;
 }
 
-.cpaf-tool {
-	border-top: 1px solid #eef0f2;
+.cpaf-group[hidden] {
+	display: none;
 }
 
-.cpaf-tool:first-of-type {
+.cpaf-group-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 16px;
+	padding: 9px 22px 8px;
+	border-top: 1px solid var(--cpaf-border);
+	background: var(--cpaf-subtle);
+}
+
+.cpaf-group:first-of-type .cpaf-group-head {
 	border-top: 0;
+}
+
+.cpaf-group-name {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--cpaf-muted);
+}
+
+.cpaf-group-count {
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--cpaf-muted);
+}
+
+.cpaf-tool {
+	border-top: 1px solid #eef0f2;
 }
 
 .cpaf-tool[hidden] {

@@ -83,6 +83,20 @@ final class Pack {
 				'description' => __( 'Tools that translate and synchronize WooCommerce products on a Linguator site, provided by Linguator Pro.', 'linguator-pro' ),
 			),
 			'is_available' => array( __CLASS__, 'is_available' ),
+			'groups'       => array(
+				array(
+					'label' => __( 'Translate', 'linguator-pro' ),
+					'tools' => array( 'translate-product-attributes', 'translate-attribute-label' ),
+				),
+				array(
+					'label' => __( 'Products', 'linguator-pro' ),
+					'tools' => array( 'get-product-translation', 'sync-product' ),
+				),
+				array(
+					'label' => __( 'Status', 'linguator-pro' ),
+					'tools' => array( 'get-woocommerce-status' ),
+				),
+			),
 			'abilities'    => array(
 				Get_Woocommerce_Status::class,
 				Get_Product_Translation::class,
