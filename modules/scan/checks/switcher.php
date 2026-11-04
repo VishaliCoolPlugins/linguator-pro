@@ -87,14 +87,7 @@ class Switcher extends Abstract_Check {
 			);
 		}
 
-		// The settings tab only enables switcher types; placing one happens in the menu or site editor.
-		if ( wp_is_block_theme() ) {
-			$fix_url   = admin_url( 'site-editor.php?path=%2Fpatterns' );
-			$fix_label = __( 'Add to header', 'linguator-pro' );
-		} else {
-			$fix_url   = admin_url( 'nav-menus.php' );
-			$fix_label = __( 'Add to menu', 'linguator-pro' );
-		}
+		$action = self::setup_action();
 
 		return array(
 			$this->result(
@@ -102,7 +95,33 @@ class Switcher extends Abstract_Check {
 				Result::WARNING,
 				__( 'No language switcher detected', 'linguator-pro' ),
 				__( 'Enabling a switcher type in settings does not display it. Add the language switcher to your header menu, a widget area or a block template so visitors can change language.', 'linguator-pro' )
-			)->with_fix( $fix_url, $fix_label ),
+			)->with_fix( $action['url'], $action['label'] ),
+		);
+	}
+
+	/**
+	 * Where the active theme allows a language switcher to be placed.
+	 *
+	 * @return array{url:string,label:string} Setup destination and action label.
+	 */
+	public static function setup_action(): array {
+		if ( wp_is_block_theme() ) {
+			return array(
+				'url'   => admin_url( 'site-editor.php?path=%2Fwp_template' ),
+				'label' => __( 'Open templates', 'linguator-pro' ),
+			);
+		}
+
+		if ( ! current_theme_supports( 'menus' ) && current_theme_supports( 'widgets' ) ) {
+			return array(
+				'url'   => admin_url( 'widgets.php' ),
+				'label' => __( 'Add to widgets', 'linguator-pro' ),
+			);
+		}
+
+		return array(
+			'url'   => admin_url( 'nav-menus.php' ),
+			'label' => __( 'Add to menu', 'linguator-pro' ),
 		);
 	}
 

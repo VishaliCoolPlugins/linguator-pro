@@ -28,6 +28,9 @@
 .lmat-styles .lmat-inspector .lmat-inspector-overlay > div { padding: 28px 40px; border-radius: 16px; background: white; text-align: center; box-shadow: 0 12px 40px #0f172a30; }
 .lmat-styles .lmat-inspector .lmat-inspector-overlay .dashicons { color: #2563eb; font-size: 32px; width: 32px; height: 32px; animation: lmat-scan-rotate .9s linear infinite; }
 .lmat-inspector-loading { display: flex; align-items: center; justify-content: center; min-height: 40vh; gap: 10px; }
+/* Pinwheel loader, matching the Linguator settings loading state. */
+.lmat-scan-pinwheel { width: 20px; height: 20px; color: #2563eb; animation: lmat-scan-rotate .9s linear infinite; flex: 0 0 auto; vertical-align: middle; }
+.lmat-scan-pinwheel-large { width: 32px; height: 32px; }
 @keyframes lmat-scan-rotate { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .lmat-styles .lmat-inspector .lmat-inspector-overlay .dashicons { animation: none; } }
 .lmat-styles .lmat-inspector {
@@ -260,7 +263,6 @@
 
 .lmat-styles .lmat-inspector .lmat-scan-summary-branding {
 	display: flex;
-	align-items: center;
 	gap: 12px;
 	min-width: 0;
 }
@@ -278,6 +280,7 @@
 	display: block;
 	width: 100%;
 	height: 100%;
+	margin-top: 2px;
 }
 
 .lmat-styles .lmat-inspector .lmat-scan-summary-branding-text {
@@ -2598,7 +2601,8 @@ a.lmat-scan-content-lang-chip-link:focus {
 
 .lmat-scan-bulk-actions { gap: 10px; align-items: center; flex-wrap: wrap; }
 .lmat-scan-select-all { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; }
-.lmat-scan-row-select { margin-right: 6px !important; vertical-align: middle !important; }
+/* One margin for header and row checkboxes: core gives thead inputs margin-left 8px, which breaks column alignment. */
+.lmat-scan-row-select { margin: 0 6px 0 0 !important; vertical-align: middle !important; }
 .lmat-scan-issue-card input.lmat-scan-row-select,
 .lmat-scan-issue-card .lmat-scan-select-all input[type="checkbox"] {
     width: 14px;
@@ -2618,4 +2622,10 @@ a.lmat-scan-content-lang-chip-link:focus {
     width: 6px;
     height: 2px;
     margin: 5px 0 0 3px;
+}
+
+/* Secondary lines in selectable rows line up with the title text, not the checkbox (14px box + 6px gap). */
+.lmat-styles .lmat-inspector .lmat-scan-content-pending-table td input.lmat-scan-row-select ~ p,
+.lmat-styles .lmat-inspector .lmat-scan-content-pending-table td input.lmat-scan-row-select ~ ul.lmat-scan-post-list {
+    margin-left: 20px;
 }

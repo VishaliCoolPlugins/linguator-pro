@@ -244,11 +244,26 @@ class Scanner {
 			foreach ( $check->run() as $found ) {
 				if ( $found->id === $result['id'] ) $fresh = $found->to_array();
 			}
-			$kept = array_values( array_filter( $result['details'], static function ( $row ) use ( $scoped ) { return ! in_array( $row['ignore_key'] ?? '', $scoped, true ); } ) );
+			// Rechecked rows keep their place in the list: still-present rows are replaced
+			// in position, resolved rows are dropped, and only genuinely new rows append.
+			$fresh_rows = array();
 			foreach ( $fresh['details'] ?? array() as $row ) {
-				if ( in_array( $row['ignore_key'] ?? '', $scoped, true ) ) $kept[] = $row;
+				if ( in_array( $row['ignore_key'] ?? '', $scoped, true ) ) $fresh_rows[ $row['ignore_key'] ] = $row;
 			}
-			$result['details'] = $kept;
+			$kept = array();
+			foreach ( $result['details'] as $row ) {
+				$row_key = $row['ignore_key'] ?? '';
+				if ( ! in_array( $row_key, $scoped, true ) ) {
+					$kept[] = $row;
+				} elseif ( isset( $fresh_rows[ $row_key ] ) ) {
+					$kept[] = $fresh_rows[ $row_key ];
+					unset( $fresh_rows[ $row_key ] );
+				}
+			}
+			foreach ( $fresh_rows as $row ) {
+				$kept[] = $row;
+			}
+			$result['details'] = array_values( $kept );
 			if ( ! $kept && empty( $result['details_truncated'] ) ) {
 				$result['status'] = Result::PASS;
 				$result['recently_fixed'] = true;
@@ -464,10 +479,16 @@ class Scanner {
 		$penalty = 0;
 		$once    = array();
 		$other   = 0;
+		$has_issues = false;
+		$content_issues = false;
 
 		foreach ( $results as $result ) {
 			if ( ! in_array( $result['status'], array( 'warning', 'critical' ), true ) ) {
 				continue;
+			}
+			$has_issues = true;
+			if ( 'content' === ( $result['section'] ?? '' ) ) {
+				$content_issues = true;
 			}
 			if ( 'elementor' === ( $result['section'] ?? '' ) ) {
 				continue; // Builder health is measured separately from site setup.
@@ -495,6 +516,11 @@ class Scanner {
 			}
 		}
 
+		// Linked translations may still be unpublished or outdated. Reserve 100 for
+		// content with no unresolved warnings, even when link coverage is complete.
+		if ( $content_issues ) {
+			$coverage_score = min( 99, $coverage_score );
+		}
 		$setup = (int) max( 0, 100 - $penalty - min( 40, $other ) );
 		$score = (int) max( 0, min( 100, round( 0.625 * $coverage_score + 0.375 * $setup ) ) );
 		$builder_checks = array_filter( $results, static function ( $result ) {
@@ -522,8 +548,9 @@ class Scanner {
 			$score = (int) round( 0.50 * $coverage_score + 0.30 * $setup + 0.20 * $builder );
 		}
 
+		// Weighted averages can round a small issue back up to 100.
 		return array(
-			'score'    => $score,
+			'score'    => $has_issues ? min( 99, $score ) : $score,
 			'coverage' => $coverage_score,
 			'setup'    => $setup,
 			'builder'  => $builder,

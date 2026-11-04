@@ -182,7 +182,7 @@ function lmatp_render_license_sidebar() {
 						</a>
 					</div>
 					<div class="lmatp-dashboard-addon-r">
-						<img src="<?php echo esc_url( LINGUATOR_PRO_URL . 'assets/logo/loco.png' ); ?>" alt="<?php esc_attr_e( 'LocoAI', 'linguator-pro' ); ?>">
+						<img src="<?php echo esc_url( plugins_url( LINGUATOR_PRO_FREE_PLUGIN_SLUG . '/assets/logo/loco.png' ) ); ?>" alt="<?php esc_attr_e( 'LocoAI', 'linguator-pro' ); ?>">
 					</div>
 				</div>
 			</div>

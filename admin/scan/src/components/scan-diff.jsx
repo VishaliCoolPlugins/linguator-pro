@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { __, sprintf } from '@wordpress/i18n'
+import { LoaderPinwheel } from 'lucide-react'
 import { Icon } from './scan-parts'
 
 const TYPE_LABEL = { changed: __('Changed', 'linguator-pro'), added: __('Added', 'linguator-pro'), removed: __('Removed', 'linguator-pro') }
@@ -77,7 +78,7 @@ const DiffModal = ({ row, request, onClose, onSynced, onError }) => {
                 </div>}
             </div>
             <div className='lmat-scan-diff-modal-body' aria-live='polite'>
-                {!data && !message && <p className='lmat-scan-diff-modal-loading'><Icon name='update' /> {__('Loading changes…', 'linguator-pro')}</p>}
+                {!data && !message && <p className='lmat-scan-diff-modal-loading'><LoaderPinwheel className='lmat-scan-pinwheel' aria-hidden='true' /> {__('Loading changes…', 'linguator-pro')}</p>}
                 {message && <p className='lmat-scan-diff-error' role='alert'>{message}</p>}
                 {data && <>
                     <div className='lmat-scan-diff-modal-intro'>

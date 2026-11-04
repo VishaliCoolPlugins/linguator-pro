@@ -472,8 +472,8 @@ function lmatp_pro_formatLicenseDate($dateString) {
  * amount. Rendered inside the card it moved only the left column and the card
  * stopped lining up with the sidebar.
  *
- * Emitted without whitespace between the tags so `:empty` collapses the slot,
- * margin included, when there is nothing to show.
+ * The WordPress notice anchor keeps admin notices in this aligned slot instead
+ * of letting core move them outside it after the page heading.
  *
  * Falls back to the same registration record the card reads, so the notice and
  * the card can never disagree. The dashboard cannot supply it: on the expired
@@ -488,7 +488,7 @@ function lmatp_render_license_notices( $license_info = null ) {
 		$license_info = \LinguatorPro\Admin\Register\Linguator_Pro_Base::get_register_info();
 	}
 
-	echo '<div class="lmatp-license-notices">';
+	echo '<div class="lmatp-license-notices"><span class="wp-header-end" hidden></span>';
 
 	if ( lmatp_is_license_expired( $license_info ) ) {
 		echo '<div class="lmatp-newLicense notice notice-error is-dismissible">';

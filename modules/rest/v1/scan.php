@@ -691,6 +691,12 @@ class Scan extends Abstract_Controller {
 		foreach ( $report['results'] as $i => $result ) {
 			if ( 'pass' !== $result['status'] ) {
 				$report['results'][ $i ] += Issue_Copy::for_id( $result['id'] );
+				// Resolve saved links against the active theme as well as fresh scan results.
+				if ( 'lang_switcher' === $result['id'] ) {
+					$action = \LinguatorPro\Modules\Scan\Checks\Switcher::setup_action();
+					$report['results'][ $i ]['fix_url'] = $action['url'];
+					$report['results'][ $i ]['fix_label'] = $action['label'];
+				}
 			}
 			foreach ( $result['details'] ?? array() as $j => $detail ) {
 				$key = $detail['ignore_key'] ?? '';

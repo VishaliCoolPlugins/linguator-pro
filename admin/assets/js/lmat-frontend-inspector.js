@@ -372,9 +372,6 @@
 		if (row.match) {
 			actions.appendChild(buildCopy(row.match));
 		}
-		if (row.post_id && row.field_key && cfg.nonce) {
-			actions.appendChild(buildQuickEdit(row, item, target));
-		}
 		if (row.edit_url) {
 			var edit = el('a', 'lmat-fi__row-edit', i18n.edit || 'Edit');
 			edit.href = row.edit_url;
@@ -387,164 +384,6 @@
 		}
 
 		return item;
-	}
-
-	var progress = { card: null, total: 0, remaining: 0 };
-
-	// Update page text, clear badges, pencil button, and outlines without reloading.
-	function applyQuickEditToPage(target, row, value) {
-		if (activePencil && activePencil.parentNode) {
-			activePencil.parentNode.removeChild(activePencil);
-			activePencil = null;
-		}
-
-		if (!target) {
-			return;
-		}
-
-		var textEl = target;
-		if (row && row.match) {
-			var inner = findTextTarget(row.match, target);
-			if (inner) {
-				textEl = inner;
-			} else if (target.children.length > 0) {
-				var candidate = target.querySelector('p, h1, h2, h3, h4, h5, h6, span, a, li');
-				if (candidate) {
-					textEl = candidate;
-				}
-			}
-		}
-
-		if (/<[a-z][\s\S]*>/i.test(value)) {
-			textEl.innerHTML = value;
-		} else {
-			textEl.textContent = value;
-		}
-
-		var nodes = [textEl];
-		if (target !== textEl) {
-			nodes.push(target);
-		}
-
-		nodes.forEach(function (node) {
-			node.classList.remove('lmat-fi-mark', 'lmat-fi-highlight');
-			if (node.hasAttribute('data-lmat-index')) {
-				var idxStr = node.getAttribute('data-lmat-index') || '';
-				var remaining = idxStr
-					.split(',')
-					.map(function (s) { return s.trim(); })
-					.filter(function (idx) { return idx && String(idx) !== String(row._index); });
-				if (remaining.length > 0) {
-					node.setAttribute('data-lmat-index', remaining.join(','));
-				} else {
-					node.removeAttribute('data-lmat-index');
-				}
-			}
-		});
-
-		if (active && (active.target === target || active.target === textEl)) {
-			active = null;
-		}
-	}
-
-	// Inline form that saves the translation without leaving the page.
-	function buildQuickEdit(row, item, target) {
-		var button = el('button', 'lmat-fi__row-copy', i18n.quickEdit || 'Quick edit');
-		button.type = 'button';
-		button.addEventListener('click', function () {
-			if (item.querySelector('.lmat-fi__quick')) {
-				return;
-			}
-			var form = el('div', 'lmat-fi__quick');
-			var input = el('textarea', 'lmat-fi__quick-input');
-			input.value = row.match || '';
-			input.rows = 3;
-			var save = el('button', 'lmat-fi__quick-save', i18n.save || 'Save');
-			save.type = 'button';
-			var cancel = el('button', 'lmat-fi__quick-cancel', i18n.cancel || 'Cancel');
-			cancel.type = 'button';
-			var error = el('p', 'lmat-fi__row-note');
-			error.hidden = true;
-			form.appendChild(input);
-			form.appendChild(save);
-			form.appendChild(cancel);
-			form.appendChild(error);
-			item.appendChild(form);
-			input.focus();
-
-			cancel.addEventListener('click', function () {
-				form.remove();
-			});
-			save.addEventListener('click', function () {
-				var value = input.value.trim();
-				if (!value) {
-					return;
-				}
-				save.disabled = true;
-				save.textContent = i18n.saving || 'Saving...';
-				var body = new FormData();
-				body.append('action', 'lmat_quick_edit');
-				body.append('nonce', cfg.nonce);
-				body.append('post_id', row.post_id);
-				body.append('field_key', row.field_key);
-				body.append('element_id', row.element_id || '');
-				body.append('value', value);
-				body.append('original', row.match || '');
-				body.append('is_segment', row.segment ? '1' : '0');
-				fetch(cfg.ajaxUrl, { method: 'POST', body: body, credentials: 'same-origin' })
-					.then(function (response) { return response.json(); })
-					.then(function (json) {
-						if (!json || !json.success) {
-							throw new Error();
-						}
-						// Update text on page, remove badge and pencil immediately
-						applyQuickEditToPage(target, row, value);
-
-						var tree = item.closest('.lmat-fi__sub, .lmat-fi__tree');
-						var section = item.closest('.lmat-fi__group');
-
-						item.remove();
-
-						if (tree) {
-							var remainingTreeItems = tree.querySelectorAll('li.lmat-fi__row');
-							if (remainingTreeItems.length === 0) {
-								tree.remove();
-							} else {
-								var summary = tree.querySelector('.lmat-fi__sub-label, .lmat-fi__tree-summary');
-								if (summary) {
-									summary.textContent = summary.textContent.replace(/\(\d+\)/, '(' + remainingTreeItems.length + ')');
-								}
-							}
-						}
-
-						if (section) {
-							var remainingGroupItems = section.querySelectorAll('li.lmat-fi__row');
-							if (remainingGroupItems.length === 0) {
-								section.remove();
-							} else {
-								var title = section.querySelector('.lmat-fi__group-title');
-								if (title) {
-									title.textContent = title.textContent.replace(/\(\d+\)/, '(' + remainingGroupItems.length + ')');
-								}
-							}
-						}
-
-						if (progress.card) {
-							progress.remaining = Math.max(0, progress.remaining - 1);
-							var card = buildProgress(progress.total, progress.remaining);
-							progress.card.replaceWith(card);
-							progress.card = card;
-						}
-					})
-					.catch(function () {
-						save.disabled = false;
-						save.textContent = i18n.save || 'Save';
-						error.textContent = i18n.saveFailed || '';
-						error.hidden = false;
-					});
-			});
-		});
-		return button;
 	}
 
 	function buildCopy(text) {
@@ -1223,8 +1062,7 @@
 
 			var total = Math.max(parseInt(result.total, 10) || 0, rows.length);
 			if (total) {
-				progress = { card: buildProgress(total, rows.length), total: total, remaining: rows.length };
-				body.appendChild(progress.card);
+				body.appendChild(buildProgress(total, rows.length));
 			}
 
 			if (!rows.length) {

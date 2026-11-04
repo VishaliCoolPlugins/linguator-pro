@@ -169,6 +169,24 @@ class Linguator_Pro_Register {
 			'redirect_url' => 'lmat_settings&tab=license',
 		);
 
+		/*
+		 * The license tab is server-rendered and keeps the settings React app off the page,
+		 * so tabs the app would switch client-side (General, AI Translation, Language
+		 * Switcher, ...) would be dead here. Give every tab without a link a real URL.
+		 */
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		if ( self::PAGE === $current_page && self::TAB === $current_tab ) {
+			foreach ( $tabs as $key => $tab ) {
+				if ( empty( $tab['redirect'] ) ) {
+					$tabs[ $key ]['redirect']     = true;
+					$tabs[ $key ]['redirect_url'] = self::PAGE . '&tab=' . $key;
+				}
+			}
+		}
+
 		return $tabs;
 	}
 
@@ -365,7 +383,7 @@ class Linguator_Pro_Register {
 		}
 		// Map error message to error code
 		$error_code = $this->lmatp_map_error_to_code( $error );
-		$this->lmatp_redirect_with_error( $error_code, $error );
+		$this->lmatp_redirect_with_error( $error_code );
 	}
 
 	private function lmatp_check_user_capabilities() {
@@ -379,11 +397,8 @@ class Linguator_Pro_Register {
 		exit;
 	}
 
-	private function lmatp_redirect_with_error( $error, $detail = '' ) {
+	private function lmatp_redirect_with_error( $error ) {
 		$url = 'admin.php?page=lmat_settings&tab=license&error=' . urlencode( $error );
-		if ( is_string( $detail ) && '' !== $detail && $detail !== $error ) {
-			$url .= '&detail=' . urlencode( substr( $detail, 0, 200 ) );
-		}
 		wp_safe_redirect( admin_url( $url ) );
 		exit;
 	}
@@ -540,9 +555,6 @@ class Linguator_Pro_Register {
 					<p><strong><?php echo esc_html( $error_message['title'] ); ?></strong></p>
 					<?php if ( ! empty( $error_message['description'] ) ) : ?>
 						<p><?php echo wp_kses_post( $error_message['description'] ); ?></p>
-					<?php endif; ?>
-					<?php if ( isset( $_GET['detail'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-						<p><em><?php echo esc_html( sprintf( /* translators: %s: message returned by the license server. */ __( 'License server response: %s', 'linguator-pro' ), sanitize_text_field( wp_unslash( $_GET['detail'] ) ) ) ); ?></em></p>
 					<?php endif; ?>
 				</div>
 				<?php

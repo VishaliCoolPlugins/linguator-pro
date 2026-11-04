@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.3.0
  */
 class Untranslated_Collector {
+	const CACHE_REVISION = 'toolkit-parity-1';
 
 	const STATUS_OK                 = 'ok';
 	const STATUS_NOT_TRANSLATABLE   = 'not_translatable';
@@ -97,7 +98,7 @@ class Untranslated_Collector {
 			return $result;
 		}
 
-		$cache_key = 'lmat_untr_' . md5( $post_id . '_' . $source_id . '_' . $translation->post_modified . '_' . $source->post_modified . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) );
+		$cache_key = 'lmat_untr_' . md5( $post_id . '_' . $source_id . '_' . $translation->post_modified . '_' . $source->post_modified . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) . self::CACHE_REVISION );
 		$cached    = get_transient( $cache_key );
 		if ( is_array( $cached ) && isset( $cached['rows'], $cached['total'] ) ) {
 			$result['rows']  = $cached['rows'];
@@ -146,7 +147,7 @@ class Untranslated_Collector {
 		}
 
 		$template_post = get_post( $template_id );
-		$cache_key     = 'lmat_untr_tpl_' . md5( $template_id . '_' . $current_lang . '_' . $source_lang . '_' . ( $template_post instanceof \WP_Post ? $template_post->post_modified : '' ) . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) );
+		$cache_key     = 'lmat_untr_tpl_' . md5( $template_id . '_' . $current_lang . '_' . $source_lang . '_' . ( $template_post instanceof \WP_Post ? $template_post->post_modified : '' ) . '_' . ( defined( 'LINGUATOR_PRO_VERSION' ) ? LINGUATOR_PRO_VERSION : '1' ) . self::CACHE_REVISION );
 		$cached        = get_transient( $cache_key );
 		if ( is_array( $cached ) && isset( $cached['rows'], $cached['total'] ) ) {
 			return $cached;
@@ -325,7 +326,15 @@ class Untranslated_Collector {
 				} elseif ( '' !== $translated && ! Elementor_Fields::skip_same_text( $field_key, $original ) ) {
 					$source_segments = self::segments( Elementor_Fields::raw_value( $source_raw, $element_id, $field_key ) );
 					$total          += max( 1, count( $source_segments ) );
-					$segments        = self::match_untranslated( self::segments( $raw ), $source_segments, $lang );
+					$translated_segments = self::segments( $raw );
+					$segments        = self::match_untranslated( $translated_segments, $source_segments, $lang );
+					foreach ( self::missing_source_segments( $source_segments, $translated_segments, $lang ) as $missing ) {
+						$row = self::elementor_row( $element_id, $source_element['widget_type'], $field_key, $missing, $edit_url, true, $translation_id );
+						/* translators: %s: field name */
+						$row['field'] = sprintf( __( '%s (missing paragraph)', 'linguator-pro' ), Elementor_Fields::location_label( $field_key ) );
+						$row['note'] = __( 'This paragraph was added to the original page but is missing from this translation.', 'linguator-pro' );
+						$rows[] = $row;
+					}
 				} else {
 					continue;
 				}
@@ -394,7 +403,8 @@ class Untranslated_Collector {
 		$edit_url = self::edit_url( $translation->ID );
 		$rows     = array();
 
-		foreach ( self::match_untranslated( self::segments( $translation->post_content ), $source_segments, $lang ) as $segment ) {
+		$translated_segments = self::segments( $translation->post_content );
+		foreach ( self::match_untranslated( $translated_segments, $source_segments, $lang ) as $segment ) {
 			$rows[] = array(
 				'kind'       => 'text',
 				'element_id' => '',
@@ -405,7 +415,174 @@ class Untranslated_Collector {
 			);
 		}
 
+		foreach ( self::missing_source_segments( $source_segments, $translated_segments, $lang ) as $segment ) {
+			$rows[] = array(
+				'kind'       => 'text',
+				'element_id' => '',
+				'widget'     => '',
+				'field'      => __( 'Content (missing)', 'linguator-pro' ),
+				'match'      => $segment,
+				'edit_url'   => self::with_focus_text( $edit_url, $segment ),
+				'note'       => __( 'This content was added to the original page but is missing from this translation.', 'linguator-pro' ),
+			);
+		}
+
 		return $rows;
+	}
+
+	/**
+	 * Source segments absent from the translation, aligned like Toolkit for Polylang.
+	 *
+	 * @param string[] $source_segments Source text segments.
+	 * @param string[] $translated_segments Translated text segments.
+	 * @param string $target_lang Target language slug.
+	 * @return string[] Missing source text segments.
+	 */
+	private static function missing_source_segments( array $source_segments, array $translated_segments, string $target_lang = '' ): array {
+		$source_count = count( $source_segments );
+		$trans_count  = count( $translated_segments );
+
+		if ( $source_count <= $trans_count || 0 === $source_count ) {
+			return array();
+		}
+
+		$missing_count = $source_count - $trans_count;
+
+		// 1. Identify which source segments are directly matched on the translated page.
+		$matched_source_indices = array();
+		$matched_trans_indices  = array();
+
+		foreach ( $translated_segments as $t_idx => $t_seg ) {
+			foreach ( $source_segments as $s_idx => $s_seg ) {
+				if ( ! isset( $matched_source_indices[ $s_idx ] ) && Elementor_Fields::text_untranslated( $s_seg, $t_seg, $target_lang ) ) {
+					$matched_source_indices[ $s_idx ] = true;
+					$matched_trans_indices[ $t_idx ]  = true;
+					break;
+				}
+			}
+		}
+
+		// 2. Identify remaining unaligned source segments.
+		$unmatched_s_indices = array_values( array_diff( array_keys( $source_segments ), array_keys( $matched_source_indices ) ) );
+		$unmatched_t_indices = array_values( array_diff( array_keys( $translated_segments ), array_keys( $matched_trans_indices ) ) );
+
+		$u_s_count = count( $unmatched_s_indices );
+		$u_t_count = count( $unmatched_t_indices );
+
+		if ( $u_s_count <= $u_t_count ) {
+			return array();
+		}
+
+		// Calculate similarity between an unmatched source segment and translated segment.
+		$calc_sim = function ( $s_text, $t_text, $s_pos_ratio, $t_pos_ratio ) {
+			$score = 0.0;
+
+			// Word overlap (words >= 3 letters).
+			$s_lower = function_exists( 'mb_strtolower' ) ? mb_strtolower( $s_text ) : strtolower( $s_text );
+			$t_lower = function_exists( 'mb_strtolower' ) ? mb_strtolower( $t_text ) : strtolower( $t_text );
+
+			preg_match_all( '/[\p{L}\p{N}]{3,}/u', $s_lower, $s_words );
+			preg_match_all( '/[\p{L}\p{N}]{3,}/u', $t_lower, $t_words );
+			if ( ! empty( $s_words[0] ) && ! empty( $t_words[0] ) ) {
+				$common_words = array_intersect( $s_words[0], $t_words[0] );
+				if ( ! empty( $common_words ) ) {
+					$score += 10.0 * count( $common_words );
+				}
+			}
+
+			// Numbers / digits match (e.g. dates, times, amounts).
+			preg_match_all( '/\b\d+(?:[\.,]\d+)?\b/u', $s_text, $s_nums );
+			preg_match_all( '/\b\d+(?:[\.,]\d+)?\b/u', $t_text, $t_nums );
+			if ( ! empty( $s_nums[0] ) && ! empty( $t_nums[0] ) ) {
+				$common_nums = array_intersect( $s_nums[0], $t_nums[0] );
+				if ( ! empty( $common_nums ) ) {
+					$score += 5.0 * count( $common_nums );
+				}
+			}
+
+			// Positional proximity (0.0 to 2.0).
+			$score += max( 0.0, 2.0 - 2.0 * abs( $s_pos_ratio - $t_pos_ratio ) );
+
+			return $score;
+		};
+
+		// Dynamic programming to align unmatched T into unmatched S in order.
+		// dp[i][j] = best score aligning first i items of T with a subset of first j items of S.
+		$dp     = array();
+		$choice = array();
+
+		for ( $i = 0; $i <= $u_t_count; $i++ ) {
+			$dp[ $i ]     = array_fill( 0, $u_s_count + 1, -1.0 );
+			$choice[ $i ] = array_fill( 0, $u_s_count + 1, 0 );
+		}
+
+		for ( $j = 0; $j <= $u_s_count; $j++ ) {
+			$dp[0][ $j ] = 0.0;
+		}
+
+		for ( $i = 1; $i <= $u_t_count; $i++ ) {
+			$t_idx       = $unmatched_t_indices[ $i - 1 ];
+			$t_text      = $translated_segments[ $t_idx ];
+			$t_pos_ratio = $trans_count > 1 ? $t_idx / ( $trans_count - 1 ) : 0.0;
+
+			for ( $j = $i; $j <= $u_s_count; $j++ ) {
+				$s_idx       = $unmatched_s_indices[ $j - 1 ];
+				$s_text      = $source_segments[ $s_idx ];
+				$s_pos_ratio = $source_count > 1 ? $s_idx / ( $source_count - 1 ) : 0.0;
+
+				$sim = $calc_sim( $s_text, $t_text, $s_pos_ratio, $t_pos_ratio );
+
+				// Option 1: match t[i-1] with s[j-1].
+				$match_score = ( $dp[ $i - 1 ][ $j - 1 ] >= 0.0 ) ? $dp[ $i - 1 ][ $j - 1 ] + $sim : -1.0;
+
+				// Option 2: skip s[j-1] (leave it unaligned).
+				$skip_score = $dp[ $i ][ $j - 1 ];
+
+				if ( $match_score >= $skip_score && $match_score >= 0.0 ) {
+					$dp[ $i ][ $j ]     = $match_score;
+					$choice[ $i ][ $j ] = 1; // Matched.
+				} else {
+					$dp[ $i ][ $j ]     = $skip_score;
+					$choice[ $i ][ $j ] = 2; // Skipped source segment.
+				}
+			}
+		}
+
+		// Traceback to find which source segments were skipped (missing from translation).
+		$aligned_s_indices = array();
+		$curr_i            = $u_t_count;
+		$curr_j            = $u_s_count;
+
+		while ( $curr_i > 0 && $curr_j > 0 ) {
+			if ( 1 === $choice[ $curr_i ][ $curr_j ] ) {
+				$aligned_s_indices[ $unmatched_s_indices[ $curr_j - 1 ] ] = true;
+				--$curr_i;
+				--$curr_j;
+			} else {
+				--$curr_j;
+			}
+		}
+
+		$missing = array();
+		foreach ( $unmatched_s_indices as $s_idx ) {
+			if ( ! isset( $aligned_s_indices[ $s_idx ] ) ) {
+				$missing[] = $source_segments[ $s_idx ];
+			}
+		}
+
+		// If traceback didn't catch enough, take remaining from the end.
+		if ( count( $missing ) < $missing_count ) {
+			$seen = array_flip( $missing );
+			for ( $k = $source_count - 1; $k >= 0 && count( $missing ) < $missing_count; $k-- ) {
+				$seg = $source_segments[ $k ];
+				if ( ! isset( $seen[ $seg ] ) && ! isset( $matched_source_indices[ $k ] ) ) {
+					$missing[]     = $seg;
+					$seen[ $seg ] = true;
+				}
+			}
+		}
+
+		return array_slice( $missing, 0, $missing_count );
 	}
 
 	/**

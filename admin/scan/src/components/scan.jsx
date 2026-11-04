@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import apiFetch from '@wordpress/api-fetch'
 import { toast } from 'sonner'
+import { LoaderPinwheel } from 'lucide-react'
 import { __, _n, sprintf } from '@wordpress/i18n'
 import { getNonce } from '../utils'
 import DiffModal from './scan-diff'
@@ -72,8 +73,9 @@ const Breakdown = ({ report, onGoto }) => {
         { key: 'routing', icon: 'admin-links', label: __('URLs & Routing', 'linguator-pro'), score: routingScore, tab: 'urls', action: __('Review URLs', 'linguator-pro'), ok: __('Language URLs and routing look healthy.', 'linguator-pro'), needs: __('Some language URLs, slugs, or routing still need attention.', 'linguator-pro') },
     ]
     if (report.elementor_available) rows.splice(2, 0, { key: 'builder', icon: 'layout', label: __('Elementor Integration', 'linguator-pro'), score: report.health.builder ?? null, tab: 'elementor', action: __('Review Elementor', 'linguator-pro'), ok: __('Scanned Elementor templates passed their checks.', 'linguator-pro'), needs: __('Some Elementor templates need translation fixes.', 'linguator-pro') })
+    rows.forEach(row => { row.hasIssues = report.results.some(result => result.section === row.tab && ['warning', 'critical'].includes(result.status)) })
     return <section className='lmat-scan-card lmat-scan-breakdown-card'><h2><Icon name='chart-bar' />{__('Translation Health Breakdown', 'linguator-pro')}</h2><ul className='lmat-scan-breakdown-list'>{rows.map(row => <li key={row.key} className={`lmat-scan-breakdown-item lmat-scan-breakdown-${row.key} lmat-scan-breakdown-tone-${toneFor(row.score)}`}>
-        <Icon name={row.icon} className='lmat-scan-breakdown-icon' /><div className='lmat-scan-breakdown-copy'><div className='lmat-scan-breakdown-main'><div className='lmat-scan-breakdown-text'><strong className='lmat-scan-breakdown-title'>{row.label}</strong><span className='lmat-scan-breakdown-desc'>{row.score === null ? (row.key === 'builder' && report.results.some(result => result.id === 'elementor_none') ? __('No saved Elementor templates were found.', 'linguator-pro') : __('Run a scan to check this area.', 'linguator-pro')) : row.score >= 90 ? row.ok : row.needs}</span></div><div className='lmat-scan-breakdown-meta'><span className='lmat-scan-breakdown-score'>{row.score === null ? '—' : `${row.score}%`}</span><button className='lmat-scan-breakdown-goto' onClick={() => onGoto(row.tab)}>{row.action}</button></div></div><div className='lmat-scan-breakdown-bar' role='meter' aria-label={row.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={row.score ?? 0}><span style={{ width: `${row.score ?? 0}%` }} /></div></div>
+        <Icon name={row.icon} className='lmat-scan-breakdown-icon' /><div className='lmat-scan-breakdown-copy'><div className='lmat-scan-breakdown-main'><div className='lmat-scan-breakdown-text'><strong className='lmat-scan-breakdown-title'>{row.label}</strong><span className='lmat-scan-breakdown-desc'>{row.score === null ? (row.key === 'builder' && report.results.some(result => result.id === 'elementor_none') ? __('No saved Elementor templates were found.', 'linguator-pro') : __('Run a scan to check this area.', 'linguator-pro')) : row.hasIssues ? row.needs : row.ok}</span></div><div className='lmat-scan-breakdown-meta'><span className='lmat-scan-breakdown-score'>{row.score === null ? '—' : `${row.score}%`}</span><button className='lmat-scan-breakdown-goto' onClick={() => onGoto(row.tab)}>{row.action}</button></div></div><div className='lmat-scan-breakdown-bar' role='meter' aria-label={row.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={row.score ?? 0}><span style={{ width: `${row.score ?? 0}%` }} /></div></div>
     </li>)}</ul></section>
 }
 
@@ -230,7 +232,7 @@ const Scan = () => {
         if (report && tab === 'elementor' && !report.elementor_available && !report.results.some(result => result.section === 'elementor')) setTab('overview')
     }, [report, tab, setTab])
     const groups = useMemo(() => groupResults(report?.results || []), [report])
-    if (loading) return <div role='status' className='lmat-inspector-loading'><Icon name='update' />{__('Loading scan results…', 'linguator-pro')}</div>
+    if (loading) return <div role='status' className='lmat-inspector-loading'><LoaderPinwheel className='lmat-scan-pinwheel' aria-hidden='true' />{__('Loading scan results…', 'linguator-pro')}</div>
     if (!report) return <div role='alert'><h2>{__('Unable to load scan results', 'linguator-pro')}</h2><p>{error?.message}</p><button className='button' onClick={load}>{__('Try again', 'linguator-pro')}</button></div>
     const cardProps = {
         busy, blocked: !!report.unassigned, languages: report.languages || [],
@@ -277,7 +279,7 @@ const Scan = () => {
             </div>
         </div>
         {diff && <DiffModal row={diff} request={request} onClose={() => setDiff(null)} onSynced={next => { setReport(next); setDiff(null); toast.success(__('Marked as up to date.', 'linguator-pro')) }} onError={fail} />}
-        {busy && <div className='lmat-inspector-overlay' role='status' aria-live='polite'><div><Icon name='update' /><p>{__('Updating scan results…', 'linguator-pro')}</p></div></div>}
+        {busy && <div className='lmat-inspector-overlay' role='status' aria-live='polite'><div><LoaderPinwheel className='lmat-scan-pinwheel lmat-scan-pinwheel-large' aria-hidden='true' /><p>{__('Updating scan results…', 'linguator-pro')}</p></div></div>}
     </div>
 }
 export default Scan
