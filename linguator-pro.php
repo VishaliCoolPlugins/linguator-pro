@@ -3,7 +3,7 @@
  * Plugin Name:       Linguator Pro
  * Plugin URI:        https://linguator.com/
  * Description:       Pro add-on for Linguator – adds the Site Scan and the license manager. Requires the free Linguator plugin.
- * Version:           2.2.1
+ * Version:           1.0.0
  * Requires at least: 6.8
  * Requires PHP:      7.2
  * Requires Plugins:  translate-words
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'LINGUATOR_PRO_VERSION' ) ) {
-	define( 'LINGUATOR_PRO_VERSION', '2.2.1' );
+	define( 'LINGUATOR_PRO_VERSION', '1.0.0' );
 }
 if ( ! defined( 'LINGUATOR_PRO_FILE' ) ) {
 	define( 'LINGUATOR_PRO_FILE', __FILE__ );
@@ -56,9 +56,8 @@ if ( ! defined( 'LINGUATOR_PRO_FREE_PLUGIN_SLUG' ) ) {
 }
 // Oldest free Linguator release that offers the hooks Pro relies on.
 if ( ! defined( 'LINGUATOR_PRO_MIN_FREE_VERSION' ) ) {
-	define( 'LINGUATOR_PRO_MIN_FREE_VERSION', '2.2.1' );
+	define( 'LINGUATOR_PRO_MIN_FREE_VERSION', '2.0.0' );
 }
-
 require_once __DIR__ . '/includes/class-linguator-pro.php';
 
 \LinguatorPro\Includes\Linguator_Pro::get_instance()->init();

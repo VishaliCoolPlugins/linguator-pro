@@ -5,7 +5,7 @@ Tags: automatic translation, google translate,elementor translation, multilingua
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 7.2
-Stable tag: 2.2.1
+Stable tag: 1.0.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -195,129 +195,5 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
-
-= Version 2.2.1 | 14 October 2026 =
-* Added: Media translation support for page and bulk translation.
-* Added: Untranslated posts filter and language URL format option.
-* Improved: Bulk translation error handling, retries, and security.
-* Fixed: Missing or duplicate translated slugs.
-* Fixed: Translation links breaking with Yoast Duplicate Post.
-
-= Version 2.2.0 | 24 August 2026 =
-* Added: Elementor V4 Component Translation support.
-* Improved: Deactivation feedback form.
-* Improved: User opt-in option in plugin.
-* Tested up to: WordPress 7.1
-
-= Version 2.1.10 | 03 August 2026 =
-* Added: New Translation Provider - Edge AI for Edge Browser
-* Improved: Code Improvements & Optimization
-* Removed: Deprecated Translate Words legacy functionality
-
-= Version 2.1.9 | 30 June 2026 =
-* Fixed: Validation issue of Google Gemini API key.
-
-= Version 2.1.8 | 15 June 2026 =
-* Improved: User Opt-in code improvements
-
-= Version 2.1.7 | 04 June 2026 =
-* Improved: Code Improvements & Optimization
-
-= Version 2.1.6 | 22 May 2026 =
-* Fixed an issue with the Bulk Translation feature.
-* Improve setting panel UI.
-* Improve code quality and security.
-* Minor fixes.
-
-= Version 2.1.5 | 23 April 2026 =
-* Added Google Gemini AI provider (available for WordPress 7.0+).
-
-= Version 2.1.4 | 3 April 2026 =
-* Minor Textual changes.
-* Fixed an issue with the Quick Edit page for unassigned languages.
-* Minor fixes.
-
-= Version 2.1.3 | 1 April 2026 =
-
-* Remove unused code.
-* Improve code quality and security.
-
-= Version 2.1.2 | 26 March 2026 =
-
-* Removed usage of HEREDOC/NOWDOC syntax and replaced with safer string handling methods.
-* Improved plugin path and URL handling by replacing hardcoded paths with WordPress standard functions like plugin_dir_path() and plugin_dir_url().
-* Strengthened REST API permission checks by adding proper capability validation for post creation actions.
-* Fixed unescaped output in content filters, ensuring all dynamic data is properly escaped to prevent XSS vulnerabilities.
-* Added missing nonce verification for user input handling to prevent CSRF attacks.
-* Improved code quality and security by implementing proper input validation and sanitization.
-
-= Version 2.1.1 | 20 March 2026 =
-
-* Implemented strict REST API permission_callback using current_user_can('edit_posts') for lmat/v1 endpoints.
-* Applied late escaping (esc_html, esc_attr, wp_kses_post) to all render callbacks and shortcode outputs.
-*  Refactored CSS and JS to use wp_enqueue_style and wp_enqueue_script, removing inline <style> and <script> tags.
-* Standardized unique prefixing (linguator_ ) across functions and classes to prevent conflicts.
-* Resolved UI logic that hidden string-translation features based on external plugin status.
-
-= Version 2.1.0 | 13 March 2026 =
-* Ensured manual string translation functionality remains accessible even when Loco Translate is active.
-* Replaced HEREDOC/NOWDOC syntax with standard PHP strings for better security scanning compatibility.
-* Updated bundled DataTables library to the latest stable version.
-* Added proper documentation in the readme for external services used by the plugin (Google Translate).
-* Improved REST API permission checks and strengthened capability validation.
-* Added missing nonce verification and improved input sanitization across admin and REST requests.
-* Implemented proper sanitization for register_setting() fields.
-* Replaced direct loading of WordPress core files with proper WordPress hooks.
-* Removed debugging code such as error_reporting() from production.
-* Improved escaping of variables and generated HTML output to prevent XSS vulnerabilities.
-* Refactored global filters to avoid unintended site-wide behavior changes.
-* Code quality, security, and compatibility improvements throughout the plugin.
-
-= Version 2.0.7 | 5 March 2026 =
-* Added proper attribution indicating that this plugin is a fork of the free Polylang plugin.
-* Corrected the license information in the header and readme file.
-* Minor textual changes.
-
-= Version 2.0.6 | 3 February 2026 =
-* Added translation for WPBakery Page Builder plugin.
-* Code optimization.
-
-= Version 2.0.5 | 14 January 2026 =
-* Fixed Undefined constant error.
-
-= Version 2.0.4 | 13 January 2026 =
-* Code Improvements.
-* Added Categories Filter in Quick Edit option.
-* Fixed incorrect URLs.
-
-= Version 2.0.3 | 7 January 2026 =
-* Fixed incorrect initial date in the deactivation form.
-
-= Version 2.0.2 | 7 January 2026 =
-* Fixed Wrong initial version bug.
-* Fixed a JSON error occurring during the initial plugin setup.
-
-= Version 2.0.1 | 5 January 2026 =
-* Fixed undefined array key issue.
-
-= Version 2.0.0 (Major Update) | 3 January 2026 =
-* Translate Words is now under new ownership by [Cool Plugins](https://profiles.wordpress.org/coolplugins/) and is actively maintained.
-* Introduced **LinguatorAI**, a modern AI-based multilingual plugin.
-* Added **Translate Words feature deprecation** Notice.
-* Recommended **Loco Translate** for users who prefer a manual string translation workflow.
-* Added **AI-powered automatic translation engine** with support for Google Translate and Local AI.
-* Added **real-time translation support** for Gutenberg, Elementor, and Classic Editor.
-* Added **Bulk Translation Tool** for posts, pages, and taxonomies with progress tracking.
-* Added **Inline Translation Mode** to translate content block-by-block with live preview.
-* Added **Page Translation Module** including SEO titles and meta descriptions.
-* Added **Advanced Language Management Panel** with unlimited languages, RTL support, and browser language detection.
-* Added **Language Switcher Options**  widget, block, Elementor widget, and menu integration.
-* Added **Custom Field Translation Manager** for ACF and meta-based fields.
-* Improved migration guidance and helpful links.
-* Improved stability and minor internal improvements.
-* General cleanup and maintenance.
-
-= Version 1.2.6 | 6 February 2024 =
-* Improved the previous fix. It did not pick up translations where words or phrases contained punctuation.
 
 == Upgrade Notice ==
