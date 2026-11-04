@@ -701,6 +701,7 @@ body.tools_page_cp-ai-tools #wpbody-content > .wrap {
 	margin: 0 0 16px;
 	border-bottom: 1px solid var(--cpaf-border);
 	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 .cpaf .cpaf-pack-tab {
