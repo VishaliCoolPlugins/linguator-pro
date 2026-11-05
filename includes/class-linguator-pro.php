@@ -22,6 +22,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Linguator_Pro {
 
 	/**
+	 * Free plugin's cron hook, which also carries Pro's status. Pro has no cron of its own.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const TELEMETRY_CRON_HOOK = 'lmat_extra_data_update';
+
+	/**
+	 * Option holding the opt-in choice shared by the Cool Translations plugins.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const TELEMETRY_CONSENT_OPTION = 'cpfm_opt_in_choice_cool_translations';
+
+	/**
+	 * Seconds to wait before sending, so `active_plugins` reflects the activation or deactivation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var int
+	 */
+	const TELEMETRY_DELAY = 60;
+
+	/**
 	 * Singleton instance.
 	 *
 	 * @var Linguator_Pro|null
@@ -97,6 +124,9 @@ final class Linguator_Pro {
 		$this->booted = true;
 		$this->model  = $linguator->model;
 
+		// Registered before the admin check below, because the cron runs outside the admin area.
+		add_filter( 'cpfm_environment', array( $this, 'add_telemetry_flag' ), 10, 1 );
+
 		require_once LINGUATOR_PRO_DIR . '/modules/scan/load.php';
 		require_once LINGUATOR_PRO_DIR . '/modules/rest/v1/scan.php';
 		// The scan REST route reads the license state, and REST requests are not admin requests.
@@ -115,6 +145,47 @@ final class Linguator_Pro {
 		add_action( 'plugins_loaded', array( $this, 'register_license' ), 10, 0 );
 
 		\LinguatorPro\Admin\Scan_Page::init();
+	}
+
+	/**
+	 * Marks this site as running Pro in the free plugin's usage data.
+	 *
+	 * The environment filter also runs for other Cool Plugins products, so the flag is limited to the free
+	 * plugin's cron. It is absent while Pro is inactive, because this code is not loaded then.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $env Environment snapshot built by the free plugin.
+	 * @return array
+	 */
+	public function add_telemetry_flag( $env ) {
+		if ( ! doing_action( self::TELEMETRY_CRON_HOOK ) ) {
+			return $env;
+		}
+
+		$env['extra_details']['linguator_pro'] = array(
+			'active'  => true,
+			'version' => LINGUATOR_PRO_VERSION,
+		);
+
+		return $env;
+	}
+
+	/**
+	 * Queues one extra run of the free plugin's cron after Pro is activated or deactivated, for sites that opted in.
+	 *
+	 * The run happens on a later request, and the free plugin's 30-day schedule stays as it is.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public static function queue_telemetry() {
+		if ( 'yes' !== get_option( self::TELEMETRY_CONSENT_OPTION ) ) {
+			return;
+		}
+
+		wp_schedule_single_event( time() + self::TELEMETRY_DELAY, self::TELEMETRY_CRON_HOOK );
 	}
 
 	/**

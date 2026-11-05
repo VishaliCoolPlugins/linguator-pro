@@ -60,4 +60,7 @@ if ( ! defined( 'LINGUATOR_PRO_MIN_FREE_VERSION' ) ) {
 }
 require_once __DIR__ . '/includes/class-linguator-pro.php';
 
+register_activation_hook( __FILE__, array( \LinguatorPro\Includes\Linguator_Pro::class, 'queue_telemetry' ) );
+register_deactivation_hook( __FILE__, array( \LinguatorPro\Includes\Linguator_Pro::class, 'queue_telemetry' ) );
+
 \LinguatorPro\Includes\Linguator_Pro::get_instance()->init();
