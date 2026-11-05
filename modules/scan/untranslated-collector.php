@@ -302,7 +302,7 @@ class Untranslated_Collector {
 							__( '%s (missing)', 'linguator-pro' ),
 							Elementor_Fields::location_label( $field_key )
 						);
-						$row['note']        = __( 'This widget was added to the original page but is missing from this translation layout.', 'linguator-pro' );
+						$row['note']        = __( 'This widget from the original page has no matching widget in this translation layout. Review it in Elementor.', 'linguator-pro' );
 						$rows[]             = $row;
 					}
 				}
@@ -332,7 +332,7 @@ class Untranslated_Collector {
 						$row = self::elementor_row( $element_id, $source_element['widget_type'], $field_key, $missing, $edit_url, true, $translation_id );
 						/* translators: %s: field name */
 						$row['field'] = sprintf( __( '%s (missing paragraph)', 'linguator-pro' ), Elementor_Fields::location_label( $field_key ) );
-						$row['note'] = __( 'This paragraph was added to the original page but is missing from this translation.', 'linguator-pro' );
+						$row['note'] = __( 'This paragraph from the original page has no matching paragraph in this translation. Review it in the translation editor.', 'linguator-pro' );
 						$rows[] = $row;
 					}
 				} else {
@@ -423,7 +423,7 @@ class Untranslated_Collector {
 				'field'      => __( 'Content (missing)', 'linguator-pro' ),
 				'match'      => $segment,
 				'edit_url'   => self::with_focus_text( $edit_url, $segment ),
-				'note'       => __( 'This content was added to the original page but is missing from this translation.', 'linguator-pro' ),
+				'note'       => __( 'This text from the original page has no matching content segment in this translation. Review the translated page to check whether it needs to be included.', 'linguator-pro' ),
 			);
 		}
 

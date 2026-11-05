@@ -47,7 +47,7 @@
 	}
 
 	function normalize(text) {
-		return String(text || '').replace(/\s+/g, ' ').trim();
+		return String(text || '').normalize('NFKC').replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"').replace(/\u2026/g, '...').replace(/\s+/g, ' ').trim();
 	}
 
 	function isInspectorUi(node) {
@@ -314,6 +314,9 @@
 		main.appendChild(header);
 		main.appendChild(el('span', 'lmat-fi__row-text', row.match || ''));
 		item.appendChild(main);
+		if (!row.note && i18n.sameContent) {
+			item.appendChild(el('span', 'lmat-fi__row-description', i18n.sameContent));
+		}
 
 		var target = findTarget(row);
 		if (target) {
@@ -365,7 +368,7 @@
 			});
 		} else {
 			item.classList.add('is-missing');
-			item.appendChild(el('span', 'lmat-fi__row-note', row.note || i18n.notFound || ''));
+			item.appendChild(el('span', 'lmat-fi__row-note', row.note || (row.kind === 'elementor' ? i18n.notFoundElementor || i18n.notFound : i18n.notFound) || ''));
 		}
 
 		var actions = el('div', 'lmat-fi__row-actions');

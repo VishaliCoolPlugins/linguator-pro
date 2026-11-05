@@ -970,3 +970,12 @@ body.lmat-fi-hide-marks .lmat-fi-highlight[data-lmat-index]::before {
 	text-decoration: underline;
 	cursor: pointer;
 }
+
+#lmat-fi .lmat-fi__row-description {
+	display: block;
+	margin: 0;
+	padding: 0 14px 10px;
+	font-size: 11px;
+	line-height: 1.5;
+	color: var(--lmat-fi-muted);
+}
