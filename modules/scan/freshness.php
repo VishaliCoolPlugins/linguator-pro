@@ -400,9 +400,10 @@ class Freshness {
 
 		$source_id = (int) ( $translations[ $default->slug ] ?? 0 );
 		if ( $source_id <= 0 || ! get_post( $source_id ) ) {
-			$status['role']   = 'translation';
-			$status['status'] = 'no_source';
-			$status['notice'] = __( 'This post is not linked to a post in the default language yet, so there is nothing to compare with.', 'linguator-pro' );
+			$status['role']         = 'translation';
+			$status['status']       = 'no_source';
+			$status['status_label'] = __( 'No source linked', 'linguator-pro' );
+			$status['notice']       = __( 'Link this translation to its default-language post to check for source changes.', 'linguator-pro' );
 			return $status;
 		}
 
@@ -479,17 +480,17 @@ class Freshness {
 				'label'      => __( 'Untranslated text', 'linguator-pro' ),
 				'badge'      => 'warn',
 				'icon'       => 'warning',
-				'notice'     => __( 'This translation is up to date, but some text is still the same as the source language.', 'linguator-pro' ),
+				'notice'     => __( 'Some text is still the same as the source language. Review whether it needs translation.', 'linguator-pro' ),
 				'still_same' => $still_same,
 			);
 		}
 
 		return array(
 			'status'     => 'in_sync',
-			'label'      => __( 'Up to date', 'linguator-pro' ),
+			'label'      => __( 'No newer source changes', 'linguator-pro' ),
 			'badge'      => 'pass',
 			'icon'       => 'yes-alt',
-			'notice'     => __( 'This translation matches the source.', 'linguator-pro' ),
+			'notice'     => __( 'No newer source changes were detected based on the saved edit history.', 'linguator-pro' ),
 			'still_same' => array(),
 		);
 	}

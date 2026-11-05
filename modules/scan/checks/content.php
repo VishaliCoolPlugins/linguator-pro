@@ -47,6 +47,11 @@ class Content extends Abstract_Check {
 	 * @return array
 	 */
 	public function extra(): array {
+		// Targeted checks only count a subset of posts and omit term coverage.
+		// Keep the saved site-wide totals until a full content scan replaces them.
+		if ( null !== $this->only || $this->row_keys ) {
+			return array();
+		}
 		return array( 'coverage' => array_values( $this->coverage ) );
 	}
 
@@ -360,8 +365,8 @@ class Content extends Abstract_Check {
 			return $this->result(
 				'content_source_updated',
 				Result::PASS,
-				__( 'Translations are up to date with the default language', 'linguator-pro' ),
-				__( 'No translation looks older than the default-language text.', 'linguator-pro' )
+				__( 'No newer default-language changes detected', 'linguator-pro' ),
+				__( 'No translation looks older than the default-language text based on the saved edit history.', 'linguator-pro' )
 			);
 		}
 
