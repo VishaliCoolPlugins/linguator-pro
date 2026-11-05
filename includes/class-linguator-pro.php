@@ -172,8 +172,10 @@ final class Linguator_Pro {
 	}
 
 	/**
-	 * Queues one extra run of the free plugin's cron after Pro is activated or deactivated, for sites that opted in.
+	 * Queues one extra run of the free plugin's cron after Pro is activated or deactivated, for sites sharing data.
 	 *
+	 * The setup wizard's ticked checkbox leaves the opt-in option unset, because it matches the setting's default.
+	 * A scheduled free cron therefore also counts as sharing, unless the site opted out.
 	 * The run happens on a later request, and the free plugin's 30-day schedule stays as it is.
 	 *
 	 * @since 1.0.0
@@ -181,7 +183,9 @@ final class Linguator_Pro {
 	 * @return void
 	 */
 	public static function queue_telemetry() {
-		if ( 'yes' !== get_option( self::TELEMETRY_CONSENT_OPTION ) ) {
+		$choice = get_option( self::TELEMETRY_CONSENT_OPTION );
+
+		if ( 'no' === $choice || ( 'yes' !== $choice && ! wp_next_scheduled( self::TELEMETRY_CRON_HOOK ) ) ) {
 			return;
 		}
 
