@@ -402,7 +402,7 @@ class Freshness {
 		if ( $source_id <= 0 || ! get_post( $source_id ) ) {
 			$status['role']         = 'translation';
 			$status['status']       = 'no_source';
-			$status['status_label'] = __( 'No source linked', 'linguator-pro' );
+			$status['status_label'] = __( 'No Source Page linked', 'linguator-pro' );
 			$status['notice']       = __( 'Link this translation to its default-language post to check for source changes.', 'linguator-pro' );
 			return $status;
 		}
